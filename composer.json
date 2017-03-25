@@ -1,0 +1,15 @@
+{
+    "name": "poirot/mod-content"
+    , "description": "API-Driven Content Management Secured with OAuth2."
+    , "authors": [
+        {
+            "name": "Payam Naderi"
+            , "email": "naderi.payam@gmail.com"
+        }
+    ]
+    , "autoload"  : {
+        "psr-4": {
+            "Module\\Content\\": "src/Content/"
+        }
+    }
+}
