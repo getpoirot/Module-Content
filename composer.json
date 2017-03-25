@@ -2,14 +2,23 @@
     "name": "poirot/mod-content"
     , "description": "API-Driven Content Management Secured with OAuth2."
     , "authors": [
-        {
-            "name": "Payam Naderi"
-            , "email": "naderi.payam@gmail.com"
-        }
+      {
+          "name": "Payam Naderi"
+          , "email": "naderi.payam@gmail.com"
+      }
     ]
+    , "require": {
+        "poirot/skeleton": "dev-devel"
+      , "poirot/mod-driver_mongo": "dev-devel"
+      , "poirot/oauth2": "dev-devel"
+      , "poirot/stream": "dev-devel"
+    }
     , "autoload"  : {
-        "psr-4": {
-            "Module\\Content\\": "src/Content/"
-        }
+      "psr-4": {
+        "Module\\Content\\": "src/Content/"
+      },
+      "files": [
+        "_functions.php"
+      ]
     }
 }
