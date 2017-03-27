@@ -1,6 +1,16 @@
 <?php
 return [
 
+    ## ----------------------------------- ##
+    ## OAuth2Client Module Must Configured ##
+    ## to assert tokens ...                ##
+    ## ----------------------------------- ##
+
+    \Module\OAuth2Client\Module::CONF_KEY => [
+        // Configure module ....
+    ],
+
+
     # Mongo Driver:
 
     Module\MongoDriver\Module::CONF_KEY =>
