@@ -3,6 +3,7 @@ namespace Module\Content;
 
 use Poirot\Application\Interfaces\Sapi;
 use Poirot\Application\ModuleManager\Interfaces\iModuleManager;
+use Poirot\Application\Sapi\Module\ContainerForFeatureActions;
 use Poirot\Ioc\Container;
 use Poirot\Ioc\Container\BuildContainer;
 use Poirot\Router\BuildRouterStack;
@@ -13,6 +14,7 @@ use Poirot\Std\Interfaces\Struct\iDataEntity;
 class Module implements Sapi\iSapiModule
     , Sapi\Module\Feature\iFeatureModuleInitModuleManager
     , Sapi\Module\Feature\iFeatureModuleMergeConfig
+    , Sapi\Module\Feature\iFeatureModuleNestActions
     , Sapi\Module\Feature\iFeatureModuleNestServices
     , Sapi\Module\Feature\iFeatureOnPostLoadModulesGrabServices
 {
@@ -57,6 +59,20 @@ class Module implements Sapi\iSapiModule
     function initConfig(iDataEntity $config)
     {
         return \Poirot\Config\load(__DIR__ . '/../../config/mod-content');
+    }
+
+    /**
+     * Get Action Services
+     *
+     * priority not that serious
+     *
+     * - return Array used to Build ModuleActionsContainer
+     *
+     * @return array|ContainerForFeatureActions|BuildContainer|\Traversable
+     */
+    function getActions()
+    {
+        return \Poirot\Config\load(__DIR__ . '/../../config/mod-content.actions');
     }
 
     /**

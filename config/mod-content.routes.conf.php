@@ -18,7 +18,7 @@ return
                  *    [1] => routes defined callable
                  *     ...
                  */
-                \Module\OAuth2Client\Actions\IOC::newFromStatical()->AssertToken,
+                \Module\OAuth2Client\Actions\IOC::bareService()->AssertToken,
             ],
         ],
 
@@ -81,7 +81,8 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
-                                \Module\Content\Actions\IOC::newFromStatical()->CreatePost,
+                                \Module\OAuth2Client\Actions\IOC::functorValidateGivenToken((object) ['mustHaveOwner' => true, 'scopes' => [] ]),
+                                \Module\Content\Actions\IOC::bareService()->CreatePost,
                             ],
                         ],
                     ],
