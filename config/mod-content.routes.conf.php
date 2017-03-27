@@ -18,7 +18,7 @@ return
                  *    [1] => routes defined callable
                  *     ...
                  */
-                \Module\OAuth2Client\Actions\IOC::instance()->AssertToken,
+                \Module\OAuth2Client\Actions\IOC::newFromStatical()->AssertToken,
             ],
         ],
 
@@ -81,9 +81,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
-                                function() {
-                                    kd('Create Post');
-                                },
+                                \Module\Content\Actions\IOC::newFromStatical()->CreatePost,
                             ],
                         ],
                     ],
