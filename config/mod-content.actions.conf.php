@@ -7,6 +7,7 @@ use Poirot\Ioc\Container\BuildContainer;
  */
 return array(
     'services' => array(
-        'createPost' => \Module\Content\Actions\Posts\CreatePost::class,
+        'createPost'       => \Module\Content\Actions\Posts\CreatePost::class,
+        'createPostAction' => \Module\Content\Actions\Posts\CreatePostAction::class,
     ),
 );

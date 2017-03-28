@@ -10,12 +10,15 @@
  *
  * @see \Module\Content::getServices()
  */
+
 return [
+    'services' => [
+        'ContentObjectContainer' => \Module\Content\Services\ContainerCappedContentObject::class,
+    ],
     'nested' => [
         'repository' => [
             // Define Default Services
-            'services' =>
-            [
+            'services' => [
                 \Module\Content\Model\Mongo\PostsRepoService::class,
             ],
         ],

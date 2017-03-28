@@ -81,8 +81,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
-                                \Module\OAuth2Client\Actions\IOC::functorValidateGivenToken((object) ['mustHaveOwner' => true, 'scopes' => [] ]),
-                                \Module\Content\Actions\IOC::bareService()->CreatePost,
+                                \Module\Content\Actions\IOC::bareService()->CreatePostAction,
                             ],
                         ],
                     ],

@@ -3,10 +3,7 @@ namespace Module\Content\Actions;
 
 
 abstract class aAction
+    extends \Module\Foundation\Actions\aAction
 {
-    abstract function __invoke();
-
-
-    // Action Chain Helpers:
 
 }
