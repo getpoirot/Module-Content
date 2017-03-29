@@ -2,7 +2,8 @@
 namespace Module\Content\Actions\Posts;
 
 use Module\Content\Actions\aAction;
-use Module\Content\Interfaces\Model\iRepoPosts;
+use Module\Content\Interfaces\Model\Repo\iRepoPosts;
+use Module\Content\Model\Entity\EntityPost;
 
 
 class CreatePost
@@ -22,8 +23,22 @@ class CreatePost
         $this->repoPosts = $repoPosts;
     }
 
-    function __invoke()
+
+    /**
+     * Create Post Content
+     *
+     * - trigger post.create event to subscribber
+     *
+     * @param EntityPost $post
+     *
+     * @return EntityPost
+     */
+    function __invoke(EntityPost $post = null)
     {
-        // TODO: Implement __invoke() method.
+        $persistEntity = $this->repoPosts->insert($post);
+
+        // TODO trigger Post Created
+
+        return $persistEntity;
     }
 }

@@ -19,7 +19,7 @@ return [
         'repository' => [
             // Define Default Services
             'services' => [
-                \Module\Content\Model\Mongo\PostsRepoService::class,
+                \Module\Content\Model\Driver\Mongo\PostsRepoService::class,
             ],
         ],
     ],

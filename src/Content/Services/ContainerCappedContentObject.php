@@ -2,8 +2,8 @@
 namespace Module\Content\Services;
 
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
-use Module\Content\Model\PostContentObject\GeneralContentObject;
-use Module\Content\Model\PostContentObject\PlainContentObject;
+use Module\Content\Model\Entity\EntityPost\ContentObjectPlain;
+use Module\Content\Model\Entity\EntityPost\ContentObjectGeneral;
 use Poirot\Ioc\Container\aContainerCapped;
 use Poirot\Ioc\Container\BuildContainer;
 use Poirot\Ioc\Container\Exception\exContainerInvalidServiceType;
@@ -15,8 +15,8 @@ class ContainerCappedContentObject
     extends aContainerCapped
 {
     protected $_map_resolver_options = [
-        'plain'   => PlainContentObject::class,
-        'general' => GeneralContentObject::class,
+        'plain'   => ContentObjectPlain::class,
+        'general' => ContentObjectGeneral::class,
     ];
 
 
@@ -39,11 +39,13 @@ class ContainerCappedContentObject
      *
      * @param mixed $pluginInstance
      *
-     * @throws exContainerInvalidServiceType
-     * @return void
+     * @throws \Exception
      */
     function validateService($pluginInstance)
     {
+        if (!is_object($pluginInstance))
+            throw new \Exception(sprintf('Can`t resolve to (%s) Instance.', $pluginInstance));
+
         if (!$pluginInstance instanceof iEntityPostContentObject)
             throw new exContainerInvalidServiceType('Invalid Plugin Of Content Object Provided.');
 

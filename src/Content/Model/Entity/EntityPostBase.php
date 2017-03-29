@@ -1,12 +1,12 @@
 <?php
-namespace Module\Content\Model;
+namespace Module\Content\Model\Entity;
 
 use Module\Content\Interfaces\Model\Entity\iEntityPost;
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
 use Poirot\Std\Struct\DataOptionsOpen;
 
 
-class BaseEntityPost
+class EntityPostBase
     extends DataOptionsOpen
     implements iEntityPost
 {
@@ -22,7 +22,7 @@ class BaseEntityPost
     protected $content;
     protected $stat;
     protected $statShare;
-    protected $timestampCreated;
+    protected $datetimeCreated;
 
     protected $_available_stat = [
         self::STAT_PUBLISH,
@@ -141,26 +141,32 @@ class BaseEntityPost
     /**
      * Set Created Timestamp
      *
-     * @param $timestamp
+     * @param \DateTime|null $dateTime
      *
      * @return $this
      */
-    function setTimestampCreated($timestamp)
+    function setDateTimeCreated($dateTime)
     {
-        $this->timestampCreated = $timestamp;
+        if ( !($dateTime === null || $dateTime instanceof \DateTime) )
+            throw new \InvalidArgumentException(sprintf(
+                'Datetime must instance of \Datetime or null; given: (%s).'
+                , \Poirot\Std\flatten($dateTime)
+            ));
+
+        $this->datetimeCreated = $dateTime;
         return $this;
     }
 
     /**
-     * Get Time Stamp Created
+     * Get Date Time Created
      *
-     * @return int Timestamp Created
+     * @return \DateTime
      */
-    function getTimestampCreated()
+    function getDateTimeCreated()
     {
-        if (!$this->timestampCreated)
-            $this->setTimestampCreated(time());
+        if (!$this->datetimeCreated)
+            $this->setDateTimeCreated(new \DateTime());
 
-        return $this->timestampCreated;
+        return $this->datetimeCreated;
     }
 }

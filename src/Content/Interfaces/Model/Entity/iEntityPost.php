@@ -35,9 +35,9 @@ interface iEntityPost
     function getStatShare();
 
     /**
-     * Get Time Stamp Created
+     * Get Date Time Created
      *
-     * @return int Timestamp Created
+     * @return \DateTime
      */
-    function getTimestampCreated();
+    function getDateTimeCreated();
 }

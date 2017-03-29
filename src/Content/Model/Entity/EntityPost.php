@@ -1,24 +1,26 @@
 <?php
-namespace Module\Content\Model;
+namespace Module\Content\Model\Entity;
+
+use Module\Content\Model\Entity\EntityPost\GeoObject;
 
 
 class EntityPost
-    extends BaseEntityPost
+    extends EntityPostBase
 {
-    /** @var EntityPostGeoObject */
+    /** @var GeoObject */
     protected $geoLocation;
 
 
     /**
      * Set GeoLocation
      *
-     * @param EntityPostGeoObject|null $location
+     * @param GeoObject|null $location
      *
      * @return $this
      */
     function setLocation($location)
     {
-        if ($location !== null && !$location instanceof EntityPostGeoObject)
+        if ($location !== null && !$location instanceof GeoObject)
             throw new \InvalidArgumentException;
 
         $this->geoLocation = $location;
@@ -28,7 +30,7 @@ class EntityPost
     /**
      * Get Geo Location
      *
-     * @return EntityPostGeoObject|null
+     * @return GeoObject|null
      */
     function getLocation()
     {

@@ -1,11 +1,9 @@
 <?php
-namespace Module\Content\Model\PostContentObject;
+namespace Module\Content\Model\Entity\EntityPost;
 
 
-use Module\Content\Model\EntityPostMediaObject;
-
-class GeneralContentObject
-    extends PlainContentObject
+class ContentObjectGeneral
+    extends ContentObjectPlain
 {
     const CONTENT_TYPE = 'general';
 
@@ -43,11 +41,11 @@ class GeneralContentObject
     /**
      * Attach Media To Post
      *
-     * @param EntityPostMediaObject $media
+     * @param MediaObject $media
      *
      * @return $this
      */
-    function addMedia(EntityPostMediaObject $media)
+    function addMedia(MediaObject $media)
     {
         $this->medias[] = $media;
         return $this;
@@ -80,8 +78,8 @@ class GeneralContentObject
         $optionsResource = parent::parseWith($optionsResource, $_);
         if (isset($optionsResource['medias'])) {
             foreach ($optionsResource['medias'] as $i => $media) {
-                if (!$media instanceof EntityPostMediaObject) {
-                    $mo = new EntityPostMediaObject;
+                if (!$media instanceof MediaObject) {
+                    $mo = new MediaObject;
                     $mo->setMediaMeta($media);
                     $optionsResource['medias'][$i] = $mo;
                 }

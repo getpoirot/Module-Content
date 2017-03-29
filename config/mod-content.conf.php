@@ -15,9 +15,9 @@ return [
 
     Module\MongoDriver\Module::CONF_KEY =>
     [
-        \Module\MongoDriver\Services\aServiceRepository::CONF_KEY =>
+        \Module\MongoDriver\Services\aServiceRepository::CONF_REPOSITORIES =>
         [
-            \Module\Content\Model\Mongo\PostsRepoService::class => [
+            \Module\Content\Model\Driver\Mongo\PostsRepoService::class => [
                 'collection' => [
                     // query on which collection
                     'name' => 'posts',

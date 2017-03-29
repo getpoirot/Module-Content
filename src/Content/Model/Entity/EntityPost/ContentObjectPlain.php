@@ -1,11 +1,11 @@
 <?php
-namespace Module\Content\Model\PostContentObject;
+namespace Module\Content\Model\Entity\EntityPost;
 
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
 use Poirot\Std\Struct\DataOptionsOpen;
 
 
-class PlainContentObject
+class ContentObjectPlain
     extends DataOptionsOpen
     implements iEntityPostContentObject
 {

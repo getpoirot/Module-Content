@@ -1,10 +1,10 @@
 <?php
-namespace Module\Content\Model;
+namespace Module\Content\Model\Entity\EntityPost;
 
 use Traversable;
 
 
-class EntityPostMediaObject
+class MediaObject
     implements \IteratorAggregate
 {
     /** @var array */
@@ -36,7 +36,7 @@ class EntityPostMediaObject
     function get_Link()
     {
         // TODO implement
-        return 'http://server/media/'.$this->mediaMeta['$bindata']['uid'];
+        return 'http://server/media/'.$this->mediaMeta['$bindata']['hash'];
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace Module\Content\Model\Mongo;
+namespace Module\Content\Model\Driver\Mongo;
 
 use Module\MongoDriver\Services\aServiceRepository;
 

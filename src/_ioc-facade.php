@@ -3,12 +3,13 @@ namespace Module\Content\Actions
 {
     use Module\Content\Actions\Posts\CreatePost;
     use Module\Content\Actions\Posts\CreatePostAction;
+    use Module\Content\Model\Entity\EntityPost;
 
     /**
      * @property CreatePost       $CreatePost
      * @property CreatePostAction $CreatePostAction
      *
-     * @method static mixed CreatePost()
+     * @method static EntityPost CreatePost(EntityPost $post)
      */
     class IOC extends \IOC
     { }

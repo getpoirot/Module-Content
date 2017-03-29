@@ -1,10 +1,10 @@
 <?php
-namespace Module\Content\Model;
+namespace Module\Content\Model\Entity\EntityPost;
 
 use Poirot\Std\Struct\aDataOptions;
 
 
-class EntityPostGeoObject
+class GeoObject
     extends aDataOptions
 {
     /** @var array [lon, lat] */
