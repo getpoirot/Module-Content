@@ -34,12 +34,16 @@ class CreatePostAction
         \Module\OAuth2Client\validateGivenToken($token, (object) ['mustHaveOwner' => true, 'scopes' => [] ]);
 
 
+        # Create Post Entity From Http Request
         $entityPost = new Content\Model\Entity\EntityPost(
             new Content\Model\HydrateEntityPostFromRequest($request)
         );
 
+        // Determine Owner Identifier From Token
         $entityPost->setOwnerIdentifier($token->getOwnerIdentifier());
 
+
+        # Persist Post Entity
         $persistPost = $this->CreatePost($entityPost);
         return $persistPost;
     }
