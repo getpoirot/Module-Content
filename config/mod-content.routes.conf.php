@@ -82,6 +82,7 @@ return
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
                                 \Module\Content\Actions\IOC::bareService()->CreatePostAction,
+                                \Module\Content\Actions\Posts\CreatePostAction::closureMakeResponseResult(),
                             ],
                         ],
                     ],

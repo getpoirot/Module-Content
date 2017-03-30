@@ -41,11 +41,33 @@ class GeoObject
     /**
      * Get Geo Location
      *
-     * @return array
+     * @param string|null $lonLat 'lat'|'lon'
+     *
+     * @return array|null
+     * @throws \Exception
      */
-    function getGeo()
+    function getGeo($lonLat = null)
     {
-        return $this->geo;
+        if ($lonLat === null)
+            return $this->geo;
+
+        if (!$this->geo)
+            // No Geo Data Provided
+            return null;
+
+        # Geo Property (lon, lat)
+        $lonLat = strtolower( (string) $lonLat );
+        switch ($lonLat) {
+            case 'lon':
+            case 'long':
+            case 'longitude':
+                return $this->geo[0];
+            case 'lat':
+            case 'latitude':
+                return $this->geo[1];
+            default:
+                throw new \Exception(sprintf('Unknown Geo Property (%s).', $lonLat));
+        }
     }
 
     /**

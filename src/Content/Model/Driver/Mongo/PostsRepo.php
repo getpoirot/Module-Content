@@ -8,6 +8,7 @@ use Module\Content\Model\Entity\EntityPost;
 use Module\Content\Model\Exception\exDuplicateEntry;
 use Module\MongoDriver\Model\Repository\aRepository;
 use MongoDB\BSON\ObjectID;
+use Poirot\Std\Hydrator\HydrateGetters;
 
 
 class PostsRepo
@@ -59,28 +60,25 @@ class PostsRepo
             ), 400);
 
 
-        $givenIdentifier = $this->genNextIdentifier($givenIdentifier);
+        $givenIdentifier  = $this->genNextIdentifier($givenIdentifier);
 
         if (!$dateCreated = $entity->getDateTimeCreated())
             $dateCreated = new \DateTime();
 
-        # Convert given entity to Persistence Entity Object To Insert
-        $post = new Mongo\EntityPost;
-        $post
-            ->setUid($givenIdentifier)
-            ->setContent($entity->getContent())
-            ->setStat($entity->getStat())
-            ->setStatShare($entity->getStatShare())
-            ->setLocation($entity->getLocation())
-            ->setDateTimeCreated($dateCreated)
-        ;
 
+        # Convert given entity to Persistence Entity Object To Insert
+        $entityMongo = new Mongo\EntityPost(new HydrateGetters($entity));
+        $entityMongo->setUid($givenIdentifier);
+        $entityMongo->setDateTimeCreated($dateCreated);
 
         # Persist BinData Record
-        $r = $this->_query()->insertOne($post);
+        $r = $this->_query()->insertOne($entityMongo);
+
+
         # Give back entity with given id and meta record info
-        $post->setUid( $r->getInsertedId() );
-        return $post;
+        $entity = clone $entity;
+        $entity->setUid( $r->getInsertedId() );
+        return $entity;
     }
 
     /**
@@ -92,7 +90,7 @@ class PostsRepo
      */
     function findOneByUID($uid)
     {
-        /** @var MongoEntityPost $r */
+        /** @var \Module\Content\Model\Driver\Mongo\EntityPost $r */
         $r = $this->_query()->findOne([
             '_id' => $this->genNextIdentifier($uid),
         ]);

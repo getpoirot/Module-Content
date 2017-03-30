@@ -2,11 +2,12 @@
 namespace Module\Content\Model\Entity\EntityPost;
 
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
+use Poirot\Std\Struct\aDataOptions;
 use Poirot\Std\Struct\DataOptionsOpen;
 
 
 class ContentObjectPlain
-    extends DataOptionsOpen
+    extends aDataOptions
     implements iEntityPostContentObject
 {
     const CONTENT_TYPE = 'plain';
@@ -22,7 +23,7 @@ class ContentObjectPlain
      */
     function getContentType()
     {
-        return self::CONTENT_TYPE;
+        return static::CONTENT_TYPE;
     }
 
     /**
