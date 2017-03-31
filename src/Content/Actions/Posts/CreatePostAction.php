@@ -63,25 +63,8 @@ class CreatePostAction
         # Build Response:
 
         return [
-            ListenerDispatch::RESULT_DISPATCH => [
-                '$post' => [
-                    'uid'        => (string) $post->getUid(),
-                    'content'    => $post->getContent(),
-                    'stat'       => $post->getStat(),
-                    'stat_share' => $post->getStatShare(),
-                    'location'   => [
-                        'caption' => $post->getLocation()->getCaption(),
-                        'geo'     => [
-                            'lon' => $post->getLocation()->getGeo('lon'),
-                            'lat' => $post->getLocation()->getGeo('lat'),
-                        ],
-                    ],
-                    'datetime_created' => [
-                        '$datetime' => $post->getDateTimeCreated(),
-                    ],
-                    'owner_identifier' => (string) $post->getOwnerIdentifier(),
-                ],
-            ],
+            ListenerDispatch::RESULT_DISPATCH =>
+                Content\toArrayResponseFromPostEntity($post)
         ];
     }
 

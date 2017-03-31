@@ -60,6 +60,9 @@ class DeletePostAction
 
 
         # Check User Has Access To Edit Post
+        if ($post->getStat() == Content\Model\Entity\EntityPost::STAT_LOCKED)
+            throw new exAccessDenied('Access Denied, Post Is Locked.');
+
         if (! $this->IsUserPermissionOnContent($post, $token))
             throw new exAccessDenied('Don`t Have Permission To Remove Post.');
 

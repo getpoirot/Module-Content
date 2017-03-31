@@ -60,11 +60,11 @@ class EditPostAction
 
 
         # Check User Has Access To Edit Post
-        if (! $this->IsUserPermissionOnContent($post, $token))
-            throw new exAccessDenied('Don`t Have Permission To Edit Post.');
-
         if ($post->getStat() == Content\Model\Entity\EntityPost::STAT_LOCKED)
             throw new exAccessDenied('Access Denied, Post Is Locked.');
+
+        if (! $this->IsUserPermissionOnContent($post, $token))
+            throw new exAccessDenied('Don`t Have Permission To Edit Post.');
 
 
         # Update Post
@@ -81,28 +81,12 @@ class EditPostAction
         # Build Response
 
         return [
-            ListenerDispatch::RESULT_DISPATCH => [
-                '$post' => [
-                    'uid'        => (string) $post->getUid(),
-                    'content'    => $post->getContent(),
-                    'stat'       => $post->getStat(),
-                    'stat_share' => $post->getStatShare(),
-                    'location'   => [
-                        'caption' => $post->getLocation()->getCaption(),
-                        'geo'     => [
-                            'lon' => $post->getLocation()->getGeo('lon'),
-                            'lat' => $post->getLocation()->getGeo('lat'),
-                        ],
+            ListenerDispatch::RESULT_DISPATCH =>
+                Content\toArrayResponseFromPostEntity($post) + [
+                    '_self' => [
+                        'content_id' => $content_id,
                     ],
-                    'datetime_created' => [
-                        '$datetime' => $post->getDateTimeCreated(),
-                    ],
-                    'owner_identifier' => (string) $post->getOwnerIdentifier(),
-                ],
-                '_self' => [
-                    'content_id' => $content_id,
-                ],
-            ],
+                ]
         ];
     }
 }
