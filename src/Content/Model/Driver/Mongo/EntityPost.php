@@ -2,6 +2,8 @@
 namespace Module\Content\Model\Driver\Mongo;
 
 use Module\Content\Interfaces\Model\Entity\iEntityPost;
+use Module\Content\Lib\FactoryContentObject;
+use Module\Content\Model\Entity\EntityPost\GeoObject;
 use Module\MongoDriver\Model\tPersistable;
 use MongoDB\BSON\Persistable;
 use MongoDB\BSON\UTCDatetime;
@@ -78,5 +80,33 @@ class EntityPost
     function getDateTimeCreated()
     {
         return parent::getDateTimeCreated();
+    }
+
+
+    // ...
+
+    /**
+     * Constructs the object from a BSON array or document
+     * Called during unserialization of the object from BSON.
+     * The properties of the BSON array or document will be passed to the method as an array.
+     * @link http://php.net/manual/en/mongodb-bson-unserializable.bsonunserialize.php
+     * @param array $data Properties within the BSON array or document.
+     */
+    function bsonUnserialize(array $data)
+    {
+        if (isset($data['location']))
+            // Unserialize BsonDocument to Required GeoObject from Persistence
+            $data['location'] = new GeoObject($data['location']);
+
+        if (isset($data['content'])) {
+            // Unserialize BsonDocument to Required ContentObject from Persistence
+            $contentType     = $data['content']['content_type'];
+            unset($data['content']['content_type']);
+            $contentObject   = FactoryContentObject::of($contentType, $data['content']);
+            $data['content'] = $contentObject;
+
+        }
+
+        $this->import($data);
     }
 }

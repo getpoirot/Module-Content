@@ -56,14 +56,14 @@ class ContentObjectPlain
     /**
      * Build Object With Provided Options
      *
-     * @param array|\Traversable $options Associated Array
-     * @param bool $throwException Throw Exception On Wrong Option
+     * @param array $options        Associated Array
+     * @param bool  $throwException Throw Exception On Wrong Option
      *
      * @return $this
      * @throws \Exception
      * @throws \InvalidArgumentException
      */
-    function with($options, $throwException = false)
+    function with(array $options, $throwException = false)
     {
         $this->import($options);
     }
@@ -96,6 +96,9 @@ class ContentObjectPlain
             ));
 
 
+        if ($optionsResource instanceof \Traversable)
+            $optionsResource = \Poirot\Std\cast($optionsResource)->toArray();
+
         return $optionsResource;
     }
 
@@ -109,6 +112,6 @@ class ContentObjectPlain
      */
     static function isConfigurableWith($optionsResource)
     {
-        return is_array($optionsResource);
+        return is_array($optionsResource) || $optionsResource instanceof \Traversable;
     }
 }

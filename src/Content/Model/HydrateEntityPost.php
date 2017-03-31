@@ -4,16 +4,17 @@ namespace Module\Content\Model;
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
 use Module\Content\Lib\FactoryContentObject;
 use Module\Content\Model\Entity\EntityPost;
-use Module\Content\Model\Entity\EntityPost\ContentObjectGeneral;
 use Module\Content\Model\Entity\EntityPost\GeoObject;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\Std\Struct\aDataOptions;
-use Poirot\Std\Struct\Exceptions\exSetterMismatch;
+use Poirot\Std\ConfigurableSetter;
+use Poirot\Std\Hydrator\HydrateGetters;
+use Traversable;
 
 
-class HydrateEntityPostFromRequest
-    extends aDataOptions
+class HydrateEntityPost
+    extends ConfigurableSetter
+    implements \IteratorAggregate
 {
     const FIELD_CONTENT_TYPE = 'content_type';
     const FIELD_CONTENT      = 'content';
@@ -31,20 +32,17 @@ class HydrateEntityPostFromRequest
 
 
     /**
-     * HydrateEntityPostFromRequest constructor.
-     * @param iHttpRequest $httpRequest
+     * Construct
+     *
+     * @param array|\Traversable $options
+     * @param array|\Traversable $defaults
      */
-    function __construct(iHttpRequest $httpRequest)
+    function __construct($options = null, $defaults = null)
     {
-        # Parse and assert Http Request
-        $_post = ParseRequestData::_($httpRequest)->parseBody();
-        $_post = $this->_assertCreatePostInputData($_post);
+        if ($defaults !== null)
+            $this->with( static::parseWith($defaults) );
 
-        try {
-            $this->import($_post);
-        } catch (exSetterMismatch $e) {
-            // Filter Unknown Field That Post and Let It Play...
-        }
+        parent::__construct($options);
     }
 
 
@@ -87,15 +85,7 @@ class HydrateEntityPostFromRequest
     function getContent()
     {
         $contentType   = ($this->_contentType) ? $this->_contentType : EntityPost\ContentObjectPlain::CONTENT_TYPE;
-
-        $contentObject = FactoryContentObject::of($contentType);
-        $contentObject->with($contentObject::parseWith($this->content));
-        if (!$contentObject->isFulfilled())
-            throw new \InvalidArgumentException(sprintf(
-                'Content With Type (%s) not Fulfilled with given content.'
-                , $contentType
-            ), 400);
-
+        $contentObject = FactoryContentObject::of($contentType, $this->content);
         return $contentObject;
     }
 
@@ -142,19 +132,62 @@ class HydrateEntityPostFromRequest
         return $this->share;
     }
 
-    // ...
 
-    protected function _assertCreatePostInputData(array $data)
+    // Implement Configurable
+
+    /**
+     * @inheritdoc
+     *
+     * @param array|\Traversable|iHttpRequest $optionsResource
+     * @param array       $_
+     *        usually pass as argument into ::with if self instanced
+     *
+     * @throws \InvalidArgumentException if resource not supported
+     * @return array
+     */
+    static function parseWith($optionsResource, array $_ = null)
     {
-        // Check For Available Post Type
-         ( isset($data[self::FIELD_CONTENT_TYPE]) && $data[self::FIELD_CONTENT_TYPE] )
-             ?: $data[self::FIELD_CONTENT_TYPE] = ContentObjectGeneral::CONTENT_TYPE;
-
-        // Inject Content
-        if (!isset($data[self::FIELD_CONTENT]))
-            throw new \InvalidArgumentException('Content Object is Required.', 400);
+        if (!static::isConfigurableWith($optionsResource))
+            throw new \InvalidArgumentException(sprintf(
+                'Invalid Configuration Resource provided; given: (%s).'
+                , \Poirot\Std\flatten($optionsResource)
+            ));
 
 
-        return $data;
+        // ..
+        if ($optionsResource instanceof iHttpRequest)
+            # Parse and assert Http Request
+            $optionsResource = ParseRequestData::_($optionsResource)->parseBody();
+
+        return parent::parseWith($optionsResource);
+    }
+
+    /**
+     * Is Configurable With Given Resource
+     *
+     * @param mixed $optionsResource
+     *
+     * @return boolean
+     */
+    static function isConfigurableWith($optionsResource)
+    {
+        return $optionsResource instanceof iHttpRequest || parent::isConfigurableWith($optionsResource);
+    }
+
+
+    // Implement IteratorAggregate
+
+    /**
+     * @ignore
+     *
+     * Retrieve an external iterator
+     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
+     * @return Traversable An instance of an object implementing <b>Iterator</b> or
+     * <b>Traversable</b>
+     * @since 5.0.0
+     */
+    public function getIterator()
+    {
+        return new HydrateGetters($this);
     }
 }

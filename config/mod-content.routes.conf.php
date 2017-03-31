@@ -36,9 +36,7 @@ return
                 ],
                 'params'  => [
                     ListenerDispatch::CONF_KEY => [
-                        function($content_id = null) {
-                            kd(sprintf('Get Post (%s)', $content_id));
-                        },
+                        \Module\Content\Actions\IOC::bareService()->RetrievePostAction,
                     ],
                 ],
             ],
@@ -82,7 +80,6 @@ return
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
                                 \Module\Content\Actions\IOC::bareService()->CreatePostAction,
-                                \Module\Content\Actions\Posts\CreatePostAction::closureMakeResponseResult(),
                             ],
                         ],
                     ],
@@ -106,9 +103,7 @@ return
                                 ],
                                 'params'  => [
                                     ListenerDispatch::CONF_KEY => [
-                                        function($content_id = null) {
-                                            kd(sprintf('Edit Post (%s)', $content_id));
-                                        },
+                                        \Module\Content\Actions\IOC::bareService()->EditPostAction,
                                     ],
                                 ],
                             ],
@@ -124,9 +119,7 @@ return
                                 ],
                                 'params'  => [
                                     ListenerDispatch::CONF_KEY => [
-                                        function($content_id = null) {
-                                            kd('Delete Post (%s)');
-                                        },
+                                        \Module\Content\Actions\IOC::bareService()->DeletePostAction,
                                     ],
                                 ],
                             ],

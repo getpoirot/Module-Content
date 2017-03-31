@@ -45,7 +45,11 @@ class EntityPost
     function setLocation($location)
     {
         if ($location !== null && !$location instanceof GeoObject)
-            throw new \InvalidArgumentException;
+            throw new \InvalidArgumentException(sprintf(
+                'Location Must instanceof GeoObject or null; given: (%s).'
+                , \Poirot\Std\flatten($location)
+            ));
+
 
         $this->geoLocation = $location;
         return $this;

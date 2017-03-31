@@ -7,7 +7,11 @@ use Poirot\Ioc\Container\BuildContainer;
  */
 return array(
     'services' => array(
-        'createPost'       => \Module\Content\Actions\Posts\CreatePost::class,
-        'createPostAction' => \Module\Content\Actions\Posts\CreatePostAction::class,
+        'CreatePostAction'          => \Module\Content\Actions\Posts\CreatePostAction::class,
+        'EditPostAction'            => \Module\Content\Actions\Posts\EditPostAction::class,
+        'DeletePostAction'          => \Module\Content\Actions\Posts\DeletePostAction::class,
+        'RetrievePostAction'        => \Module\Content\Actions\Posts\RetrievePostAction::class,
+
+        'IsUserPermissionOnContent' => \Module\Content\Actions\IsUserPermissionOnContent::class,
     ),
 );

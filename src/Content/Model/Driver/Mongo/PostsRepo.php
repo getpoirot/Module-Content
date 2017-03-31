@@ -82,6 +82,38 @@ class PostsRepo
     }
 
     /**
+     * Save Entity By Insert Or Update
+     *
+     * @param EntityPost $entity
+     *
+     * @return mixed
+     */
+    function save(EntityPost $entity)
+    {
+        if ($entity->getUid()) {
+            // It Must Be Update
+
+            /* Currently With Version 1.1.2 Of MongoDB driver library
+             * Entity Not Replaced Entirely
+             *
+             * $this->_query()->updateOne(
+                [
+                    '_id' => $entity->getUid(),
+                ]
+                , $entity
+                , ['upsert' => true]
+            );*/
+
+            $this->_query()->deleteOne([
+                '_id' => $this->genNextIdentifier( $entity->getUid() ),
+            ]);
+        }
+
+        $entity = $this->insert($entity);
+        return $entity;
+    }
+
+    /**
      * Find Match By Given UID
      *
      * @param string|mixed $uid
@@ -96,5 +128,24 @@ class PostsRepo
         ]);
 
         return ($r) ? $r : false;
+    }
+
+    /**
+     * Delete Entity With Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return int Delete Count
+     */
+    function deleteOneByUID($uid)
+    {
+        $uid = $this->genNextIdentifier($uid);
+
+        # Find and delete object
+        $r = $this->_query()->deleteOne([
+            '_id' => $this->genNextIdentifier($uid),
+        ]);
+
+        return $r->getDeletedCount();
     }
 }

@@ -20,6 +20,15 @@ interface iRepoPosts
     function insert(EntityPost $entity);
 
     /**
+     * Save Entity By Insert Or Update
+     *
+     * @param EntityPost $entity
+     *
+     * @return EntityPost
+     */
+    function save(EntityPost $entity);
+
+    /**
      * Find Match By Given UID
      *
      * @param string|mixed $uid
@@ -27,5 +36,14 @@ interface iRepoPosts
      * @return EntityPost|false
      */
     function findOneByUID($uid);
+
+    /**
+     * Delete Entity With Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return int Delete Count
+     */
+    function deleteOneByUID($uid);
 
 }
