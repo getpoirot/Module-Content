@@ -5,9 +5,11 @@ use Module\Content\Model\Driver\Mongo;
 
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityPost;
+use Module\Content\Model\Entity\MemberObject;
 use Module\Content\Model\Exception\exDuplicateEntry;
 use Module\MongoDriver\Model\Repository\aRepository;
 use MongoDB\BSON\ObjectID;
+use MongoDB\Operation\FindOneAndUpdate;
 use Poirot\Std\Hydrator\HydrateGetters;
 
 
@@ -147,5 +149,80 @@ class PostsRepo
         ]);
 
         return $r->getDeletedCount();
+    }
+
+
+    /**
+     * Set a Like On Post By Given ID
+     *
+     * @param string       $content_id
+     * @param MemberObject $member
+     *
+     * @return EntityPost\LikesObject
+     */
+    function insertLikeEntry($content_id, MemberObject $member)
+    {
+        /** @var EntityPost $r */
+        $r = $this->_query()->findOneAndUpdate(
+            [
+                '_id' => $this->genNextIdentifier($content_id),
+            ],
+            [
+                '$push' => [
+                    'likes.members' => [
+                        '$each' => [ \Poirot\Std\cast($member)->toArray() ],
+                        '$position' => 0,
+                        '$slice' => 10,
+                    ],
+                ],
+                '$inc'  => [
+                    'likes.count' => 1,
+                ]
+            ],
+            [
+                'projection' => [
+                    'likes' => 1,
+                ],
+                'returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER
+            ]
+        );
+
+        return ($r) ? $r->getLikes() : null;
+    }
+
+    /**
+     * Remove a Like On Post By Given ID
+     *
+     * @param string       $content_id
+     * @param MemberObject $member
+     *
+     * @return EntityPost\LikesObject
+     */
+    function removeLikeEntry($content_id, MemberObject $member)
+    {
+        /** @var EntityPost $r */
+        $r = $this->_query()->findOneAndUpdate(
+            [
+                '_id' => $this->genNextIdentifier($content_id),
+            ],
+            [
+                '$pull' => [
+                    'likes.members' => [
+                            'uid' => $member->getUid(),
+                    ],
+                ],
+                '$inc'  => [
+                    'likes.count' => -1,
+                ]
+            ],
+            [
+                'projection' => [
+                    'likes' => 1,
+                ],
+                'returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER
+            ]
+        );
+
+        return ($r) ? $r->getLikes() : null;
     }
 }

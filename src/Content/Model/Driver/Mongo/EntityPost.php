@@ -4,6 +4,7 @@ namespace Module\Content\Model\Driver\Mongo;
 use Module\Content\Interfaces\Model\Entity\iEntityPost;
 use Module\Content\Lib\FactoryContentObject;
 use Module\Content\Model\Entity\EntityPost\GeoObject;
+use Module\Content\Model\Entity\EntityPost\LikesObject;
 use Module\MongoDriver\Model\tPersistable;
 use MongoDB\BSON\Persistable;
 use MongoDB\BSON\UTCDatetime;
@@ -97,6 +98,13 @@ class EntityPost
         if (isset($data['location']))
             // Unserialize BsonDocument to Required GeoObject from Persistence
             $data['location'] = new GeoObject($data['location']);
+
+        if (isset($data['likes'])) {
+            // Unserialize BsonDocument to Required LikesObject from Persistence
+            $objLike = new LikesObject;
+            $objLike->with($objLike::parseWith($data['likes']));
+            $data['likes'] = $objLike;
+        }
 
         if (isset($data['content'])) {
             // Unserialize BsonDocument to Required ContentObject from Persistence

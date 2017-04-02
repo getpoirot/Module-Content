@@ -2,6 +2,7 @@
 namespace Module\Content\Model\Entity;
 
 use Module\Content\Model\Entity\EntityPost\GeoObject;
+use Module\Content\Model\Entity\EntityPost\LikesObject;
 
 
 class EntityPost
@@ -10,6 +11,8 @@ class EntityPost
     protected $owner;
     /** @var GeoObject */
     protected $geoLocation;
+    /** @var LikesObject */
+    protected $likes;
 
 
     /**
@@ -38,20 +41,20 @@ class EntityPost
     /**
      * Set GeoLocation
      *
-     * @param GeoObject|null $location
+     * @param GeoObject|null $objLocation
      *
      * @return $this
      */
-    function setLocation($location)
+    function setLocation($objLocation)
     {
-        if ($location !== null && !$location instanceof GeoObject)
+        if ($objLocation !== null && !$objLocation instanceof GeoObject)
             throw new \InvalidArgumentException(sprintf(
                 'Location Must instanceof GeoObject or null; given: (%s).'
-                , \Poirot\Std\flatten($location)
+                , \Poirot\Std\flatten($objLocation)
             ));
 
 
-        $this->geoLocation = $location;
+        $this->geoLocation = $objLocation;
         return $this;
     }
 
@@ -63,5 +66,35 @@ class EntityPost
     function getLocation()
     {
         return $this->geoLocation;
+    }
+
+    /**
+     * Set Embed Likes
+     *
+     * @param LikesObject|null $objLike
+     *
+     * @return $this
+     */
+    function setLikes($objLike)
+    {
+        if ($objLike !== null && !$objLike instanceof LikesObject)
+            throw new \InvalidArgumentException(sprintf(
+                'Location Must instanceof LikeObject or null; given: (%s).'
+                , \Poirot\Std\flatten($objLike)
+            ));
+
+
+        $this->likes = $objLike;
+        return $this;
+    }
+
+    /**
+     * Get Likes
+     *
+     * @return LikesObject
+     */
+    function getLikes()
+    {
+        return $this->likes;
     }
 }

@@ -20,6 +20,7 @@ return [
             // Define Default Services
             'services' => [
                 \Module\Content\Model\Driver\Mongo\PostsRepoService::class,
+                \Module\Content\Model\Driver\Mongo\LikesRepoService::class,
             ],
         ],
     ],

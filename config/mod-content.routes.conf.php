@@ -140,9 +140,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::CONF_KEY => [
-                                                function($content_id = null) {
-                                                    kd(sprintf('(%s) List Likes.', $content_id));
-                                                },
+                                                \Module\Content\Actions\IOC::bareService()->ListPostLikesAction,
                                             ],
                                         ],
                                     ],
@@ -155,9 +153,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::CONF_KEY => [
-                                                function($content_id = null) {
-                                                    kd(sprintf('(%s) Set Likes On Post', $content_id));
-                                                },
+                                                \Module\Content\Actions\IOC::bareService()->LikePostAction,
                                             ],
                                         ],
                                     ],
@@ -170,9 +166,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::CONF_KEY => [
-                                                function($content_id = null) {
-                                                    kd(sprintf('(%s) Un-Likes The Post', $content_id));
-                                                },
+                                                \Module\Content\Actions\IOC::bareService()->UnLikePostAction,
                                             ],
                                         ],
                                     ],

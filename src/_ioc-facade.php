@@ -1,6 +1,10 @@
 <?php
 namespace Module\Content\Actions
 {
+
+    use Module\Content\Actions\Likes\LikePostAction;
+    use Module\Content\Actions\Likes\ListPostLikesAction;
+    use Module\Content\Actions\Likes\UnLikePostAction;
     use Module\Content\Actions\Posts\CreatePostAction;
     use Module\Content\Actions\Posts\DeletePostAction;
     use Module\Content\Actions\Posts\EditPostAction;
@@ -11,6 +15,10 @@ namespace Module\Content\Actions
      * @property EditPostAction     $EditPostAction
      * @property DeletePostAction   $DeletePostAction
      * @property RetrievePostAction $RetrievePostAction
+     *
+     * @property LikePostAction      $LikePostAction
+     * @property UnLikePostAction    $UnLikePostAction
+     * @property ListPostLikesAction $ListPostLikesAction
      *
      */
     class IOC extends \IOC

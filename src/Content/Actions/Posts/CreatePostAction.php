@@ -18,8 +18,8 @@ class CreatePostAction
 
     /**
      *
-     * @param iHttpRequest $request  @IoC /
-     * @param iRepoPosts  $repoPosts @IoC /module/content/services/repository/Posts
+     * @param iHttpRequest $request   @IoC /
+     * @param iRepoPosts   $repoPosts @IoC /module/content/services/repository/Posts
      */
     function __construct(iHttpRequest $request, iRepoPosts $repoPosts)
     {

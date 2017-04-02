@@ -2,6 +2,7 @@
 namespace Module\Content\Interfaces\Model\Repo;
 
 use Module\Content\Model\Entity\EntityPost;
+use Module\Content\Model\Entity\MemberObject;
 
 
 interface iRepoPosts
@@ -46,4 +47,23 @@ interface iRepoPosts
      */
     function deleteOneByUID($uid);
 
+    /**
+     * Set a Like On Post By Given ID
+     *
+     * @param string       $content_id
+     * @param MemberObject $member
+     *
+     * @return EntityPost\LikesObject
+     */
+    function insertLikeEntry($content_id, MemberObject $member);
+
+    /**
+     * Remove a Like On Post By Given ID
+     *
+     * @param string       $content_id
+     * @param MemberObject $member
+     *
+     * @return EntityPost\LikesObject
+     */
+    function removeLikeEntry($content_id, MemberObject $member);
 }

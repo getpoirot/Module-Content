@@ -27,6 +27,18 @@ return [
                     'indexes' => [
                         ['key' => ['_id' => 1]],
                     ],],],
+
+            \Module\Content\Model\Driver\Mongo\LikesRepoService::class => [
+                'collection' => [
+                    // query on which collection
+                    'name' => 'likes',
+                    // which client to connect and query with
+                    'client' => \Module\MongoDriver\Module\MongoDriverManagementFacade::CLIENT_DEFAULT,
+                    // ensure indexes
+                    'indexes' => [
+                        ['key' => ['_id'  => 1]],
+                        ['key' => ['_uid' => 1]],
+                    ],],],
         ],
     ],
 ];
