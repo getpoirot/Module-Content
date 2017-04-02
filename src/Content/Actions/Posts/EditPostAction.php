@@ -70,7 +70,9 @@ class EditPostAction
         # Update Post
 
         // Change Entity From Request
-        $postChanged = new Content\Model\HydrateEntityPost($this->request, $post);
+        $postChanged = new Content\Model\HydrateEntityPost(
+            Content\Model\HydrateEntityPost::parseWith($this->request), $post);
+
         $postChanged->setContentType($post->getContent()->getContentType());
         $post->import($postChanged);
 

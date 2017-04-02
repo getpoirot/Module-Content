@@ -2,6 +2,7 @@
 namespace Module\Content
 {
     use Module\Content\Model\Entity\EntityPost;
+    use Module\Content\Model\Entity\MemberObject;
 
     /**
      * Build Array Response From Given Entity Object
@@ -18,17 +19,24 @@ namespace Module\Content
                 'content'    => $post->getContent(),
                 'stat'       => $post->getStat(),
                 'stat_share' => $post->getStatShare(),
-                'location'   => [
+                '$user' => new MemberObject( ['uid' => $post->getOwnerIdentifier()] ),
+                '$location'   => [
                     'caption' => $post->getLocation()->getCaption(),
                     'geo'     => [
                         'lon' => $post->getLocation()->getGeo('lon'),
                         'lat' => $post->getLocation()->getGeo('lat'),
                     ],
                 ],
+                'likes' => ($post->getLikes()) ? [
+                    'count'   => $post->getLikes()->getCount(),
+                    'members' => \Poirot\Std\cast( $post->getLikes()->getMembers() )
+                        ->withWalk(function(&$value, $key) {
+                            $value = ['$user' => $value];
+                        })
+                ] : null,
                 'datetime_created' => [
                     '$datetime' => $post->getDateTimeCreated(),
                 ],
-                'owner_identifier' => (string) $post->getOwnerIdentifier(),
             ],
         ];
     }
@@ -58,14 +66,12 @@ namespace Module\Content\Lib
 
 
             $contentObject = ContentIOC::ContentObjectContainer()->get($contentName);
-            if ($contentData !== null) {
-                $contentObject->with($contentObject::parseWith($contentData));
-                if (!$contentObject->isFulfilled())
-                    throw new \InvalidArgumentException(sprintf(
-                        'Content With Type (%s) not Fulfilled with given content.'
-                        , $contentName
-                    ), 400);
-            }
+            $contentObject->with($contentObject::parseWith($contentData));
+            if (!$contentObject->isFulfilled())
+                throw new \InvalidArgumentException(sprintf(
+                    'Content With Type (%s) not Fulfilled with given content.'
+                    , $contentName
+                ), 400);
 
             return $contentObject;
         }

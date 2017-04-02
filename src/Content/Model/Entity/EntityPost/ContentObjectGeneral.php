@@ -41,11 +41,11 @@ class ContentObjectGeneral
     /**
      * Attach Media To Post
      *
-     * @param MediaObject $media
+     * @param MediaObjectTenderBin $media
      *
      * @return $this
      */
-    function addMedia(MediaObject $media)
+    function addMedia(MediaObjectTenderBin $media)
     {
         $this->medias[] = $media;
         return $this;
@@ -76,12 +76,13 @@ class ContentObjectGeneral
     static function parseWith($optionsResource, array $_ = null)
     {
         $optionsResource = parent::parseWith($optionsResource, $_);
-        if (isset($optionsResource['medias'])) {
+        if (isset($optionsResource['medias']) && $medias = $optionsResource['medias']) {
             foreach ($optionsResource['medias'] as $i => $media) {
-                if (!$media instanceof MediaObject) {
-                    $mo = new MediaObject;
-                    $mo->setMediaMeta($media);
-                    $optionsResource['medias'][$i] = $mo;
+                if (!$media instanceof MediaObjectTenderBin) {
+                    // Content Object May Fetch From DB Or Sent By Post Http Request
+                    $objectMedia = new MediaObjectTenderBin;
+                    $objectMedia->with( $objectMedia::parseWith($media) );
+                    $optionsResource['medias'][$i] = $objectMedia;
                 }
             }
         }
