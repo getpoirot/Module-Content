@@ -55,7 +55,7 @@ class PostsRepo
     function insert(EntityPost $entity)
     {
         $givenIdentifier = $entity->getUid();
-        if ($givenIdentifier && false !== $this->findOneByUID($givenIdentifier))
+        if ($givenIdentifier && false !== $this->findOneMatchUid($givenIdentifier))
             throw new exDuplicateEntry(sprintf(
                 'Content with UID (%s) exists.'
                 , (string) $givenIdentifier
@@ -122,7 +122,7 @@ class PostsRepo
      *
      * @return EntityPost|false
      */
-    function findOneByUID($uid)
+    function findOneMatchUid($uid)
     {
         /** @var \Module\Content\Model\Driver\Mongo\EntityPost $r */
         $r = $this->_query()->findOne([
@@ -139,7 +139,7 @@ class PostsRepo
      *
      * @return int Delete Count
      */
-    function deleteOneByUID($uid)
+    function deleteOneMatchUid($uid)
     {
         $uid = $this->genNextIdentifier($uid);
 
@@ -151,6 +151,40 @@ class PostsRepo
         return $r->getDeletedCount();
     }
 
+    /**
+     * Find All Match By Given UIDs List
+     *
+     * @param []mixed      $uids
+     * @param array|string $expression Filter expression
+     *
+     * @return \Traversable
+     */
+    function findAllMatchUidWithin($uids, $expression = null)
+    {
+        $objIds = [];
+        foreach ($uids as $id)
+            $objIds[] = $this->genNextIdentifier($id);
+
+
+        // Query Condition By Expression
+
+        $queryConditions = [
+            '_id' => [
+                '$in' => $objIds
+            ]
+        ];
+
+        if ($expression !== null) {
+            $queryConditions
+                += \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+        }
+
+        $r = $this->_query()->find(
+            $queryConditions
+        );
+
+        return $r;
+    }
 
     /**
      * Set a Like On Post By Given ID

@@ -38,6 +38,8 @@ return [
                     'indexes' => [
                         ['key' => ['_id'  => 1]],
                         ['key' => ['_uid' => 1]],
+                        ['key' => ['item_identifier' => 1, 'model' => 1]],
+                        ['key' => ['owner_identifier' => 1, 'model' => 1]],
                     ],],],
         ],
     ],

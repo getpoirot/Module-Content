@@ -30,7 +30,8 @@ return
             'get_post' => [
                 'route'   => 'RouteMethodSegment',
                 'options' => [
-                    'criteria' => '/posts/:content_id{\w+}',
+                    // 24 is length of content_id by persistence
+                    'criteria' => '/posts/:content_id{{\w{24}}}',
                     'method'   => 'GET',
                     'match_whole' => true,
                 ],
@@ -84,10 +85,26 @@ return
                         ],
                     ],
 
+                    ## GET /posts/liked
+                    #- Get the list of recent media liked by the owner.
+                    'liked' => [
+                        'route'   => 'RouteSegment',
+                        'options' => [
+                            'criteria'    => '/liked',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::CONF_KEY => [
+                                \Module\Content\Actions\IOC::bareService()->ListPostsWhichUserLikedAction,
+                            ],
+                        ],
+                    ],
+
                     'delegate' => [
                         'route' => 'RouteSegment',
                         'options' => [
-                            'criteria'    => '/:content_id{\w+}',
+                            // 24 is length of content_id by persistence
+                            'criteria'    => '/:content_id{{\w{24}}}',
                             'match_whole' => false,
                         ],
                         'routes' => [
@@ -215,7 +232,7 @@ return
                                     'remove' => [
                                         'route'   => 'RouteMethodSegment',
                                         'options' => [
-                                            'criteria' => '/:comment_id{\w+}',
+                                            'criteria' => '/:comment_id{{\w+}}',
                                             'method' => 'DELETE',
                                         ],
                                         'params'  => [
@@ -239,7 +256,7 @@ return
             'users' => [
                 'route'   => 'RouteSegment',
                 'options' => [
-                    'criteria' => '/[@:username{\w+}][-:userid{\w+}]',
+                    'criteria' => '/[@:username{{\w+}}][-:userid{{\w+}}]',
                     'match_whole' => false,
                     'params'  => [
                         ListenerDispatch::CONF_KEY => [

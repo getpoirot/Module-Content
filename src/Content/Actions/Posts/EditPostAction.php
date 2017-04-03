@@ -52,7 +52,7 @@ class EditPostAction
 
 
         # Check Whether Content Post Exists?
-        if( false === $post = $this->repoPosts->findOneByUID($content_id) )
+        if( false === $post = $this->repoPosts->findOneMatchUid($content_id) )
             throw new Content\Exception\exResourceNotFound(sprintf(
                 'Content Post (%s) Not Found.'
                 , $content_id

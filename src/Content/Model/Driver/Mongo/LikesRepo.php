@@ -110,13 +110,39 @@ class LikesRepo
      *
      * @return \Traversable
      */
-    function findByItemIdentifierOnModel($item_identifier, $model, $skip = null, $limit = null)
+    function findByItemIdentifierWithModel($item_identifier, $model, $skip = null, $limit = null)
     {
         $r = $this->_query()->find(
             [
                                   // We Consider All Item Liked Has _id from Mongo Collection
                 'item_identifier' => $this->genNextIdentifier($item_identifier),
                 'model'           => $model
+            ],
+            [
+                'limit' => $limit,
+                'skip'  => $skip,
+            ]
+        );
+
+        return $r;
+    }
+
+    /**
+     * Find Entities Liked By Owner In Model X
+     *
+     * @param mixed  $owner_identifier
+     * @param string $model
+     * @param int|null $skip
+     * @param int|null $limit
+     *
+     * @return \Traversable
+     */
+    function findAllItemsWithOwnerAndModel($owner_identifier, $model, $skip = null, $limit = null)
+    {
+        $r = $this->_query()->find(
+            [
+                'owner_identifier' => (string) $owner_identifier,
+                'model'            => $model
             ],
             [
                 'limit' => $limit,

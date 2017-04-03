@@ -10,8 +10,8 @@ use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
 
 /**
  *
- * @method bool         IsUserPermissionOnContent(EntityPost $post = null, iEntityAccessToken $token = null)
- * @method \Traversable ListWhoLikesPost($content_id = null, $skip = null, $limit = null)
+ * @method bool         IsUserPermissionOnContent(EntityPost $post, iEntityAccessToken $token = null)
+ * @method \Traversable ListPostsLikedByUser($owner_identifier, $skip = null, $limit = null)
  */
 abstract class aAction
     extends \Module\Foundation\Actions\aAction

@@ -21,9 +21,9 @@ namespace Module\Content
                 ->withWalk(function(&$value, $key) {
                     $value = ['user' => $value];
                 })
-        ] : [];
+        ] : null;
 
-        if ($me) {
+        if ($me && $likes) {
             // Check Whether Current User Has Liked Entity?
             $totalMembers = $post->getLikes()->getTotalMembers();
             if ( in_array((string)$me, $totalMembers) )

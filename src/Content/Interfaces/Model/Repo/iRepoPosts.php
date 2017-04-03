@@ -36,7 +36,7 @@ interface iRepoPosts
      *
      * @return EntityPost|false
      */
-    function findOneByUID($uid);
+    function findOneMatchUid($uid);
 
     /**
      * Delete Entity With Given UID
@@ -45,7 +45,17 @@ interface iRepoPosts
      *
      * @return int Delete Count
      */
-    function deleteOneByUID($uid);
+    function deleteOneMatchUid($uid);
+
+    /**
+     * Find All Match By Given UIDs List
+     *
+     * @param []mixed      $uids
+     * @param array|string $expression Filter expression
+     *
+     * @return \Traversable
+     */
+    function findAllMatchUidWithin($uids, $expression = null);
 
     /**
      * Set a Like On Post By Given ID

@@ -3,17 +3,15 @@ namespace Module\Content\Actions\Likes;
 
 use Module\Content;
 use Module\Content\Actions\aAction;
-use Module\Content\Interfaces\Model\Entity\iEntityLike;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
-use Module\Content\Model\Entity\EntityLike;
-use Module\Content\Model\Entity\MemberObject;
 use Module\Foundation\Actions\IOC;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
+use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
 
 
-class ListPostLikesAction
+class ListPostsWhichUserLikedAction
     extends aAction
 {
     /** @var iRepoLikes */
@@ -33,54 +31,44 @@ class ListPostLikesAction
         $this->repoLikes = $repoLikes;
     }
 
+
     /**
-     * List Users who have liked a Post
+     * Get the list of posts liked by the current user.
      *
-     * - Trigger Like.Post Event To Notify Subscribers
-     *
-     * @param string             $content_id
+     * @param iEntityAccessToken $token
      *
      * @return array
      */
-    function __invoke($content_id = null)
+    function __invoke(iEntityAccessToken $token = null)
     {
+        # Assert Token
+        $this->assertTokenByOwnerAndScope($token);
+
         $q     = ParseRequestData::_($this->request)->parseQueryParams();
         $skip  = (isset($q['skip']))  ? (int) $q['skip']  : null;
         $limit = (isset($q['limit'])) ? (int) $q['limit'] : 30;
 
-
-        # Retrieve Users Who Liked a Post
-        $cursor = $this->repoLikes->findByItemIdentifierWithModel($content_id, EntityLike::MODEL_POSTS, $skip, $limit);
-
-        $likes  = [];
-        /** @var iEntityLike $like */
-        foreach ($cursor as $like) {
-            $member = new MemberObject;
-            $member->setUid($like->getOwnerIdentifier());
-
-            $likes[] = [
-                'user' => $member,
-            ];
+        # Retrieve Posts Liked By User
+        $posts = $this->ListPostsLikedByUser($token->getOwnerIdentifier(), $skip, $limit);
+        $postsPrepared = [];
+        foreach ($posts as $post) {
+            // Create Response Items
+            $postsPrepared[] = Content\toArrayResponseFromPostEntity( $post, $token->getOwnerIdentifier() );
         }
-
-
-        # Build Response:
 
         // Check whether to display fetch more link in response?
         $linkMore = null;
-        if (count($likes) >= $limit) {
-            $linkMore = IOC::url(null, array('content_id' => $content_id));
+        if (count($postsPrepared) >= $limit) {
+            $linkMore = IOC::url(null);
             $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
         }
 
-
         return [
             ListenerDispatch::RESULT_DISPATCH => [
-                'count' => count($likes),
-                'items' => $likes,
+                'count' => count($postsPrepared),
+                'items' => $postsPrepared,
                 '_link_more' => $linkMore,
                 '_self' => [
-                    'content_id' => $content_id,
                     'skip'       => $skip,
                     'limit'      => $limit,
                 ],

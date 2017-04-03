@@ -12,10 +12,14 @@ return array(
         'DeletePostAction'          => \Module\Content\Actions\Posts\DeletePostAction::class,
         'RetrievePostAction'        => \Module\Content\Actions\Posts\RetrievePostAction::class,
 
-        'LikePostAction'            => \Module\Content\Actions\Likes\LikePostAction::class,
-        'UnLikePostAction'          => \Module\Content\Actions\Likes\UnLikePostAction::class,
-        'ListPostLikesAction'       => \Module\Content\Actions\Likes\ListPostLikesAction::class,
-        'ListWhoLikesPost'          => \Module\Content\Actions\ListWhoLikesPost::class,
+
+        'LikePostAction'                => \Module\Content\Actions\Likes\LikePostAction::class,
+        'UnLikePostAction'              => \Module\Content\Actions\Likes\UnLikePostAction::class,
+        'ListPostLikesAction'           => \Module\Content\Actions\Likes\ListPostLikesAction::class,
+        'ListPostsWhichUserLikedAction' => \Module\Content\Actions\Likes\ListPostsWhichUserLikedAction::class,
+
+        'ListPostsLikedByUser'          => \Module\Content\Actions\ListPostsLikedByUser::class,
+
 
         'IsUserPermissionOnContent' => \Module\Content\Actions\IsUserPermissionOnContent::class,
     ),
