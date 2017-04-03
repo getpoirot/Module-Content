@@ -43,7 +43,7 @@ class ListWhoLikesPost
             $member->setUid($like->getOwnerIdentifier());
 
             yield [
-                '$user' => $member,
+                'user' => $member,
             ];
         }
     }

@@ -84,7 +84,7 @@ class EditPostAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH =>
-                Content\toArrayResponseFromPostEntity($post) + [
+                Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier()) + [
                     '_self' => [
                         'content_id' => $content_id,
                     ],

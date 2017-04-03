@@ -11,7 +11,9 @@ class LikesObject
     /** @var int */
     protected $count;
     /** @var array */
-    protected $members = array(
+    protected $members;
+    /** @var array */
+    protected $latestMembers = array(
 
     );
 
@@ -39,15 +41,42 @@ class LikesObject
         return $this;
     }
 
+    /**
+     * Members UID List
+     *
+     * @param array|\Traversable $members
+     *
+     * @return $this
+     */
+    function setTotalMembers($members)
+    {
+        if ($members instanceof \Traversable)
+            $members = \Poirot\Std\cast($members)->toArray();
+
+        if ($members !== null & !is_array($members))
+            throw new \InvalidArgumentException(sprintf(
+                'Members must instance of Traversable or array; given (%s).'
+                , \Poirot\Std\flatten($members)
+            ));
+
+
+        $this->members = $members;
+        return $this;
+    }
+
+    function getTotalMembers()
+    {
+        return $this->members;
+    }
 
     /**
      * List Members
      *
      * @return array
      */
-    function getMembers()
+    function getLatestMembers()
     {
-        return $this->members;
+        return $this->latestMembers;
     }
 
     /**
@@ -57,13 +86,13 @@ class LikesObject
      *
      * @return $this
      */
-    function setMembers($members)
+    function setLatestMembers($latestMembers)
     {
-        $this->members = array();
+        $this->latestMembers = array();
 
         /** @var MemberObject $m */
-        foreach ($members as $m)
-            $this->addMember($m);
+        foreach ($latestMembers as $m)
+            $this->addLatestMember($m);
 
         return $this;
     }
@@ -75,9 +104,9 @@ class LikesObject
      *
      * @return $this
      */
-    function addMember(MemberObject $member)
+    function addLatestMember(MemberObject $member)
     {
-        $this->members[] = $member;
+        $this->latestMembers[] = $member;
         return $this;
     }
 
@@ -96,7 +125,7 @@ class LikesObject
      */
     function with(array $options, $throwException = false)
     {
-        if (isset($options['members']) && $members = &$options['members']) {
+        if (isset($options['latest_members']) && $members = &$options['latest_members']) {
             foreach ($members as $i => $m) {
                 if (!$m instanceof MemberObject) {
                     $objMember   = new MemberObject;

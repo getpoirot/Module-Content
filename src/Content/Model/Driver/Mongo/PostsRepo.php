@@ -168,8 +168,15 @@ class PostsRepo
                 '_id' => $this->genNextIdentifier($content_id),
             ],
             [
+                // Keep Track Of All Users That Like an Entity
+                '$addToSet' => [
+                    'likes.total_members' => [
+                        '$each' => [ $member->getUid() ],
+                    ],
+                ],
+                // More Info About Latest Users Who Like an Entity
                 '$push' => [
-                    'likes.members' => [
+                    'likes.latest_members' => [
                         '$each' => [ \Poirot\Std\cast($member)->toArray() ],
                         '$position' => 0,
                         '$slice' => 10,
@@ -207,9 +214,10 @@ class PostsRepo
             ],
             [
                 '$pull' => [
-                    'likes.members' => [
-                            'uid' => $member->getUid(),
+                    'likes.latest_members' => [
+                        'uid' => $member->getUid(),
                     ],
+                    'likes.total_members' => $member->getUid(),
                 ],
                 '$inc'  => [
                     'likes.count' => -1,

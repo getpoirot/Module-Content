@@ -7,35 +7,49 @@ namespace Module\Content
     /**
      * Build Array Response From Given Entity Object
      *
-     * @param EntityPost $post
+     * @param EntityPost  $post
+     * @param null|string $me   Current User Identifier
      *
      * @return array
      */
-    function toArrayResponseFromPostEntity(EntityPost $post)
+    function toArrayResponseFromPostEntity(EntityPost $post, $me = null)
     {
+        # Build Likes Response:
+        $likes = ($post->getLikes()) ? [
+            'count'   => $post->getLikes()->getCount(),
+            'members' => \Poirot\Std\cast( $post->getLikes()->getLatestMembers() )
+                ->withWalk(function(&$value, $key) {
+                    $value = ['user' => $value];
+                })
+        ] : [];
+
+        if ($me) {
+            // Check Whether Current User Has Liked Entity?
+            $totalMembers = $post->getLikes()->getTotalMembers();
+            if ( in_array((string)$me, $totalMembers) )
+                $likes = ['by_me' => true] + $likes;
+        }
+
+
+        #
+
         return [
-            '$post' => [
+            'post' => [
                 'uid'        => (string) $post->getUid(),
                 'content'    => $post->getContent(),
                 'stat'       => $post->getStat(),
                 'stat_share' => $post->getStatShare(),
-                '$user' => new MemberObject( ['uid' => $post->getOwnerIdentifier()] ),
-                '$location'   => [
+                'user' => new MemberObject( ['uid' => $post->getOwnerIdentifier()] ),
+                'location'   => [
                     'caption' => $post->getLocation()->getCaption(),
                     'geo'     => [
                         'lon' => $post->getLocation()->getGeo('lon'),
                         'lat' => $post->getLocation()->getGeo('lat'),
                     ],
                 ],
-                'likes' => ($post->getLikes()) ? [
-                    'count'   => $post->getLikes()->getCount(),
-                    'members' => \Poirot\Std\cast( $post->getLikes()->getMembers() )
-                        ->withWalk(function(&$value, $key) {
-                            $value = ['$user' => $value];
-                        })
-                ] : null,
+                'likes' => $likes,
                 'datetime_created' => [
-                    '$datetime' => $post->getDateTimeCreated(),
+                    'datetime' => $post->getDateTimeCreated(),
                 ],
             ],
         ];
