@@ -221,9 +221,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::CONF_KEY => [
-                                                function($content_id = null) {
-                                                    kd(sprintf('(%s) Create Comment On Post', $content_id));
-                                                },
+                                                \Module\Content\Actions\IOC::bareService()->AddCommentOnPostAction,
                                             ],
                                         ],
                                     ],

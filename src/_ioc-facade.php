@@ -2,6 +2,7 @@
 namespace Module\Content\Actions
 {
 
+    use Module\Content\Actions\Comments\AddCommentOnPostAction;
     use Module\Content\Actions\Likes\LikePostAction;
     use Module\Content\Actions\Likes\ListPostLikesAction;
     use Module\Content\Actions\Likes\ListPostsWhichUserLikedAction;
@@ -21,6 +22,8 @@ namespace Module\Content\Actions
      * @property UnLikePostAction              $UnLikePostAction
      * @property ListPostLikesAction           $ListPostLikesAction
      * @property ListPostsWhichUserLikedAction $ListPostsWhichUserLikedAction
+     *
+     * @property AddCommentOnPostAction $AddCommentOnPostAction
      *
      */
     class IOC extends \IOC

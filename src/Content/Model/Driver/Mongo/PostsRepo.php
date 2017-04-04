@@ -44,7 +44,6 @@ class PostsRepo
     /**
      * Persist Content Post
      *
-     * - check given entity identifier not exists; must be unique
      * - if entity has no identifier used ::nextIdentifier
      *   to assign something new
      *
@@ -55,14 +54,7 @@ class PostsRepo
     function insert(EntityPost $entity)
     {
         $givenIdentifier = $entity->getUid();
-        if ($givenIdentifier && false !== $this->findOneMatchUid($givenIdentifier))
-            throw new exDuplicateEntry(sprintf(
-                'Content with UID (%s) exists.'
-                , (string) $givenIdentifier
-            ), 400);
-
-
-        $givenIdentifier  = $this->genNextIdentifier($givenIdentifier);
+        $givenIdentifier = $this->genNextIdentifier($givenIdentifier);
 
         if (!$dateCreated = $entity->getDateTimeCreated())
             $dateCreated = new \DateTime();

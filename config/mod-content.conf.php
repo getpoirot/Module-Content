@@ -41,6 +41,19 @@ return [
                         ['key' => ['item_identifier' => 1, 'model' => 1]],
                         ['key' => ['owner_identifier' => 1, 'model' => 1]],
                     ],],],
+
+            \Module\Content\Model\Driver\Mongo\CommentsRepoService::class => [
+                'collection' => [
+                    // query on which collection
+                    'name' => 'comments',
+                    // which client to connect and query with
+                    'client' => \Module\MongoDriver\Module\MongoDriverManagementFacade::CLIENT_DEFAULT,
+                    // ensure indexes
+                    'indexes' => [
+                        ['key' => ['_id'  => 1]],
+                        ['key' => ['item_identifier' => 1, 'model' => 1]],
+                        ['key' => ['owner_identifier' => 1, 'model' => 1]],
+                    ],],],
         ],
     ],
 ];
