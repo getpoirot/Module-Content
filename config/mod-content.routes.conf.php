@@ -206,14 +206,12 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::CONF_KEY => [
-                                                function($content_id = null) {
-                                                    kd(sprintf('(%s) List Comments.', $content_id));
-                                                },
+                                                \Module\Content\Actions\IOC::bareService()->ListCommentsOfPostAction,
                                             ],
                                         ],
                                     ],
-                                    ## Set Like on Post
-                                    #- Set a like on the post by the currently authenticated user.
+                                    ## Write a Comment on The Post
+                                    #- Add a comment on the post by the currently authenticated user.
                                     'create' => [
                                         'route'   => 'RouteMethod',
                                         'options' => [
@@ -225,19 +223,18 @@ return
                                             ],
                                         ],
                                     ],
-                                    ## Set Like on Post
-                                    #- Set a like on the post by the currently authenticated user.
+                                    ## Delete Comment From Post By Me Or Ignored By Content Owner
+                                    #-
                                     'remove' => [
                                         'route'   => 'RouteMethodSegment',
                                         'options' => [
-                                            'criteria' => '/:comment_id{{\w+}}',
+                                            // 24 is length of content_id by persistence
+                                            'criteria' => '/:comment_id{{\w{24}}}',
                                             'method' => 'DELETE',
                                         ],
                                         'params'  => [
                                             ListenerDispatch::CONF_KEY => [
-                                                function($content_id = null, $comment_id = null) {
-                                                    kd(sprintf('Delete Comment(%s) Of The Post(%s)', $comment_id, $content_id));
-                                                },
+                                                \Module\Content\Actions\IOC::bareService()->RemoveCommentFromPostAction,
                                             ],
                                         ],
                                     ],

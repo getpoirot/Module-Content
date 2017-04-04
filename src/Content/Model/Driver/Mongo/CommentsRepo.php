@@ -75,4 +75,96 @@ class CommentsRepo
         $entity->setUid( $r->getInsertedId() );
         return $entity;
     }
+
+    /**
+     * Save Entity By Insert Or Update
+     *
+     * @param iEntityComment $entity
+     *
+     * @return mixed
+     */
+    function save(iEntityComment $entity)
+    {
+        if ($entity->getUid()) {
+            // It Must Be Update
+
+            /* Currently With Version 1.1.2 Of MongoDB driver library
+             * Entity Not Replaced Entirely
+             *
+             * $this->_query()->updateOne(
+                [
+                    '_id' => $entity->getUid(),
+                ]
+                , $entity
+                , ['upsert' => true]
+            );*/
+
+            $this->_query()->deleteOne([
+                '_id' => $this->genNextIdentifier( $entity->getUid() ),
+            ]);
+        }
+
+        $entity = $this->insert($entity);
+        return $entity;
+    }
+
+    /**
+     * Remove a Comment Entity
+     *
+     * @param iEntityComment $entity
+     *
+     * @return int
+     */
+    function remove(iEntityComment $entity)
+    {
+        $r = $this->_query()->deleteMany([
+            '_id' => $this->genNextIdentifier( $entity->getUid() )
+        ]);
+
+        return $r->getDeletedCount();
+    }
+
+
+    /**
+     * Find Match By Given UID
+     *
+     * @param string|mixed $uid
+     *
+     * @return iEntityComment|false
+     */
+    function findOneMatchUid($uid)
+    {
+        $r = $this->_query()->findOne([
+            '_id' => $this->genNextIdentifier($uid),
+        ]);
+
+        return ($r) ? $r : false;
+    }
+
+    /**
+     * Find Entities Match With Given Identifier And Model
+     *
+     * @param mixed    $item_identifier
+     * @param string   $model
+     * @param int|null $skip
+     * @param int|null $limit
+     *
+     * @return \Traversable
+     */
+    function findByItemIdentifierOfModel($item_identifier, $model, $skip = null, $limit = null)
+    {
+        $r = $this->_query()->find(
+            [
+                // We Consider All Item Liked Has _id from Mongo Collection
+                'item_identifier' => $this->genNextIdentifier($item_identifier),
+                'model'           => $model
+            ],
+            [
+                'limit' => $limit,
+                'skip'  => $skip,
+            ]
+        );
+
+        return $r;
+    }
 }

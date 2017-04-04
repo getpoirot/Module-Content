@@ -5,9 +5,6 @@ use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoComments;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
-use Module\Content\Interfaces\Model\Repo\iRepoPosts;
-use Module\Content\Model\Entity\EntityLike;
-use Module\Content\Model\Entity\MemberObject;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
@@ -19,8 +16,6 @@ class AddCommentOnPostAction
 {
     /** @var iRepoLikes */
     protected $repoComments;
-    /** @var iRepoPosts */
-    protected $repoPosts;
 
 
     /**

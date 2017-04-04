@@ -37,7 +37,7 @@ class ListPostsLikedByUser
      */
     function __invoke($owner_identifier = null, $skip = null, $limit = 30)
     {
-        $likedPost = $this->repoLikes->findAllItemsWithOwnerAndModel(
+        $likedPost = $this->repoLikes->findAllItemsOfOwnerAndModel(
             $owner_identifier
             , EntityLike::MODEL_POSTS
             , $skip

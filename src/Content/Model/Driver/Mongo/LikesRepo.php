@@ -110,7 +110,7 @@ class LikesRepo
      *
      * @return \Traversable
      */
-    function findByItemIdentifierWithModel($item_identifier, $model, $skip = null, $limit = null)
+    function findByItemIdentifierOfModel($item_identifier, $model, $skip = null, $limit = null)
     {
         $r = $this->_query()->find(
             [
@@ -137,7 +137,7 @@ class LikesRepo
      *
      * @return \Traversable
      */
-    function findAllItemsWithOwnerAndModel($owner_identifier, $model, $skip = null, $limit = null)
+    function findAllItemsOfOwnerAndModel($owner_identifier, $model, $skip = null, $limit = null)
     {
         $r = $this->_query()->find(
             [

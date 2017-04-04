@@ -39,7 +39,7 @@ interface iRepoLikes
      *
      * @return \Traversable
      */
-    function findByItemIdentifierWithModel($item_identifier, $model, $skip = null, $limit = null);
+    function findByItemIdentifierOfModel($item_identifier, $model, $skip = null, $limit = null);
 
     /**
      * Find Entities Liked By Owner In Model X
@@ -51,5 +51,5 @@ interface iRepoLikes
      *
      * @return \Traversable
      */
-    function findAllItemsWithOwnerAndModel($owner_identifier, $model, $skip = null, $limit = null);
+    function findAllItemsOfOwnerAndModel($owner_identifier, $model, $skip = null, $limit = null);
 }

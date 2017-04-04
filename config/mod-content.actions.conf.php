@@ -24,7 +24,9 @@ return array(
         'ListPostsLikedByUser'          => \Module\Content\Actions\ListPostsLikedByUser::class,
 
         // Comment
-        'AddCommentOnPostAction' => \Module\Content\Actions\Comments\AddCommentOnPostAction::class,
+        'AddCommentOnPostAction'      => \Module\Content\Actions\Comments\AddCommentOnPostAction::class,
+        'RemoveCommentFromPostAction' => \Module\Content\Actions\Comments\RemoveCommentFromPostAction::class,
+        'ListCommentsOfPostAction'    => \Module\Content\Actions\Comments\ListCommentsOfPostAction::class,
 
     ),
 );
