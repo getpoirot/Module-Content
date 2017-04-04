@@ -8,6 +8,7 @@ use Module\Foundation\Actions\IOC;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
+use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
 
 
 class ListCommentsOfPostAction
@@ -33,11 +34,12 @@ class ListCommentsOfPostAction
     /**
      * List Recent Comments on a Post
      *
-     * @param string $content_id
+     * @param string             $content_id
+     * @param iEntityAccessToken $token
      *
      * @return array
      */
-    function __invoke($content_id = null)
+    function __invoke($content_id = null, iEntityAccessToken $token = null)
     {
         $q     = ParseRequestData::_($this->request)->parseQueryParams();
         $skip  = (isset($q['skip']))  ? (int) $q['skip']  : null;
@@ -54,7 +56,14 @@ class ListCommentsOfPostAction
 
         $comments  = [];
         /** @var Content\Model\Entity\EntityComment $comment */
-        foreach ($persistComments as $comment) {
+        foreach ($persistComments as $comment)
+        {
+            if ($comment->getStat() == $comment::STAT_IGNORE)
+                // Ignored Comment Displayed For Owner
+                if ($comment->getOwnerIdentifier() !== $token->getOwnerIdentifier())
+                    // Don't Display this comment
+                    continue;
+
             $cid = (string) $comment->getUid();
             $comments[ $cid ] = [
                 'uid'     => $cid,
