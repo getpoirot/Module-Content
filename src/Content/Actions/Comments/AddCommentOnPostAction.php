@@ -28,14 +28,12 @@ class AddCommentOnPostAction
      *
      * @param iHttpRequest  $request      @IoC /
      * @param iRepoComments $repoComments @IoC /module/content/services/repository/Comments
-     * @param iRepoPosts    $repoPosts    @IoC /module/content/services/repository/Posts
      */
-    function __construct(iHttpRequest $request, iRepoComments $repoComments, iRepoPosts $repoPosts)
+    function __construct(iHttpRequest $request, iRepoComments $repoComments)
     {
         parent::__construct($request);
 
         $this->repoComments = $repoComments;
-        $this->repoPosts = $repoPosts;
     }
 
     /**
