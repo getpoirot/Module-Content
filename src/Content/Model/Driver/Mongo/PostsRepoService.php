@@ -14,14 +14,15 @@ class PostsRepoService
     /**
      * Return new instance of Repository
      *
-     * @param \MongoDB\Database $mongoDb
-     * @param string            $collection
+     * @param \MongoDB\Database  $mongoDb
+     * @param string             $collection
+     * @param string|object|null $persistable
      *
      * @return PostsRepo
      */
-    function newRepoInstance($mongoDb, $collection)
+    function newRepoInstance($mongoDb, $collection, $persistable = null)
     {
-        $repo = new PostsRepo($mongoDb, $collection);
+        $repo = new PostsRepo($mongoDb, $collection, $persistable);
         return $repo;
     }
 }

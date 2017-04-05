@@ -19,7 +19,8 @@ class CommentsRepo
      */
     protected function __init()
     {
-        $this->setModelPersist(new Mongo\EntityComment);
+        if (!$this->persist)
+            $this->setModelPersist(new Mongo\EntityComment);
     }
 
 

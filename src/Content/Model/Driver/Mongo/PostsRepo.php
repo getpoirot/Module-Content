@@ -23,7 +23,8 @@ class PostsRepo
      */
     protected function __init()
     {
-        $this->setModelPersist(new Mongo\EntityPost);
+        if (!$this->persist)
+            $this->setModelPersist(new Mongo\EntityPost);
     }
 
 
