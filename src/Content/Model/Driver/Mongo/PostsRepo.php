@@ -6,7 +6,6 @@ use Module\Content\Model\Driver\Mongo;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityPost;
 use Module\Content\Model\Entity\MemberObject;
-use Module\Content\Model\Exception\exDuplicateEntry;
 use Module\MongoDriver\Model\Repository\aRepository;
 use MongoDB\BSON\ObjectID;
 use MongoDB\Operation\FindOneAndUpdate;
@@ -145,6 +144,78 @@ class PostsRepo
     }
 
     /**
+     * Find Entities Match With Given Expression
+     *
+     * @param array    $expression Filter expression
+     * @param int|null $offset
+     * @param int|null $limit
+     *
+     * @return \Traversable
+     */
+    function findAll($expression, $offset = null, $limit = null)
+    {
+        $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+
+        if ($offset)
+            $condition = [
+                    '_id' => [
+                        '$lt' => $this->genNextIdentifier($offset),
+                    ]
+                ] + $condition;
+
+        $r = $this->_query()->find(
+            $condition
+            , [
+                'limit' => $limit,
+                'sort'  => [
+                    '_id' => -1,
+                ],
+            ]
+        );
+
+        return $r;
+    }
+
+    /**
+     * Find All Match By Given Owner UIDs List
+     *
+     * @param string $ownerIdentifier Owner Identifier
+     * @param array  $expression      Filter expression
+     * @param string $offset          Offset is MongoID
+     * @param int    $limit
+     *
+     * @return \Traversable
+     */
+    function findAllMatchWithOwnerId($ownerIdentifier, $expression = null, $offset = null, $limit = null)
+    {
+        $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+
+        $condition = [
+            'owner_identifier' => (string) $ownerIdentifier,
+        ] + $condition;
+
+        if ($offset)
+            $condition = [
+                '_id' => [
+                    '$lt' => $this->genNextIdentifier($offset),
+                ]
+            ] + $condition;
+
+
+        $r = $this->_query()->find(
+            $condition
+            , [
+                'limit' => $limit,
+                'sort'  => [
+                    '_id' => -1,
+                ],
+            ]
+        );
+
+        return $r;
+    }
+
+    /**
      * Find All Match By Given UIDs List
      *
      * @param []mixed      $uids
@@ -173,7 +244,12 @@ class PostsRepo
         }
 
         $r = $this->_query()->find(
-            $queryConditions
+            $queryConditions,
+            [
+                'sort' => [
+                    '_id' => -1,
+                ]
+            ]
         );
 
         return $r;

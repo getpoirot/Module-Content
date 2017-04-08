@@ -26,6 +26,7 @@ return [
                     // ensure indexes
                     'indexes' => [
                         ['key' => ['_id' => 1]],
+                        ['key' => ['owner_identifier' => 1]],
                     ],],],
 
             \Module\Content\Model\Driver\Mongo\LikesRepoService::class => [

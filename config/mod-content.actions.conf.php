@@ -12,8 +12,13 @@ return array(
         'EditPostAction'            => \Module\Content\Actions\Posts\EditPostAction::class,
         'DeletePostAction'          => \Module\Content\Actions\Posts\DeletePostAction::class,
         'RetrievePostAction'        => \Module\Content\Actions\Posts\RetrievePostAction::class,
+        'ListPostsOfMeAction'       => \Module\Content\Actions\Posts\ListPostsOfMeAction::class,
+        'ListPostsOfUserAction'     => \Module\Content\Actions\Posts\ListPostsOfUserAction::class,
+        'BrowsePostsAction'         => \Module\Content\Actions\Posts\BrowsePostsAction::class,
 
         'IsUserPermissionOnContent' => \Module\Content\Actions\IsUserPermissionOnContent::class,
+        'ListPostsOfUser'               => \Module\Content\Actions\ListPostsOfUser::class,
+
 
         // Like
         'LikePostAction'                => \Module\Content\Actions\Likes\LikePostAction::class,
@@ -22,6 +27,7 @@ return array(
         'ListPostsWhichUserLikedAction' => \Module\Content\Actions\Likes\ListPostsWhichUserLikedAction::class,
 
         'ListPostsLikedByUser'          => \Module\Content\Actions\ListPostsLikedByUser::class,
+
 
         // Comment
         'AddCommentOnPostAction'      => \Module\Content\Actions\Comments\AddCommentOnPostAction::class,

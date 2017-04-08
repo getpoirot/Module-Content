@@ -49,7 +49,12 @@ class ListPostsWhichUserLikedAction
         $limit = (isset($q['limit'])) ? (int) $q['limit'] : 30;
 
         # Retrieve Posts Liked By User
-        $posts = $this->ListPostsLikedByUser($token->getOwnerIdentifier(), $skip, $limit);
+        $posts = $this->ListPostsLikedByUser(
+            $token->getOwnerIdentifier()
+            , $skip
+            , $limit + 1
+        );
+
         $postsPrepared = [];
         foreach ($posts as $post) {
             // Create Response Items
@@ -58,7 +63,8 @@ class ListPostsWhichUserLikedAction
 
         // Check whether to display fetch more link in response?
         $linkMore = null;
-        if (count($postsPrepared) >= $limit) {
+        if (count($postsPrepared) > $limit) {
+            array_pop($postsPrepared);   // skip augmented content to determine has more?
             $linkMore = IOC::url(null);
             $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
         }

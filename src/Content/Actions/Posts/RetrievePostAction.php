@@ -35,6 +35,7 @@ class RetrievePostAction
      *
      * - only posts with stat publish and share public will attain here.
      * - when user is owner of a post the draft and private posts also can be retrieved.
+     * - posts with share:locked is disabled and will not showing in list.
      *
      * @param null                    $content_id
      * @param iEntityAccessToken|null $token

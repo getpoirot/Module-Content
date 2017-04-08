@@ -143,26 +143,32 @@ class CommentsRepo
     }
 
     /**
-     * Find Entities Match With Given Identifier And Model
+     * Find Entities Match With Given Expression
      *
-     * @param mixed    $item_identifier
-     * @param string   $model
-     * @param int|null $skip
+     * @param array    $expression Filter expression
+     * @param int|null $offset
      * @param int|null $limit
      *
      * @return \Traversable
      */
-    function findByItemIdentifierOfModel($item_identifier, $model, $skip = null, $limit = null)
+    function findAll($expression, $offset = null, $limit = null)
     {
+        $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+
+        if ($offset)
+            $condition = [
+                '_id' => [
+                    '$lt' => $this->genNextIdentifier($offset),
+                ]
+            ] + $condition;
+
         $r = $this->_query()->find(
-            [
-                // We Consider All Item Liked Has _id from Mongo Collection
-                'item_identifier' => $this->genNextIdentifier($item_identifier),
-                'model'           => $model
-            ],
-            [
+            $condition
+            , [
                 'limit' => $limit,
-                'skip'  => $skip,
+                'sort'  => [
+                    '_id' => -1,
+                ],
             ]
         );
 

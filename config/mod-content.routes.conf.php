@@ -62,9 +62,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
-                                function() {
-                                    kd('List and Filter Post ');
-                                },
+                                \Module\Content\Actions\IOC::bareService()->ListPostsOfMeAction,
                             ],
                         ],
                     ],
@@ -253,16 +251,6 @@ return
                 'options' => [
                     'criteria' => '/[@:username{{\w+}}][-:userid{{\w+}}]',
                     'match_whole' => false,
-                    'params'  => [
-                        ListenerDispatch::CONF_KEY => [
-                            function($username = null, $userid = null) {
-                                k(sprintf('Lists Post of @(%s)#(%s)', $username, $userid));
-                                if ($userid === null)
-                                    // Find userid by username
-                                    return ['userid' => '#userid'];
-                            },
-                        ],
-                    ],
                 ],
                 'routes' => [
                     ## /@username/posts
@@ -276,9 +264,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
-                                function($username = null, $userid = null) {
-                                    kd(sprintf('Lists Post of #(%s)', $userid));
-                                },
+                                \Module\Content\Actions\IOC::bareService()->ListPostsOfUserAction,
                             ],
                         ],
                     ],
@@ -309,9 +295,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
-                                function() {
-                                    kd(sprintf('Browse'));
-                                },
+                                \Module\Content\Actions\IOC::bareService()->BrowsePostsAction,
                             ],
                         ],
                     ],
@@ -327,7 +311,7 @@ return
                         'params'  => [
                             ListenerDispatch::CONF_KEY => [
                                 function() {
-                                    kd(sprintf('Discover'));
+                                    die(sprintf('Implement Discover ...'));
                                 },
                             ],
                         ],

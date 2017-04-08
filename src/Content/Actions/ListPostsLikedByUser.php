@@ -50,7 +50,11 @@ class ListPostsLikedByUser
             $posts_id[] = $like->getItemIdentifier();
         }
 
-        $posts = $this->repoPosts->findAllMatchUidWithin($posts_id, 'stat=publish');
+        $posts = $this->repoPosts->findAllMatchUidWithin(
+            $posts_id
+            , \Module\MongoDriver\parseExpressionFromString('stat=publish|draft')
+        );
+
         return $posts;
     }
 }

@@ -122,6 +122,9 @@ class LikesRepo
             [
                 'limit' => $limit,
                 'skip'  => $skip,
+                'sort' => [
+                    '_id' => -1
+                ],
             ]
         );
 

@@ -41,36 +41,43 @@ class ListCommentsOfPostAction
      */
     function __invoke($content_id = null, iEntityAccessToken $token = null)
     {
-        $q     = ParseRequestData::_($this->request)->parseQueryParams();
-        $skip  = (isset($q['skip']))  ? (int) $q['skip']  : null;
-        $limit = (isset($q['limit'])) ? (int) $q['limit'] : 30;
+        $q      = ParseRequestData::_($this->request)->parseQueryParams();
+        $offset = (isset($q['offset'])) ? (int) $q['offset'] : null;
+        $limit  = (isset($q['limit']))  ? (int) $q['limit']  : 30;
 
 
         # Retrieve Comments Of Given Post ID
-        $persistComments = $this->repoComments->findByItemIdentifierOfModel(
-            $content_id
-            , Content\Model\Entity\EntityComment::MODEL_POSTS
-            , $skip
-            , $limit
+        $persistComments = $this->repoComments->findAll(
+            \Module\MongoDriver\parseExpressionFromArray([
+                // We Consider All Item Liked Has _id from Mongo Collection
+                'item_identifier' => $this->repoComments->genNextIdentifier($content_id),
+                'model'           => Content\Model\Entity\EntityComment::MODEL_POSTS,
+                'stat'            => 'publish', // all comments that has publish stat
+            ])
+            , $offset
+            , $limit + 1
         );
+
 
         $comments  = [];
         /** @var Content\Model\Entity\EntityComment $comment */
         foreach ($persistComments as $comment)
         {
-            if ($comment->getStat() == $comment::STAT_IGNORE)
+/*            if ($comment->getStat() == $comment::STAT_IGNORE)
                 // Ignored Comment Displayed For Owner
                 if ($comment->getOwnerIdentifier() !== $token->getOwnerIdentifier())
                     // Don't Display this comment
-                    continue;
+                    continue;*/
 
             $cid = (string) $comment->getUid();
-            $comments[ $cid ] = [
-                'uid'     => $cid,
-                'content' => $comment->getContent(),
-                'user' => new Content\Model\Entity\MemberObject([
-                    'uid' => $comment->getOwnerIdentifier(),
-                ])
+            $comments[] = [
+                'comment' => [
+                    'uid'     => $cid,
+                    'content' => $comment->getContent(),
+                    'user' => new Content\Model\Entity\MemberObject([
+                        'uid' => $comment->getOwnerIdentifier(),
+                    ])
+                ]
             ];
         }
 
@@ -79,9 +86,11 @@ class ListCommentsOfPostAction
 
         // Check whether to display fetch more link in response?
         $linkMore = null;
-        if (count($comments) >= $limit) {
-            $linkMore = IOC::url(null, array('content_id' => $content_id));
-            $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
+        if (count($comments) > $limit) {
+            array_pop($comments);                       // skip augmented content to determine has more?
+            $nextOffset = $comment[count($comments)-1]; // retrieve the next from this offset (less than this)
+            $linkMore   = IOC::url(null, array('content_id' => $content_id));
+            $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['comment']['uid']).'&limit='.$limit);
         }
 
         return [
@@ -91,7 +100,7 @@ class ListCommentsOfPostAction
                 '_link_more' => $linkMore,
                 '_self' => [
                     'content_id' => $content_id,
-                    'skip'       => $skip,
+                    'skip'       => $offset,
                     'limit'      => $limit,
                 ],
             ],

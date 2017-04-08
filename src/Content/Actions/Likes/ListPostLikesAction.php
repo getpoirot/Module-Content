@@ -50,7 +50,12 @@ class ListPostLikesAction
 
 
         # Retrieve Users Who Liked a Post
-        $cursor = $this->repoLikes->findByItemIdentifierOfModel($content_id, EntityLike::MODEL_POSTS, $skip, $limit);
+        $cursor = $this->repoLikes->findByItemIdentifierOfModel(
+            $content_id
+            , EntityLike::MODEL_POSTS
+            , $skip
+            , $limit + 1
+        );
 
         $likes  = [];
         /** @var iEntityLike $like */
@@ -68,7 +73,7 @@ class ListPostLikesAction
 
         // Check whether to display fetch more link in response?
         $linkMore = null;
-        if (count($likes) >= $limit) {
+        if (count($likes) > $limit) {
             $linkMore = IOC::url(null, array('content_id' => $content_id));
             $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
         }

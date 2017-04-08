@@ -5,8 +5,22 @@ use Module\Content\Model\Entity\EntityPost;
 use Module\Content\Model\Entity\MemberObject;
 
 
+/**
+ * Note: When you retrieve posts consider to sort newest at first.
+ *
+ */
 interface iRepoPosts
 {
+    /**
+     * Generate next unique identifier to persist
+     * data with
+     *
+     * @param null|string $id
+     *
+     * @return mixed
+     */
+    function genNextIdentifier($id = null);
+
     /**
      * Persist Content Post
      *
@@ -46,6 +60,29 @@ interface iRepoPosts
      * @return int Delete Count
      */
     function deleteOneMatchUid($uid);
+
+    /**
+     * Find Entities Match With Given Expression
+     *
+     * @param array    $expression Filter expression
+     * @param int|null $offset
+     * @param int|null $limit
+     *
+     * @return \Traversable
+     */
+    function findAll($expression, $offset = null, $limit = null);
+
+    /**
+     * Find All Match By Given Owner UIDs List
+     *
+     * @param string $ownerIdentifier Owner Identifier
+     * @param array  $expression      Filter expression
+     * @param string $offset          Offset is MongoID
+     * @param int    $limit
+     *
+     * @return \Traversable
+     */
+    function findAllMatchWithOwnerId($ownerIdentifier, $expression = null, $offset = null, $limit = null);
 
     /**
      * Find All Match By Given UIDs List

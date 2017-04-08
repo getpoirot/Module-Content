@@ -44,15 +44,14 @@ interface iRepoComments
     function findOneMatchUid($uid);
 
     /**
-     * Find Entities Match With Given Identifier And Model
+     * Find Entities Match With Given Expression
      *
-     * @param mixed    $item_identifier
-     * @param string   $model
-     * @param int|null $skip
+     * @param array    $expression Filter expression
+     * @param int|null $offset
      * @param int|null $limit
      *
      * @return \Traversable
      */
-    function findByItemIdentifierOfModel($item_identifier, $model, $skip = null, $limit = null);
+    function findAll($expression, $offset = null, $limit = null);
 
 }

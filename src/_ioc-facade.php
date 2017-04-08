@@ -9,16 +9,22 @@ namespace Module\Content\Actions
     use Module\Content\Actions\Likes\ListPostLikesAction;
     use Module\Content\Actions\Likes\ListPostsWhichUserLikedAction;
     use Module\Content\Actions\Likes\UnLikePostAction;
+    use Module\Content\Actions\Posts\BrowsePostsAction;
     use Module\Content\Actions\Posts\CreatePostAction;
     use Module\Content\Actions\Posts\DeletePostAction;
     use Module\Content\Actions\Posts\EditPostAction;
+    use Module\Content\Actions\Posts\ListPostsOfMeAction;
+    use Module\Content\Actions\Posts\ListPostsOfUserAction;
     use Module\Content\Actions\Posts\RetrievePostAction;
 
     /**
-     * @property CreatePostAction   $CreatePostAction
-     * @property EditPostAction     $EditPostAction
-     * @property DeletePostAction   $DeletePostAction
-     * @property RetrievePostAction $RetrievePostAction
+     * @property CreatePostAction      $CreatePostAction
+     * @property EditPostAction        $EditPostAction
+     * @property DeletePostAction      $DeletePostAction
+     * @property RetrievePostAction    $RetrievePostAction
+     * @property ListPostsOfMeAction   $ListPostsOfMeAction
+     * @property ListPostsOfUserAction $ListPostsOfUserAction
+     * @property BrowsePostsAction     $BrowsePostsAction
      *
      * @property LikePostAction                $LikePostAction
      * @property UnLikePostAction              $UnLikePostAction
