@@ -27,6 +27,9 @@ return [
                     'indexes' => [
                         ['key' => ['_id' => 1]],
                         ['key' => ['owner_identifier' => 1]],
+                        ['key' => ['_id' => -1, 'stat' => 1]],
+                        ['key' => ['_id' => -1, 'stat' => 1, 'stat_share' => 1]],
+                        ['key' => ['_id' => -1, 'owner_identifier' => 1, 'stat' => 1, 'stat_share' => 1]],
                     ],],],
 
             \Module\Content\Model\Driver\Mongo\LikesRepoService::class => [

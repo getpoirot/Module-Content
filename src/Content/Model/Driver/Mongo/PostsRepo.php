@@ -146,6 +146,8 @@ class PostsRepo
     /**
      * Find Entities Match With Given Expression
      *
+     * !! Consider Mongo Indexes When Using Custom Conditions !!
+     *
      * @param array    $expression Filter expression
      * @param int|null $offset
      * @param int|null $limit
@@ -178,6 +180,8 @@ class PostsRepo
 
     /**
      * Find All Match By Given Owner UIDs List
+     *
+     * !! Consider Mongo Indexes When Using Custom Conditions !!
      *
      * @param string $ownerIdentifier Owner Identifier
      * @param array  $expression      Filter expression
@@ -217,6 +221,8 @@ class PostsRepo
 
     /**
      * Find All Match By Given UIDs List
+     *
+     * !! Consider Mongo Indexes When Using Custom Conditions !!
      *
      * @param []mixed      $uids
      * @param array|string $expression Filter expression
