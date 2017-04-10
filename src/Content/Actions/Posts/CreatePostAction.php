@@ -50,13 +50,24 @@ class CreatePostAction
         $hydratePost = new Content\Model\HydrateEntityPost(
             Content\Model\HydrateEntityPost::parseWith($this->request) );
 
-        $entityPost  = new Content\Model\Entity\EntityPost($hydratePost);
+        try
+        {
+            $entityPost  = new Content\Model\Entity\EntityPost($hydratePost);
 
-        // Determine Owner Identifier From Token
-        $entityPost->setOwnerIdentifier($token->getOwnerIdentifier());
+            // Determine Owner Identifier From Token
+            $entityPost->setOwnerIdentifier($token->getOwnerIdentifier());
+
+            // TODO Assert Validate Entity
+
+        } catch (\InvalidArgumentException $e)
+        {
+            // TODO Handle Validation ...
+            throw $e;
+        }
 
 
         # Persist Post Entity
+
         $post = $this->repoPosts->insert($entityPost);
 
 

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Content\Model;
 
+use Module\Content\Interfaces\Model\Entity\iEntityPost;
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
 use Module\Content\Lib\FactoryContentObject;
 use Module\Content\Model\Entity\EntityPost;
@@ -14,6 +15,7 @@ use Poirot\Std\Hydrator\HydrateGetters;
 class HydrateEntityPost
     extends ConfigurableSetter
     implements \IteratorAggregate
+    , iEntityPost
 {
     const FIELD_CONTENT_TYPE = 'content_type';
     const FIELD_CONTENT      = 'content';
@@ -77,6 +79,16 @@ class HydrateEntityPost
     // .. defined as tEntityPostGetter
 
     /**
+     * Get Content Unique Identifier
+     *
+     * @return mixed
+     */
+    function getUid()
+    {
+        // Not Implemented
+    }
+
+    /**
      * Get Key/Value Content
      *
      * @return iEntityPostContentObject
@@ -107,18 +119,6 @@ class HydrateEntityPost
     }
 
     /**
-     * Get Post Stat
-     * values: publish|draft|locked
-     *
-     * @return string
-     */
-    function getStat()
-    {
-        ($this->stat) ?: $this->stat = EntityPost::STAT_PUBLISH;
-        return $this->stat;
-    }
-
-    /**
      * Get Share Stat
      * values: public|private
      *
@@ -131,6 +131,26 @@ class HydrateEntityPost
         return $this->share;
     }
 
+    /**
+     * Get Post Stat
+     * values: publish|draft|locked
+     *
+     * @return string
+     */
+    function getStat()
+    {
+        // TODO: Implement getStat() method.
+    }
+
+    /**
+     * Get Date Time Created
+     *
+     * @return \DateTime
+     */
+    function getDateTimeCreated()
+    {
+        // TODO: Implement getDateTimeCreated() method.
+    }
 
     // Implement Configurable
 
@@ -187,6 +207,9 @@ class HydrateEntityPost
      */
     public function getIterator()
     {
-        return new HydrateGetters($this);
+        $hydrator = new HydrateGetters($this);
+        $hydrator->setExcludeNullValues();
+
+        return $hydrator;
     }
 }

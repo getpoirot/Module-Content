@@ -19,6 +19,7 @@ abstract class aAction
 {
     /** @var iHttpRequest */
     protected $request;
+
     protected $tokenMustHaveOwner  = true;
     protected $tokenMustHaveScopes = array(
 
