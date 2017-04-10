@@ -34,7 +34,7 @@ class ListPostsOfUser
     function __invoke($owner_identifier = null, $expression = null, $offset = null, $limit = 30)
     {
         if (!$expression)
-            $expression = \Module\MongoDriver\parseExpressionFromString('stat=publish|draft');
+            $expression = \Module\MongoDriver\parseExpressionFromString('stat=publish|draft&stat_share=public|private');
 
         $persistPosts = $this->repoPosts->findAllMatchWithOwnerId(
             $owner_identifier

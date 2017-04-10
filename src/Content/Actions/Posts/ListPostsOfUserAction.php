@@ -32,6 +32,8 @@ class ListPostsOfUserAction
 
 
     /**
+     * // TODO if user identifier is current user show private and draft posts
+     *
      * List and Filter Content Posts Of An User
      *
      * Search Terms:
@@ -77,7 +79,7 @@ class ListPostsOfUserAction
 //        $expression   = \Module\MongoDriver\parseExpressionFromArray($q, ['stat'], 'allow');
         $posts = $this->ListPostsOfUser(
             $userid
-            , \Module\MongoDriver\parseExpressionFromString('stat=publish')
+            , \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public')
             , $offset
             , $limit + 1
         );
