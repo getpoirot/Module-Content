@@ -32,10 +32,17 @@ class LikesRepo
      * @param null|string $id
      *
      * @return mixed
+     * @throws \Exception
      */
     function genNextIdentifier($id = null)
     {
-        return ($id !== null) ? new ObjectID( (string)$id ) : new ObjectID;
+        try {
+            $objectId = ($id !== null) ? new ObjectID( (string)$id ) : new ObjectID;
+        } catch (\Exception $e) {
+            throw new \Exception(sprintf('Invalid Persist (%s) Id is Given.', $id));
+        }
+
+        return $objectId;
     }
 
     /**
