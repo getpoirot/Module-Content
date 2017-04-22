@@ -55,38 +55,29 @@ class ContentObjectGeneral
     // ...
 
     /**
-     * Load Build Options From Given Resource
+     * Build Object With Provided Options
      *
-     * - usually it used in cases that we have to support
-     *   more than once configure situation
-     *   [code:]
-     *     Configurable->with(Configurable::withOf(path\to\file.conf))
-     *   [code]
+     * @param array $options Associated Array
+     * @param bool $throwException Throw Exception On Wrong Option
      *
-     * !! With this The classes that extend this have to
-     *    implement desired parse methods
-     *
-     * @param array|mixed $optionsResource
-     * @param array $_
-     *        usually pass as argument into ::with if self instanced
-     *
-     * @throws \InvalidArgumentException if resource not supported
-     * @return array
+     * @return array Remained Options (if not throw exception)
+     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
-    static function parseWith($optionsResource, array $_ = null)
+    function with(array $options, $throwException = false)
     {
-        $optionsResource = parent::parseWith($optionsResource, $_);
-        if (isset($optionsResource['medias']) && $medias = $optionsResource['medias']) {
-            foreach ($optionsResource['medias'] as $i => $media) {
+        if (isset($options['medias']) && $medias = $options['medias']) {
+            foreach ($options['medias'] as $i => $media) {
                 if (!$media instanceof MediaObjectTenderBin) {
                     // Content Object May Fetch From DB Or Sent By Post Http Request
                     $objectMedia = new MediaObjectTenderBin;
                     $objectMedia->with( $objectMedia::parseWith($media) );
-                    $optionsResource['medias'][$i] = $objectMedia;
+                    $options['medias'][$i] = $objectMedia;
                 }
             }
         }
 
-        return $optionsResource;
+
+        parent::with($options, $throwException);
     }
 }

@@ -19,7 +19,7 @@ interface iRepoPosts
      *
      * @return mixed
      */
-    function genNextIdentifier($id = null);
+    function attainNextIdentifier($id = null);
 
     /**
      * Persist Content Post

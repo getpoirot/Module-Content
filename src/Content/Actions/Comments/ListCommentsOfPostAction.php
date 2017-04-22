@@ -14,7 +14,7 @@ use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
 class ListCommentsOfPostAction
     extends aAction
 {
-    /** @var iRepoComments */
+    /** @var Content\Model\Driver\Mongo\CommentsRepo */
     protected $repoComments;
 
 
@@ -50,7 +50,7 @@ class ListCommentsOfPostAction
         $persistComments = $this->repoComments->findAll(
             \Module\MongoDriver\parseExpressionFromArray([
                 // We Consider All Item Liked Has _id from Mongo Collection
-                'item_identifier' => $this->repoComments->genNextIdentifier($content_id),
+                'item_identifier' => $this->repoComments->attainNextIdentifier($content_id),
                 'model'           => Content\Model\Entity\EntityComment::MODEL_POSTS,
                 'stat'            => 'publish', // all comments that has publish stat
             ])

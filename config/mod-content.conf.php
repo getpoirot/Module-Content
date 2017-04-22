@@ -22,7 +22,7 @@ return [
                     // query on which collection
                     'name' => 'posts',
                     // which client to connect and query with
-                    'client' => \Module\MongoDriver\Module\MongoDriverManagementFacade::CLIENT_DEFAULT,
+                    'client' => 'master',
                     // ensure indexes
                     'indexes' => [
                         ['key' => ['_id' => 1]],
@@ -37,7 +37,7 @@ return [
                     // query on which collection
                     'name' => 'likes',
                     // which client to connect and query with
-                    'client' => \Module\MongoDriver\Module\MongoDriverManagementFacade::CLIENT_DEFAULT,
+                    'client' => 'master',
                     // ensure indexes
                     'indexes' => [
                         ['key' => ['_id'  => 1]],
@@ -51,7 +51,7 @@ return [
                     // query on which collection
                     'name' => 'comments',
                     // which client to connect and query with
-                    'client' => \Module\MongoDriver\Module\MongoDriverManagementFacade::CLIENT_DEFAULT,
+                    'client' => 'master',
                     // ensure indexes
                     'indexes' => [
                         ['key' => ['_id'  => 1]],

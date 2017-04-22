@@ -34,7 +34,7 @@ class LikesRepo
      * @return mixed
      * @throws \Exception
      */
-    function genNextIdentifier($id = null)
+    function attainNextIdentifier($id = null)
     {
         try {
             $objectId = ($id !== null) ? new ObjectID( (string)$id ) : new ObjectID;
@@ -73,7 +73,7 @@ class LikesRepo
                 '$set' => [
                     'owner_identifier' => $entity->getOwnerIdentifier(),
                                        // We Consider All Item Liked Has _id from Mongo Collection
-                    'item_identifier'  => $this->genNextIdentifier( $entity->getItemIdentifier() ),
+                    'item_identifier'  => $this->attainNextIdentifier( $entity->getItemIdentifier() ),
                     'model'            => $entity->getModel(),
                 ],
                 '$setOnInsert' => [
@@ -123,7 +123,7 @@ class LikesRepo
         $r = $this->_query()->find(
             [
                                   // We Consider All Item Liked Has _id from Mongo Collection
-                'item_identifier' => $this->genNextIdentifier($item_identifier),
+                'item_identifier' => $this->attainNextIdentifier($item_identifier),
                 'model'           => $model
             ],
             [

@@ -9,7 +9,7 @@ return
             'match_whole' => false,
         ],
         'params'  => [
-            ListenerDispatch::CONF_KEY => [
+            ListenerDispatch::ACTIONS => [
                 // This Action Run First In Chains and Assert Validate Token
                 //! define array allow actions on matched routes chained after this action
                 /*
@@ -36,7 +36,7 @@ return
                     'match_whole' => true,
                 ],
                 'params'  => [
-                    ListenerDispatch::CONF_KEY => [
+                    ListenerDispatch::ACTIONS => [
                         \Module\Content\Actions\IOC::bareService()->RetrievePostAction,
                     ],
                 ],
@@ -61,7 +61,7 @@ return
                             'match_whole' => true,
                         ],
                         'params'  => [
-                            ListenerDispatch::CONF_KEY => [
+                            ListenerDispatch::ACTIONS => [
                                 \Module\Content\Actions\IOC::bareService()->ListPostsOfMeAction,
                             ],
                         ],
@@ -77,7 +77,7 @@ return
                             'match_whole' => true,
                         ],
                         'params'  => [
-                            ListenerDispatch::CONF_KEY => [
+                            ListenerDispatch::ACTIONS => [
                                 \Module\Content\Actions\IOC::bareService()->CreatePostAction,
                             ],
                         ],
@@ -92,7 +92,7 @@ return
                             'match_whole' => true,
                         ],
                         'params'  => [
-                            ListenerDispatch::CONF_KEY => [
+                            ListenerDispatch::ACTIONS => [
                                 \Module\Content\Actions\IOC::bareService()->ListPostsWhichUserLikedAction,
                             ],
                         ],
@@ -117,7 +117,7 @@ return
                                     'match_whole' => true,
                                 ],
                                 'params'  => [
-                                    ListenerDispatch::CONF_KEY => [
+                                    ListenerDispatch::ACTIONS => [
                                         \Module\Content\Actions\IOC::bareService()->EditPostAction,
                                     ],
                                 ],
@@ -133,7 +133,7 @@ return
                                     'match_whole' => true,
                                 ],
                                 'params'  => [
-                                    ListenerDispatch::CONF_KEY => [
+                                    ListenerDispatch::ACTIONS => [
                                         \Module\Content\Actions\IOC::bareService()->DeletePostAction,
                                     ],
                                 ],
@@ -154,7 +154,7 @@ return
                                             'method' => 'GET',
                                         ],
                                         'params'  => [
-                                            ListenerDispatch::CONF_KEY => [
+                                            ListenerDispatch::ACTIONS => [
                                                 \Module\Content\Actions\IOC::bareService()->ListPostLikesAction,
                                             ],
                                         ],
@@ -167,7 +167,7 @@ return
                                             'method' => 'POST',
                                         ],
                                         'params'  => [
-                                            ListenerDispatch::CONF_KEY => [
+                                            ListenerDispatch::ACTIONS => [
                                                 \Module\Content\Actions\IOC::bareService()->LikePostAction,
                                             ],
                                         ],
@@ -180,7 +180,7 @@ return
                                             'method' => 'DELETE',
                                         ],
                                         'params'  => [
-                                            ListenerDispatch::CONF_KEY => [
+                                            ListenerDispatch::ACTIONS => [
                                                 \Module\Content\Actions\IOC::bareService()->UnLikePostAction,
                                             ],
                                         ],
@@ -203,7 +203,7 @@ return
                                             'method' => 'GET',
                                         ],
                                         'params'  => [
-                                            ListenerDispatch::CONF_KEY => [
+                                            ListenerDispatch::ACTIONS => [
                                                 \Module\Content\Actions\IOC::bareService()->ListCommentsOfPostAction,
                                             ],
                                         ],
@@ -216,7 +216,7 @@ return
                                             'method' => 'POST',
                                         ],
                                         'params'  => [
-                                            ListenerDispatch::CONF_KEY => [
+                                            ListenerDispatch::ACTIONS => [
                                                 \Module\Content\Actions\IOC::bareService()->AddCommentOnPostAction,
                                             ],
                                         ],
@@ -231,7 +231,7 @@ return
                                             'method' => 'DELETE',
                                         ],
                                         'params'  => [
-                                            ListenerDispatch::CONF_KEY => [
+                                            ListenerDispatch::ACTIONS => [
                                                 \Module\Content\Actions\IOC::bareService()->RemoveCommentFromPostAction,
                                             ],
                                         ],
@@ -263,7 +263,7 @@ return
                             'match_whole' => true,
                         ],
                         'params'  => [
-                            ListenerDispatch::CONF_KEY => [
+                            ListenerDispatch::ACTIONS => [
                                 \Module\Content\Actions\IOC::bareService()->ListPostsOfUserAction,
                             ],
                         ],
@@ -279,7 +279,7 @@ return
                     'match_whole' => false,
                 ],
                 'params'  => [
-                    ListenerDispatch::CONF_KEY => [
+                    ListenerDispatch::ACTIONS => [
 
                     ],
                 ],
@@ -294,7 +294,7 @@ return
                             'match_whole' => true,
                         ],
                         'params'  => [
-                            ListenerDispatch::CONF_KEY => [
+                            ListenerDispatch::ACTIONS => [
                                 \Module\Content\Actions\IOC::bareService()->BrowsePostsAction,
                             ],
                         ],
@@ -309,7 +309,7 @@ return
                             'match_whole' => true,
                         ],
                         'params'  => [
-                            ListenerDispatch::CONF_KEY => [
+                            ListenerDispatch::ACTIONS => [
                                 function() {
                                     die(sprintf('Implement Discover ...'));
                                 },

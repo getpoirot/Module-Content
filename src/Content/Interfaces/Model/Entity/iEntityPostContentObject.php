@@ -1,12 +1,11 @@
 <?php
 namespace Module\Content\Interfaces\Model\Entity;
 
-use Poirot\Std\Interfaces\Pact\ipConfigurable;
-use Poirot\Std\Interfaces\Struct\iDataOptions;
+use Poirot\Std\Interfaces\Struct\iValueObject;
+
 
 interface iEntityPostContentObject
-    extends iDataOptions
-    , ipConfigurable
+    extends iValueObject
 {
     /**
      * Get Content Type

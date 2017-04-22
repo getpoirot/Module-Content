@@ -76,7 +76,7 @@ class UnLikePostAction
 
         if ( isset($likes) ) {
             $r = [
-                'stat'  => 'del-like',
+                'stat'  => 'unlike',
                 'count' => $likes->getCount(),
             ];
         } else {
@@ -87,7 +87,7 @@ class UnLikePostAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => $r + [
-                '$user'  => $objMember,
+                'user'  => $objMember,
                 '_self' => [
                     'content_id' => $content_id
                 ],

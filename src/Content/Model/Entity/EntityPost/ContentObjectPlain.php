@@ -2,13 +2,11 @@
 namespace Module\Content\Model\Entity\EntityPost;
 
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
-use Module\MongoDriver\Model\aObject;
-use Poirot\Std\Struct\aDataOptions;
-use Poirot\Std\Struct\DataOptionsOpen;
+use Poirot\Std\Struct\aValueObject;
 
 
 class ContentObjectPlain
-    extends aObject
+    extends aValueObject
     implements iEntityPostContentObject
 {
     const CONTENT_TYPE = 'plain';

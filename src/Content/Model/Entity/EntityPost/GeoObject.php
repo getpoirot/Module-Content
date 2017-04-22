@@ -1,11 +1,11 @@
 <?php
 namespace Module\Content\Model\Entity\EntityPost;
 
-use Poirot\Std\Struct\aDataOptions;
+use Poirot\Std\Struct\aValueObject;
 
 
 class GeoObject
-    extends aDataOptions
+    extends aValueObject
 {
     /** @var array [lon, lat] */
     protected $geo;

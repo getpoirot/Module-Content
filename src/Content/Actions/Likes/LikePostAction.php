@@ -78,7 +78,7 @@ class LikePostAction
 
         if ( isset($likes) ) {
             $r = [
-                'stat'  => 'set-like',
+                'stat'  => 'like',
                 'count' => $likes->getCount(),
             ];
         } else {
@@ -89,7 +89,7 @@ class LikePostAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => $r + [
-                '$user'  => $objMember,
+                'user'  => $objMember,
                 '_self' => [
                     'content_id' => $content_id
                 ],

@@ -2,11 +2,11 @@
 namespace Module\Content\Model\Entity\EntityPost;
 
 use Module\Content\Model\Entity\MemberObject;
-use Module\MongoDriver\Model\aObject;
+use Poirot\Std\Struct\aValueObject;
 
 
 class LikesObject
-    extends aObject
+    extends aValueObject
 {
     /** @var int */
     protected $count;

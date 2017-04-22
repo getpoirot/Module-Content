@@ -36,7 +36,7 @@ class PostsRepo
      * @return mixed
      * @throws \Exception
      */
-    function genNextIdentifier($id = null)
+    function attainNextIdentifier($id = null)
     {
         try {
             $objectId = ($id !== null) ? new ObjectID( (string)$id ) : new ObjectID;
@@ -61,7 +61,7 @@ class PostsRepo
     function insert(EntityPost $entity)
     {
         $givenIdentifier = $entity->getUid();
-        $givenIdentifier = $this->genNextIdentifier($givenIdentifier);
+        $givenIdentifier = $this->attainNextIdentifier($givenIdentifier);
 
         if (!$dateCreated = $entity->getDateTimeCreated())
             $dateCreated = new \DateTime();
@@ -106,7 +106,7 @@ class PostsRepo
             );*/
 
             $this->_query()->deleteOne([
-                '_id' => $this->genNextIdentifier( $entity->getUid() ),
+                '_id' => $this->attainNextIdentifier( $entity->getUid() ),
             ]);
         }
 
@@ -125,7 +125,7 @@ class PostsRepo
     {
         /** @var \Module\Content\Model\Driver\Mongo\EntityPost $r */
         $r = $this->_query()->findOne([
-            '_id' => $this->genNextIdentifier($uid),
+            '_id' => $this->attainNextIdentifier($uid),
         ]);
 
         return ($r) ? $r : false;
@@ -140,11 +140,11 @@ class PostsRepo
      */
     function deleteOneMatchUid($uid)
     {
-        $uid = $this->genNextIdentifier($uid);
+        $uid = $this->attainNextIdentifier($uid);
 
         # Find and delete object
         $r = $this->_query()->deleteOne([
-            '_id' => $this->genNextIdentifier($uid),
+            '_id' => $this->attainNextIdentifier($uid),
         ]);
 
         return $r->getDeletedCount();
@@ -168,7 +168,7 @@ class PostsRepo
         if ($offset)
             $condition = [
                     '_id' => [
-                        '$lt' => $this->genNextIdentifier($offset),
+                        '$lt' => $this->attainNextIdentifier($offset),
                     ]
                 ] + $condition;
 
@@ -208,7 +208,7 @@ class PostsRepo
         if ($offset)
             $condition = [
                 '_id' => [
-                    '$lt' => $this->genNextIdentifier($offset),
+                    '$lt' => $this->attainNextIdentifier($offset),
                 ]
             ] + $condition;
 
@@ -240,7 +240,7 @@ class PostsRepo
     {
         $objIds = [];
         foreach ($uids as $id)
-            $objIds[] = $this->genNextIdentifier($id);
+            $objIds[] = $this->attainNextIdentifier($id);
 
 
         // Query Condition By Expression
@@ -281,7 +281,7 @@ class PostsRepo
         /** @var EntityPost $r */
         $r = $this->_query()->findOneAndUpdate(
             [
-                '_id' => $this->genNextIdentifier($content_id),
+                '_id' => $this->attainNextIdentifier($content_id),
             ],
             [
                 // Keep Track Of All Users That Like an Entity
@@ -326,7 +326,7 @@ class PostsRepo
         /** @var EntityPost $r */
         $r = $this->_query()->findOneAndUpdate(
             [
-                '_id' => $this->genNextIdentifier($content_id),
+                '_id' => $this->attainNextIdentifier($content_id),
             ],
             [
                 '$pull' => [

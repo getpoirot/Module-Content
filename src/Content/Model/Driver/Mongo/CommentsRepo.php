@@ -33,7 +33,7 @@ class CommentsRepo
      * @return mixed
      * @throws \Exception
      */
-    function genNextIdentifier($id = null)
+    function attainNextIdentifier($id = null)
     {
         try {
             $objectId = ($id !== null) ? new ObjectID( (string)$id ) : new ObjectID;
@@ -54,7 +54,7 @@ class CommentsRepo
     function insert(iEntityComment $entity)
     {
         $givenIdentifier = $entity->getUid();
-        $givenIdentifier = $this->genNextIdentifier($givenIdentifier);
+        $givenIdentifier = $this->attainNextIdentifier($givenIdentifier);
 
         if (!$dateCreated = $entity->getDateTimeCreated())
             $dateCreated = new \DateTime();
@@ -66,7 +66,7 @@ class CommentsRepo
             ->setUid($givenIdentifier)
             ->setContent( $entity->getContent() )
             // We Consider All Item Liked Has _id from Mongo Collection
-            ->setItemIdentifier( $this->genNextIdentifier($entity->getItemIdentifier()) )
+            ->setItemIdentifier( $this->attainNextIdentifier($entity->getItemIdentifier()) )
             ->setOwnerIdentifier( $entity->getOwnerIdentifier() )
             ->setModel( $entity->getModel() )
             ->setVoteCount( $entity->getVoteCount() )
@@ -108,7 +108,7 @@ class CommentsRepo
             );*/
 
             $this->_query()->deleteOne([
-                '_id' => $this->genNextIdentifier( $entity->getUid() ),
+                '_id' => $this->attainNextIdentifier( $entity->getUid() ),
             ]);
         }
 
@@ -126,7 +126,7 @@ class CommentsRepo
     function remove(iEntityComment $entity)
     {
         $r = $this->_query()->deleteMany([
-            '_id' => $this->genNextIdentifier( $entity->getUid() )
+            '_id' => $this->attainNextIdentifier( $entity->getUid() )
         ]);
 
         return $r->getDeletedCount();
@@ -143,7 +143,7 @@ class CommentsRepo
     function findOneMatchUid($uid)
     {
         $r = $this->_query()->findOne([
-            '_id' => $this->genNextIdentifier($uid),
+            '_id' => $this->attainNextIdentifier($uid),
         ]);
 
         return ($r) ? $r : false;
@@ -165,7 +165,7 @@ class CommentsRepo
         if ($offset)
             $condition = [
                 '_id' => [
-                    '$lt' => $this->genNextIdentifier($offset),
+                    '$lt' => $this->attainNextIdentifier($offset),
                 ]
             ] + $condition;
 

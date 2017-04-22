@@ -1,11 +1,18 @@
 <?php
 namespace Module\Content\Model\Entity\EntityPost;
 
-use Module\MongoDriver\Model\aTypeObject;
+use Poirot\Std\Struct\aValueObject;
 
+
+/**
+ * Stream Wrapper Link to Bindata To Retrieve Content
+ * note: usually link must provide on-the-fly using media extend
+ *
+ * http://bin/54d3w345
+ */
 
 class MediaObjectTenderBin
-    extends aTypeObject
+    extends aValueObject
 {
     const TYPE = 'tenderbin';
 
@@ -22,6 +29,13 @@ class MediaObjectTenderBin
     final function getStorageType()
     {
         return static::TYPE;
+    }
+
+    final function setStorageType($storageType)
+    {
+        if ( $storageType !== $this->getStorageType() )
+            throw new \Exception(sprintf('Mismatch Storage Type (%s).', $storageType));
+
     }
 
 
@@ -60,17 +74,5 @@ class MediaObjectTenderBin
     function getContentType()
     {
         return $this->contentType;
-    }
-
-    /**
-     * Stream Wrapper Link to Bindata To Retrieve Content
-     * note: usually link must provide on-the-fly using media extend
-     *
-     * @return string|null http://bin/54d3w345
-     */
-    function get_Link()
-    {
-        // TODO implement
-        return 'http://server/media/'.$this->getHash();
     }
 }

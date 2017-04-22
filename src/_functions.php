@@ -49,7 +49,8 @@ namespace Module\Content
                 ],
                 'likes' => $likes,
                 'datetime_created' => [
-                    'datetime' => $post->getDateTimeCreated(),
+                    'datetime'  => $post->getDateTimeCreated(),
+                    'timestamp' => $post->getDateTimeCreated()->getTimestamp(),
                 ],
             ],
         ];
@@ -75,17 +76,12 @@ namespace Module\Content\Lib
          */
         static function of($contentName, $contentData = null)
         {
-            if (!ContentIOC::ContentObjectContainer()->has($contentName))
+            if (! ContentIOC::ContentObjectContainer()->has($contentName) )
                 throw new \Exception(sprintf('Content (%s) not registered as plugin.', $contentName));
 
 
             $contentObject = ContentIOC::ContentObjectContainer()->get($contentName);
             $contentObject->with($contentObject::parseWith($contentData));
-            if (!$contentObject->isFulfilled())
-                throw new \InvalidArgumentException(sprintf(
-                    'Content With Type (%s) not Fulfilled with given content.'
-                    , $contentName
-                ), 400);
 
             return $contentObject;
         }
