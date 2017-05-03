@@ -72,9 +72,11 @@ class RetrievePostAction
 
         # Build Response
 
+        $me = ($token) ? $token->getOwnerIdentifier() : null;
+
         return [
             ListenerDispatch::RESULT_DISPATCH =>
-                Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier()) + [
+                Content\toArrayResponseFromPostEntity($post, $me) + [
                     '_self' => [
                         'content_id' => $content_id,
                     ],

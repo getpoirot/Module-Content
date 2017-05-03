@@ -15,7 +15,6 @@ class IsUserPermissionOnContent
     /**
      * Check Whether Current User (By Token) Has Permission On Content?
      *
-     *
      * @param EntityPost|null   $post
      * @param iAccessToken|null $token
      *
@@ -23,6 +22,10 @@ class IsUserPermissionOnContent
      */
     function __invoke(EntityPost $post = null, iAccessToken $token = null)
     {
+        if (! $token)
+            // There is no token given ...
+            return false;
+
         $postOwner  = (string) $post->getOwnerIdentifier();
         $tokenOwner = (string) $token->getOwnerIdentifier();
 
