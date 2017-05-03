@@ -9,7 +9,7 @@ use Module\Foundation\Actions\IOC;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class BrowsePostsAction
@@ -42,12 +42,12 @@ class BrowsePostsAction
      * - only public and published post
      * - posts with share:locked is disabled and will not showing in list.
      *
-     * @param iEntityAccessToken|null $token
+     * @param iAccessToken|null $token
      *
      * @return array
      * @throws \Exception
      */
-    function __invoke(iEntityAccessToken $token = null)
+    function __invoke(iAccessToken $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

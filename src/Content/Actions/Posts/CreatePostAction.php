@@ -6,7 +6,7 @@ use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class CreatePostAction
@@ -36,11 +36,11 @@ class CreatePostAction
      *
      * - Trigger Create.Post Event To Notify Subscribers
      *
-     * @param iEntityAccessToken|null $token
+     * @param iAccessToken|null $token
      *
      * @return array
      */
-    function __invoke(iEntityAccessToken $token = null)
+    function __invoke(iAccessToken $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

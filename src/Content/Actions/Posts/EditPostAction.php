@@ -7,7 +7,7 @@ use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Poirot\Application\Exception\exAccessDenied;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class EditPostAction
@@ -41,11 +41,11 @@ class EditPostAction
      *
      *
      * @param null                    $content_id
-     * @param iEntityAccessToken|null $token
+     * @param iAccessToken|null $token
      *
      * @return array
      */
-    function __invoke($content_id = null, iEntityAccessToken $token = null)
+    function __invoke($content_id = null, iAccessToken $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

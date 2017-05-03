@@ -4,6 +4,7 @@ namespace Module\Content
     use Module\Content\Model\Entity\EntityPost;
     use Module\Content\Model\Entity\MemberObject;
 
+
     /**
      * Build Array Response From Given Entity Object
      *
@@ -61,6 +62,7 @@ namespace Module\Content\Lib
 {
     use Module\Content\Services\IOC as ContentIOC;
     use Poirot\Std\Interfaces\Pact\ipFactory;
+
 
     class FactoryContentObject
         implements ipFactory

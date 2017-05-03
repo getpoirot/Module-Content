@@ -8,7 +8,7 @@ use Module\Content\Interfaces\Model\Repo\iRepoLikes;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class AddCommentOnPostAction
@@ -39,12 +39,12 @@ class AddCommentOnPostAction
      *
      * - Trigger Like.Post Event To Notify Subscribers
      *
-     * @param string             $content_id
-     * @param iEntityAccessToken $token
+     * @param string       $content_id
+     * @param iAccessToken $token
      *
      * @return array
      */
-    function __invoke($content_id = null, iEntityAccessToken $token = null)
+    function __invoke($content_id = null, iAccessToken $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

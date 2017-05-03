@@ -1,7 +1,6 @@
 <?php
 namespace Module\Content\Actions
 {
-
     use Module\Content\Actions\Comments\AddCommentOnPostAction;
     use Module\Content\Actions\Comments\ListCommentsOfPostAction;
     use Module\Content\Actions\Comments\RemoveCommentFromPostAction;
@@ -16,6 +15,7 @@ namespace Module\Content\Actions
     use Module\Content\Actions\Posts\ListPostsOfMeAction;
     use Module\Content\Actions\Posts\ListPostsOfUserAction;
     use Module\Content\Actions\Posts\RetrievePostAction;
+
 
     /**
      * @property CreatePostAction      $CreatePostAction

@@ -8,7 +8,7 @@ use Module\Foundation\Actions\IOC;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class ListPostsWhichUserLikedAction
@@ -35,11 +35,11 @@ class ListPostsWhichUserLikedAction
     /**
      * Get the list of posts liked by the current user.
      *
-     * @param iEntityAccessToken $token
+     * @param iAccessToken $token
      *
      * @return array
      */
-    function __invoke(iEntityAccessToken $token = null)
+    function __invoke(iAccessToken $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

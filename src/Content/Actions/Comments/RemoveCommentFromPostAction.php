@@ -8,7 +8,7 @@ use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Poirot\Application\Exception\exAccessDenied;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class RemoveCommentFromPostAction
@@ -43,13 +43,13 @@ class RemoveCommentFromPostAction
      *
      * - Trigger Like.Post Event To Notify Subscribers
      *
-     * @param string             $comment_id
-     * @param string             $content_id
-     * @param iEntityAccessToken $token
+     * @param string       $comment_id
+     * @param string       $content_id
+     * @param iAccessToken $token
      *
      * @return array
      */
-    function __invoke($comment_id = null, $content_id = null, iEntityAccessToken $token = null)
+    function __invoke($comment_id = null, $content_id = null, iAccessToken $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

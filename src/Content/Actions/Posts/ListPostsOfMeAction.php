@@ -8,7 +8,7 @@ use Module\Foundation\Actions\IOC;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class ListPostsOfMeAction
@@ -44,11 +44,11 @@ class ListPostsOfMeAction
      * - post with draft and private posts also can be retrieved for owner
      * - posts with share:locked is disabled and will not showing in list.
      *
-     * @param iEntityAccessToken|null $token
+     * @param iAccessToken|null $token
      *
      * @return array
      */
-    function __invoke(iEntityAccessToken $token = null)
+    function __invoke(iAccessToken $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

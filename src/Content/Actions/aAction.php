@@ -5,12 +5,12 @@ namespace Module\Content\Actions;
 use Module\Content\Model\Entity\EntityPost;
 use Poirot\Application\Exception\exAccessDenied;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 /**
  *
- * @method bool         IsUserPermissionOnContent(EntityPost $post, iEntityAccessToken $token = null)
+ * @method bool         IsUserPermissionOnContent(EntityPost $post, iAccessToken $token = null)
  * @method \Traversable ListPostsLikedByUser($owner_identifier, $skip = null, $limit = null)
  * @method array        ListPostsOfUser($owner_identifier, $expression = null, $offset = null, $limit = null)
  */
@@ -39,14 +39,14 @@ abstract class aAction
     /**
      * Assert Token
      *
-     * @param iEntityAccessToken $token
+     * @param iAccessToken $token
      *
      * @throws exAccessDenied
      */
     protected function assertTokenByOwnerAndScope($token)
     {
         # Validate Access Token
-        \Module\OAuth2Client\validateGivenToken(
+        \Module\OAuth2Client\Assertion\validateAccessToken(
             $token
             , (object) ['mustHaveOwner' => $this->tokenMustHaveOwner, 'scopes' => $this->tokenMustHaveScopes ]
         );

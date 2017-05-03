@@ -7,7 +7,7 @@ use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Poirot\Application\Exception\exAccessDenied;
 use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2\Interfaces\Server\Repository\iEntityAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class RetrievePostAction
@@ -38,11 +38,11 @@ class RetrievePostAction
      * - posts with share:locked is disabled and will not showing in list.
      *
      * @param null                    $content_id
-     * @param iEntityAccessToken|null $token
+     * @param iAccessToken|null $token
      *
      * @return array
      */
-    function __invoke($content_id = null, iEntityAccessToken $token = null)
+    function __invoke($content_id = null, iAccessToken $token = null)
     {
         # Check Whether Content Post Exists?
         if( false === $post = $this->repoPosts->findOneMatchUid($content_id) )
