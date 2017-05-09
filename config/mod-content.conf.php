@@ -20,7 +20,7 @@ return [
             \Module\Content\Model\Driver\Mongo\PostsRepoService::class => [
                 'collection' => [
                     // query on which collection
-                    'name' => 'posts',
+                    'name' => 'content.posts',
                     // which client to connect and query with
                     'client' => 'master',
                     // ensure indexes
@@ -35,7 +35,7 @@ return [
             \Module\Content\Model\Driver\Mongo\LikesRepoService::class => [
                 'collection' => [
                     // query on which collection
-                    'name' => 'likes',
+                    'name' => 'content.likes',
                     // which client to connect and query with
                     'client' => 'master',
                     // ensure indexes
@@ -49,7 +49,7 @@ return [
             \Module\Content\Model\Driver\Mongo\CommentsRepoService::class => [
                 'collection' => [
                     // query on which collection
-                    'name' => 'comments',
+                    'name' => 'content.comments',
                     // which client to connect and query with
                     'client' => 'master',
                     // ensure indexes
