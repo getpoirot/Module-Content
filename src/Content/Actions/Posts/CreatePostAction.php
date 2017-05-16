@@ -4,7 +4,7 @@ namespace Module\Content\Actions\Posts;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
-use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
+use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 

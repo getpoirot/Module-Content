@@ -5,7 +5,7 @@ use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
 use Module\Foundation\Actions\IOC;
-use Poirot\Application\Sapi\Server\Http\ListenerDispatch;
+use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
