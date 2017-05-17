@@ -7,7 +7,6 @@ use Module\Content\Interfaces\Model\Entity\iEntityLike;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
 use Module\Content\Model\Entity\EntityLike;
 use Module\Content\Model\Entity\MemberObject;
-use Module\Foundation\Actions\IOC;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
@@ -74,7 +73,7 @@ class ListPostLikesAction
         // Check whether to display fetch more link in response?
         $linkMore = null;
         if (count($likes) > $limit) {
-            $linkMore = IOC::url(null, array('content_id' => $content_id));
+            $linkMore = \Module\HttpFoundation\Module::url(null, array('content_id' => $content_id));
             $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
         }
 

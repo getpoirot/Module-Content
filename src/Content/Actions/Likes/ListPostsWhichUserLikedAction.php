@@ -4,7 +4,6 @@ namespace Module\Content\Actions\Likes;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
-use Module\Foundation\Actions\IOC;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
@@ -65,7 +64,7 @@ class ListPostsWhichUserLikedAction
         $linkMore = null;
         if (count($postsPrepared) > $limit) {
             array_pop($postsPrepared);   // skip augmented content to determine has more?
-            $linkMore = IOC::url(null);
+            $linkMore = \Module\HttpFoundation\Module::url(null);
             $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
         }
 

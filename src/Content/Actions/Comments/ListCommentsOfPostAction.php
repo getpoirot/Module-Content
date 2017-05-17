@@ -4,7 +4,6 @@ namespace Module\Content\Actions\Comments;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoComments;
-use Module\Foundation\Actions\IOC;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
@@ -89,7 +88,7 @@ class ListCommentsOfPostAction
         if (count($comments) > $limit) {
             array_pop($comments);                       // skip augmented content to determine has more?
             $nextOffset = $comment[count($comments)-1]; // retrieve the next from this offset (less than this)
-            $linkMore   = IOC::url(null, array('content_id' => $content_id));
+            $linkMore   = \Module\HttpFoundation\Module::url(null, array('content_id' => $content_id));
             $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['comment']['uid']).'&limit='.$limit);
         }
 
