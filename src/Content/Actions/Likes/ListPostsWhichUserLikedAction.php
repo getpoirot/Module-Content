@@ -20,12 +20,12 @@ class ListPostsWhichUserLikedAction
     /**
      * Construct
      *
-     * @param iHttpRequest $request   @IoC /
-     * @param iRepoLikes   $repoLikes @IoC /module/content/services/repository/Likes
+     * @param iHttpRequest $httpRequest @IoC /HttpRequest
+     * @param iRepoLikes   $repoLikes   @IoC /module/content/services/repository/Likes
      */
-    function __construct(iHttpRequest $request, iRepoLikes $repoLikes)
+    function __construct(iHttpRequest $httpRequest, iRepoLikes $repoLikes)
     {
-        parent::__construct($request);
+        parent::__construct($httpRequest);
 
         $this->repoLikes = $repoLikes;
     }

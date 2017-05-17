@@ -24,13 +24,13 @@ class LikePostAction
     /**
      * Construct
      *
-     * @param iHttpRequest $request   @IoC /
-     * @param iRepoLikes   $repoLikes @IoC /module/content/services/repository/Likes
-     * @param iRepoPosts   $repoPosts @IoC /module/content/services/repository/Posts
+     * @param iHttpRequest $httpRequest @IoC /HttpRequest
+     * @param iRepoLikes   $repoLikes   @IoC /module/content/services/repository/Likes
+     * @param iRepoPosts   $repoPosts   @IoC /module/content/services/repository/Posts
      */
-    function __construct(iHttpRequest $request, iRepoLikes $repoLikes, iRepoPosts $repoPosts)
+    function __construct(iHttpRequest $httpRequest, iRepoLikes $repoLikes, iRepoPosts $repoPosts)
     {
-        parent::__construct($request);
+        parent::__construct($httpRequest);
 
         $this->repoLikes = $repoLikes;
         $this->repoPosts = $repoPosts;

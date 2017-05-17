@@ -23,13 +23,13 @@ class RemoveCommentFromPostAction
     /**
      * Construct
      *
-     * @param iHttpRequest  $request      @IoC /
+     * @param iHttpRequest  $httpRequest  @IoC /HttpRequest
      * @param iRepoComments $repoComments @IoC /module/content/services/repository/Comments
      * @param iRepoPosts    $repoPosts    @IoC /module/content/services/repository/Posts
      */
-    function __construct(iHttpRequest $request, iRepoComments $repoComments, iRepoPosts $repoPosts)
+    function __construct(iHttpRequest $httpRequest, iRepoComments $repoComments, iRepoPosts $repoPosts)
     {
-        parent::__construct($request);
+        parent::__construct($httpRequest);
 
         $this->repoComments = $repoComments;
         $this->repoPosts    = $repoPosts;

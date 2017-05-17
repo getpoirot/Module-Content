@@ -20,12 +20,12 @@ class BrowsePostsAction
 
     /**
      *
-     * @param iHttpRequest $request   @IoC /
-     * @param iRepoPosts   $repoPosts @IoC /module/content/services/repository/Posts
+     * @param iHttpRequest $httpRequest @IoC /HttpRequest
+     * @param iRepoPosts   $repoPosts   @IoC /module/content/services/repository/Posts
      */
-    function __construct(iHttpRequest $request, iRepoPosts $repoPosts)
+    function __construct(iHttpRequest $httpRequest, iRepoPosts $repoPosts)
     {
-        parent::__construct($request);
+        parent::__construct($httpRequest);
 
         $this->repoPosts = $repoPosts;
     }
