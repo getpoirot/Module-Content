@@ -73,7 +73,7 @@ class ListPostLikesAction
         // Check whether to display fetch more link in response?
         $linkMore = null;
         if (count($likes) > $limit) {
-            $linkMore = \Module\HttpFoundation\Module::url(null, array('content_id' => $content_id));
+            $linkMore = \Module\HttpFoundation\Actions::url(null, array('content_id' => $content_id));
             $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
         }
 

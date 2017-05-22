@@ -64,7 +64,7 @@ class ListPostsWhichUserLikedAction
         $linkMore = null;
         if (count($postsPrepared) > $limit) {
             array_pop($postsPrepared);   // skip augmented content to determine has more?
-            $linkMore = \Module\HttpFoundation\Module::url(null);
+            $linkMore = \Module\HttpFoundation\Actions::url(null);
             $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
         }
 
