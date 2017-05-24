@@ -18,7 +18,7 @@ return
                  *    [1] => routes defined callable
                  *     ...
                  */
-                \Module\OAuth2Client\Actions\IOC::bareService()->AssertToken,
+                '/module/oauth2client/actions/AssertToken',
             ],
         ],
 
@@ -31,7 +31,7 @@ return
                 'route'   => 'RouteMethodSegment',
                 'options' => [
                     // 24 is length of content_id by persistence
-                    'criteria' => '/posts/:content_id{{\w{24}}}',
+                    'criteria' => '/posts/:content_id~\w{24}~',
                     'method'   => 'GET',
                     'match_whole' => true,
                 ],
@@ -102,7 +102,7 @@ return
                         'route' => 'RouteSegment',
                         'options' => [
                             // 24 is length of content_id by persistence
-                            'criteria'    => '/:content_id{{\w{24}}}',
+                            'criteria'    => '/:content_id~\w{24}~',
                             'match_whole' => false,
                         ],
                         'routes' => [
@@ -227,7 +227,7 @@ return
                                         'route'   => 'RouteMethodSegment',
                                         'options' => [
                                             // 24 is length of content_id by persistence
-                                            'criteria' => '/:comment_id{{\w{24}}}',
+                                            'criteria' => '/:comment_id~\w{24}~',
                                             'method' => 'DELETE',
                                         ],
                                         'params'  => [
@@ -249,7 +249,7 @@ return
             'users' => [
                 'route'   => 'RouteSegment',
                 'options' => [
-                    'criteria' => '/[@:username{{\w+}}][-:userid{{\w+}}]',
+                    'criteria' => '/<@:username~\w+~><-:userid~\w+~>',
                     'match_whole' => false,
                 ],
                 'routes' => [
