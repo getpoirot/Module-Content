@@ -1,7 +1,6 @@
 <?php
 namespace Module\Content
 {
-
     use Poirot\Application\Interfaces\Sapi;
     use Poirot\Application\ModuleManager\Interfaces\iModuleManager;
     use Poirot\Application\Sapi\Module\ContainerForFeatureActions;
@@ -11,7 +10,6 @@ namespace Module\Content
     use Poirot\Router\Interfaces\iRouterStack;
     use Poirot\Std\Interfaces\Struct\iDataEntity;
 
-
     class Module implements Sapi\iSapiModule
         , Sapi\Module\Feature\iFeatureModuleInitModuleManager
         , Sapi\Module\Feature\iFeatureModuleMergeConfig
@@ -19,7 +17,7 @@ namespace Module\Content
         , Sapi\Module\Feature\iFeatureModuleNestServices
         , Sapi\Module\Feature\iFeatureOnPostLoadModulesGrabServices
     {
-        const CONF_KEY = 'module.content';
+        const CONF = 'module.content';
 
 
         /**
@@ -164,8 +162,11 @@ namespace Module\Content\Actions
 
 namespace Module\Content\Services
 {
+    use Poirot\TenderBinClient\Client;
+
     /**
      * @method static ContainerCappedContentObject ContentObjectContainer()
+     * @method static Client ClientTender()
      */
     class IOC extends \IOC
     { }

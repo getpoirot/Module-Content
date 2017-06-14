@@ -1,5 +1,15 @@
 <?php
+use Module\Content\Services\ServiceClientTender;
+
 return [
+
+    \Module\Content\Module::CONF => [
+        // Client of Tender-Bin Object Storage Settings:
+        ServiceClientTender::CONF => [
+            'server_url' => 'http://storage.'.$_SERVER['HTTP_HOST'],
+        ],
+    ],
+
 
     ## ----------------------------------- ##
     ## OAuth2Client Module Must Configured ##

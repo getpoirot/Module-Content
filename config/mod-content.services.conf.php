@@ -13,6 +13,7 @@
 
 return [
     'services' => [
+        'ClientTender' => \Module\Content\Services\ServiceClientTender::class,
         'ContentObjectContainer' => \Module\Content\Services\ContainerCappedContentObject::class,
     ],
     'nested' => [

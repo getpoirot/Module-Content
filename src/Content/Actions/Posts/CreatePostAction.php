@@ -7,6 +7,7 @@ use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\TenderBinClient\Client;
 
 
 class CreatePostAction
@@ -50,6 +51,37 @@ class CreatePostAction
         $hydratePost = new Content\Model\HydrateEntityPost(
             Content\Model\HydrateEntityPost::parseWith($this->request) );
 
+
+        # Content May Include TenderBin Media
+        # so touch-media file for infinite expiration
+        #
+        $content  = $hydratePost->getContent();
+
+        $_f_touch = function ($traversable) use (&$_f_touch)
+        {
+            /** @var Client $cTender */
+            $cTender = \Module\Content\Services\IOC::ClientTender();
+
+            foreach ($traversable as $c)
+            {
+                if ($c instanceof Content\Model\Entity\EntityPost\MediaObjectTenderBin) {
+                    try {
+                        $cTender->touch( $c->getHash() );
+                    } catch (\Exception $e) {
+                        // TODO Maybe File Hash Not Found or something ...
+                    }
+                }
+
+                elseif (is_array($c) || $c instanceof \Traversable)
+                    $_f_touch($c);
+            }
+        };
+
+        $_f_touch($content);
+
+
+        # Insert Post
+        #
         try
         {
             $entityPost  = new Content\Model\Entity\EntityPost($hydratePost);
