@@ -22,8 +22,9 @@ namespace Module\Content
      * - Using Tender-Bin Storage For Files.
      *   through http client-tenderBin
      *
-     *   @see ServiceClientTender
+     *   also using oauth-client.
      *
+     *   @see ServiceClientTender
      *
      */
     class Module implements Sapi\iSapiModule
