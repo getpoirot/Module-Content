@@ -1,12 +1,9 @@
 <?php
 namespace Module\Content\Services;
 
-use Poirot\Application\aSapi;
 use Poirot\Ioc\Container\Service\aServiceContainer;
-use Poirot\OAuth2\Interfaces\Server\Repository\iOAuthClient;
 use Poirot\OAuth2Client\Federation\TokenProvider\TokenFromOAuthClient;
 use Poirot\OAuth2Client\Grant\Container\GrantPlugins;
-use Poirot\Std\Struct\DataEntity;
 use Poirot\TenderBinClient\Client;
 
 
@@ -18,6 +15,8 @@ class ServiceClientTender
     /** @var string Service Name */
     protected $name = 'clientTender';
 
+    protected $serverUrl;
+
 
     /**
      * Create Service
@@ -26,9 +25,7 @@ class ServiceClientTender
      */
     function newService()
     {
-        $conf      = $this->_attainConf();
-
-        $serverUrl = $conf['server_url'];
+        $serverUrl = $this->serverUrl;
 
         /** @var \Poirot\OAuth2Client\Client $oauthClient */
         $oauthClient = $this->services()->get('/module/OAuth2Client/services/OAuthClient');
@@ -44,22 +41,10 @@ class ServiceClientTender
     // ..
 
     /**
-     * Attain Merged Module Configuration
-     * @return array
+     * @param mixed $serverUrl
      */
-    protected function _attainConf()
+    function setServerUrl($serverUrl)
     {
-        $sc     = $this->services();
-        /** @var aSapi $sapi */
-        $sapi   = $sc->get('/sapi');
-        /** @var DataEntity $config */
-        $config = $sapi->config();
-        $config = $config->get(\Module\Content\Module::CONF);
-
-        $r = array();
-        if (is_array($config) && isset($config[static::CONF]))
-            $r = $config[static::CONF];
-
-        return $r;
+        $this->serverUrl = $serverUrl;
     }
 }

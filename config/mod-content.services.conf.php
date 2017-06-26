@@ -11,18 +11,28 @@
  * @see \Module\Content::getServices()
  */
 
+use Poirot\Ioc\instance;
+
 return [
     'services' => [
-        'ClientTender' => \Module\Content\Services\ServiceClientTender::class,
+        'ClientTender' => new instance(
+            \Module\Content\Services\ServiceClientTender::class
+            , \Poirot\Std\catchIt(function () {
+                if (false === $c = \Poirot\Config\load(__DIR__.'/content/client-tenderbin'))
+                    throw new \Exception('Config (content/client-tenderbin) not loaded.');
+
+                return $c->value;
+            })
+        ),
         'ContentObjectContainer' => \Module\Content\Services\ContainerCappedContentObject::class,
     ],
     'nested' => [
         'repository' => [
             // Define Default Services
             'services' => [
-                \Module\Content\Model\Driver\Mongo\PostsRepoService::class,
-                \Module\Content\Model\Driver\Mongo\LikesRepoService::class,
-                \Module\Content\Model\Driver\Mongo\CommentsRepoService::class,
+                'Posts'    => \Module\Content\Model\Driver\Mongo\PostsRepoService::class,
+                'Likes'    => \Module\Content\Model\Driver\Mongo\LikesRepoService::class,
+                'Comments' => \Module\Content\Model\Driver\Mongo\CommentsRepoService::class,
             ],
         ],
     ],

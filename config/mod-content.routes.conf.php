@@ -37,7 +37,7 @@ return
                 ],
                 'params'  => [
                     ListenerDispatch::ACTIONS => [
-                        \Module\Content\Actions\IOC::bareService()->RetrievePostAction,
+                        '/module/content/actions/RetrievePostAction',
                     ],
                 ],
             ],
@@ -62,7 +62,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                \Module\Content\Actions\IOC::bareService()->ListPostsOfMeAction,
+                                '/module/content/actions/ListPostsOfMeAction',
                             ],
                         ],
                     ],
@@ -78,7 +78,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                \Module\Content\Actions\IOC::bareService()->CreatePostAction,
+                                '/module/content/actions/CreatePostAction',
                             ],
                         ],
                     ],
@@ -93,7 +93,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                \Module\Content\Actions\IOC::bareService()->ListPostsWhichUserLikedAction,
+                                '/module/content/actions/ListPostsWhichUserLikedAction',
                             ],
                         ],
                     ],
@@ -118,7 +118,7 @@ return
                                 ],
                                 'params'  => [
                                     ListenerDispatch::ACTIONS => [
-                                        \Module\Content\Actions\IOC::bareService()->EditPostAction,
+                                        '/module/content/actions/EditPostAction',
                                     ],
                                 ],
                             ],
@@ -134,7 +134,7 @@ return
                                 ],
                                 'params'  => [
                                     ListenerDispatch::ACTIONS => [
-                                        \Module\Content\Actions\IOC::bareService()->DeletePostAction,
+                                        '/module/content/actions/DeletePostAction',
                                     ],
                                 ],
                             ],
@@ -155,7 +155,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                \Module\Content\Actions\IOC::bareService()->ListPostLikesAction,
+                                                '/module/content/actions/ListPostLikesAction',
                                             ],
                                         ],
                                     ],
@@ -168,7 +168,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                \Module\Content\Actions\IOC::bareService()->LikePostAction,
+                                                '/module/content/actions/LikePostAction',
                                             ],
                                         ],
                                     ],
@@ -181,7 +181,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                \Module\Content\Actions\IOC::bareService()->UnLikePostAction,
+                                                '/module/content/actions/UnLikePostAction',
                                             ],
                                         ],
                                     ],
@@ -204,7 +204,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                \Module\Content\Actions\IOC::bareService()->ListCommentsOfPostAction,
+                                                '/module/content/actions/ListCommentsOfPostAction',
                                             ],
                                         ],
                                     ],
@@ -217,7 +217,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                \Module\Content\Actions\IOC::bareService()->AddCommentOnPostAction,
+                                                '/module/content/actions/AddCommentOnPostAction',
                                             ],
                                         ],
                                     ],
@@ -232,7 +232,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                \Module\Content\Actions\IOC::bareService()->RemoveCommentFromPostAction,
+                                                '/module/content/actions/RemoveCommentFromPostAction',
                                             ],
                                         ],
                                     ],
@@ -264,7 +264,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                \Module\Content\Actions\IOC::bareService()->ListPostsOfUserAction,
+                                '/module/content/actions/ListPostsOfUserAction',
                             ],
                         ],
                     ],
@@ -295,7 +295,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                \Module\Content\Actions\IOC::bareService()->BrowsePostsAction,
+                                '/module/content/actions/BrowsePostsAction',
                             ],
                         ],
                     ],

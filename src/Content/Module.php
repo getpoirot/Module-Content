@@ -1,6 +1,8 @@
 <?php
 namespace Module\Content
 {
+
+    use Module\Content\Services\ServiceClientTender;
     use Poirot\Application\Interfaces\Sapi;
     use Poirot\Application\ModuleManager\Interfaces\iModuleManager;
     use Poirot\Application\Sapi\Module\ContainerForFeatureActions;
@@ -10,6 +12,20 @@ namespace Module\Content
     use Poirot\Router\Interfaces\iRouterStack;
     use Poirot\Std\Interfaces\Struct\iDataEntity;
 
+
+    /**
+     * - Using Mongo Db To Store Content.
+     *
+     *   @see mod-content.conf.php
+     *
+     *
+     * - Using Tender-Bin Storage For Files.
+     *   through http client-tenderBin
+     *
+     *   @see ServiceClientTender
+     *
+     *
+     */
     class Module implements Sapi\iSapiModule
         , Sapi\Module\Feature\iFeatureModuleInitModuleManager
         , Sapi\Module\Feature\iFeatureModuleMergeConfig
