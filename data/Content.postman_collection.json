@@ -1,0 +1,1924 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Content",
+		"_postman_id": "902b2eb9-10df-1934-7dc0-d3f53d9219a8",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Collections",
+			"description": "",
+			"item": [
+				{
+					"name": "List a Collection Post Entities",
+					"request": {
+						"url": "{{server_url}}/collection/{{collection_id}}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Colllections can be used to organize posts together; we can have a bookmark collection to save favorite posts.\n\nnote: a collection may be private or public share. the posts within a collection has a share attribute similar to collection that belong to.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Me - Create Content in a Collection",
+					"request": {
+						"url": "{{server_url}}/collection/{{collection_id}}/posts",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content_type\": \"general\",\n  \"content\": {\n    \"caption\": \"any text content #with_hash_tag or @mention that will extracted.\",\n    \"media\": [\n      {\n        \"$bindata\": {\n          \"hash\": \"58c7dcb239288f0012569ed0\",\n          \"content_type\": \"image/jpeg\"\n        }\n      },\n      {\n        \"$bindata\": {\n          \"hash\": \"58c7d33339288f0012569eb4\",\n          \"content_type\": \"image/jpeg\"\n        }\n      }\n    ]\n  },\n  \"stat\": \"draft|publish\",\n  \"location\": {\n    \"entitle\": \"Sohrevardi St.\",\n    \"geo\": {\n      \"lat\": 58.9,\n      \"lon\": 53.4\n    }\n  },\n  \"has_comment_enabled\": false\n}\n"
+						},
+						"description": "Create a Content In The Collection by Currently Authenticated User.\n\n### Upload Files:\nuploading files must directly sent to object-storage then when file successfully uploaded we get hash code in response; we must bind this hash code within post request."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"description": "",
+			"item": [
+				{
+					"name": "List Recent Comments on a Post",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}/comments",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "## Paginate Result\n```\n?offset=58e37abf6c6b7a001136cca2&limit=20\n```"
+					},
+					"response": [
+						{
+							"id": "a925f25f-eca0-4d20-b8f0-d5ad85e1efdc",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}/comments",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Tue, 04 Apr 2017 11:08:41 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=98",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 103,
+							"body": "{\"status\":\"OK\",\"result\":{\"count\":1,\"items\":[{\"uid\":\"58e37abf6c6b7a001136cca2\",\"content\":\"This is Comment Message On Given Content.\",\"user\":{\"uid\":\"p18014445\"}}],\"_link_more\":null,\"_self\":{\"content_id\":\"58e1f3ef6c6b7a001423fd32\",\"skip\":null,\"limit\":30}}}"
+						}
+					]
+				},
+				{
+					"name": "Me - Write a Comment on The Post",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}/comments",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "This is Comment Message On Given Content.",
+									"type": "text"
+								}
+							]
+						},
+						"description": "note: The total length of the comment cannot exceed 300 characters."
+					},
+					"response": [
+						{
+							"id": "03a29334-dfe0-44fc-9cfd-873b3a86b87a",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}/comments",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"enabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "This is Comment Message On Given Content.",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Tue, 04 Apr 2017 08:18:20 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+								}
+							],
+							"cookie": [],
+							"responseTime": 111,
+							"body": "{\"status\":\"OK\",\"result\":{\"comment\":{\"uid\":\"58e356cc6c6b7a001655f8e3\",\"content\":\"This is Comment Message On Given Content.\",\"user\":{\"uid\":\"p18014445\"}},\"_self\":{\"content_id\":\"58e1f3ef6c6b7a001423fd32\"}}}"
+						}
+					]
+				},
+				{
+					"name": "Me - Delete my Comment From Post",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}/comments/{{comment_id}}",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Delete a comment on the post by the currently authenticated user."
+					},
+					"response": [
+						{
+							"id": "2914f203-9f87-4850-ace8-3228b5bc51e2",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}/comments/{{comment_id}}",
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text",
+										"enabled": true,
+										"warning": ""
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text",
+										"enabled": true,
+										"warning": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Tue, 04 Apr 2017 09:26:15 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+								}
+							],
+							"cookie": [],
+							"responseTime": 114,
+							"body": "{\"status\":\"OK\",\"result\":{\"stat\":\"del-comment\",\"_self\":{\"content_id\":\"58e1f3ef6c6b7a001423fd32\",\"comment_id\":\"58e356cc6c6b7a001655f8e3\"}}}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Likes",
+			"description": "",
+			"item": [
+				{
+					"name": "List Users who have liked a Post",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}/likes",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "## Paginate Result\n```\n?skip=40&limit=20\n```"
+					},
+					"response": [
+						{
+							"id": "ebbd44f0-6f55-4f05-9c8d-3d33e4259f69",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}/likes",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Mon, 03 Apr 2017 07:09:14 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 95,
+							"body": "{\"status\":\"OK\",\"result\":{\"count\":1,\"items\":[{\"user\":{\"uid\":\"p18014445\"}}],\"_link_more\":null,\"_self\":{\"content_id\":\"58e1e58d6c6b7a00113b2d32\",\"skip\":null,\"limit\":30}}}"
+						}
+					]
+				},
+				{
+					"name": "Me - Set Like on Post",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}/likes",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Set a like on the post by the currently authenticated user."
+					},
+					"response": [
+						{
+							"id": "6e41408b-40fd-4a95-88a5-9cddf4c46903",
+							"name": "success.SetLike",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}/likes",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text",
+										"enabled": true,
+										"warning": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Sun, 02 Apr 2017 11:45:33 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 108,
+							"body": "{\"status\":\"OK\",\"result\":{\"stat\":\"inc\",\"count\":1,\"$user\":{\"uid\":\"p18014445\"},\"_self\":{\"content_id\":\"58de8e7b6c6b7a00132ea9a3\"}}}"
+						},
+						{
+							"id": "ee17b2b4-c159-4387-ba94-306122e7d8f5",
+							"name": "success.NoChanges",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}/likes",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text",
+										"enabled": true,
+										"warning": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Sun, 02 Apr 2017 11:46:03 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 95,
+							"body": "{\"status\":\"OK\",\"result\":{\"stat\":\"none\",\"$user\":{\"uid\":\"p18014445\"},\"_self\":{\"content_id\":\"58de8e7b6c6b7a00132ea9a3\"}}}"
+						}
+					]
+				},
+				{
+					"name": "Me - UnLike on Post",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}/likes",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Delete a like on the post by the currently authenticated user."
+					},
+					"response": [
+						{
+							"id": "7b29743d-bb46-4148-a549-5dcb76fe3bff",
+							"name": "success.UnLike",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}/likes",
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Mon, 03 Apr 2017 06:37:44 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 115,
+							"body": "{\"status\":\"OK\",\"result\":{\"stat\":\"del-like\",\"count\":0,\"$user\":{\"uid\":\"p18014445\"},\"_self\":{\"content_id\":\"58e1e58d6c6b7a00113b2d32\"}}}"
+						}
+					]
+				},
+				{
+					"name": "Me - List Posts wich user has liked",
+					"request": {
+						"url": "{{server_url}}/posts/liked",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get the list of recent media liked by the owner of the access_token.\n\n\n## Paginate Result\n```\n?skip=40&limit=20\n```"
+					},
+					"response": [
+						{
+							"id": "a42738d5-b8af-4322-bca7-3ff22b6b15da",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/liked?XDEBUG_SESSION_START=14969",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"type": "text",
+										"enabled": true,
+										"warning": ""
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true,
+										"warning": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Mon, 03 Apr 2017 15:25:16 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+								}
+							],
+							"cookie": [],
+							"responseTime": 250,
+							"body": "{\"status\":\"OK\",\"result\":{\"count\":1,\"items\":[{\"post\":{\"uid\":\"58e1f3ef6c6b7a001423fd32\",\"content\":{\"medias\":[{\"storage_type\":\"tenderbin\",\"hash\":\"58c7dcb239288f0012569ed0\",\"content_type\":\"image\\/jpeg\",\"_link\":\"http:\\/\\/server\\/media\\/58c7dcb239288f0012569ed0\"},{\"storage_type\":\"tenderbin\",\"hash\":\"58c7d33339288f0012569eb4\",\"content_type\":\"image\\/jpeg\",\"_link\":\"http:\\/\\/server\\/media\\/58c7d33339288f0012569eb4\"}],\"content_type\":\"general\",\"description\":\"any text content #with_hash_tag or @mention that will extracted.\"},\"stat\":\"publish\",\"stat_share\":\"public\",\"user\":{\"uid\":\"p18014445\"},\"location\":{\"caption\":\"Sohrevardi St.\",\"geo\":{\"lon\":53.4,\"lat\":58.9}},\"likes\":{\"by_me\":true,\"count\":1,\"members\":[{\"user\":{\"uid\":\"p18014445\"}}]},\"datetime_created\":{\"datetime\":{\"date\":\"2017-04-03 07:04:15.000000\",\"timezone_type\":1,\"timezone\":\"+00:00\"}}}}],\"_link_more\":null,\"_self\":{\"skip\":null,\"limit\":30}}}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Posts",
+			"description": "",
+			"item": [
+				{
+					"name": "Me - Create Content",
+					"request": {
+						"url": "{{server_url}}/posts",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content_type\": \"general\",\n  \"content\": {\n    \"description\": \"any text content #with_hash_tag or @mention that will extracted.\",\n    \"medias\": [\n      {\n          \"hash\": \"58c7dcb239288f0012569ed0\",\n          \"content_type\": \"image/jpeg\"\n      },\n      {\n          \"hash\": \"58c7d33339288f0012569eb4\",\n          \"content_type\": \"image/jpeg\"\n      }\n    ]\n  },\n  \"location\": {\n    \"caption\": \"Sohrevardi St.\",\n    \"geo\": {\n      \"lon\": 53.4,\n      \"lat\": 58.9\n    }\n  },\n  \"stat\": \"publish\",\n  \"share\": \"public\",\n  \"is_comment_enabled\": false\n}\n"
+						},
+						"description": "Create a Post Content by Currently Authenticated User.\n\n### Upload Files:\nuploading files must directly sent to object-storage then when file successfully uploaded we get hash code in response; we must bind this hash code within post request.\n\n## Fields:\n- stat: publish|draft\n- share: public|private"
+					},
+					"response": [
+						{
+							"id": "c8da3378-900d-417b-bb61-875c9c464a48",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"enabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"enabled": true,
+										"description": "The mime type of this content"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content_type\": \"general\",\n  \"content\": {\n    \"description\": \"any text content #with_hash_tag or @mention that will extracted.\",\n    \"medias\": [\n      {\n          \"hash\": \"58c7dcb239288f0012569ed0\",\n          \"content_type\": \"image/jpeg\"\n      },\n      {\n          \"hash\": \"58c7d33339288f0012569eb4\",\n          \"content_type\": \"image/jpeg\"\n      }\n    ]\n  },\n  \"location\": {\n    \"caption\": \"Sohrevardi St.\",\n    \"geo\": {\n      \"lon\": 53.4,\n      \"lat\": 58.9\n    }\n  },\n  \"stat\": \"publish\",\n  \"share\": \"public\",\n  \"is_comment_enabled\": false\n}\n"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Sat, 22 Apr 2017 05:47:55 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+								}
+							],
+							"cookie": [],
+							"responseTime": 135,
+							"body": "{\"status\":\"OK\",\"result\":{\"post\":{\"uid\":\"58faee8bf3c7d50016338c12\",\"content\":{\"medias\":[{\"storage_type\":\"tenderbin\",\"hash\":\"58c7dcb239288f0012569ed0\",\"content_type\":\"image\\/jpeg\"},{\"storage_type\":\"tenderbin\",\"hash\":\"58c7d33339288f0012569eb4\",\"content_type\":\"image\\/jpeg\"}],\"content_type\":\"general\",\"description\":\"any text content #with_hash_tag or @mention that will extracted.\"},\"stat\":null,\"stat_share\":\"public\",\"user\":{\"uid\":\"p18014445\"},\"location\":{\"caption\":\"Sohrevardi St.\",\"geo\":{\"lon\":53.4,\"lat\":58.9}},\"likes\":null,\"datetime_created\":{\"datetime\":{\"date\":\"2017-04-22 05:47:55.000000\",\"timezone_type\":3,\"timezone\":\"UTC\"},\"timestamp\":1492840075}}}}"
+						}
+					]
+				},
+				{
+					"name": "Me - Update Content",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": {\n    \"medias\": [\n       {\n          \"hash\": \"58c7dcb239288f0012569ed0\",\n          \"content_type\": \"image/jpeg\"\n      }\n    ],\n    \"description\": \"The Content Has Been Changed.\"\n  },\n  \"location\": {\n  \t\"caption\": \"Niavaran\",\n    \"geo\": {\n    \t\"lon\": 101.56,\n        \"lat\": 76.3\n   }\n  },\n  \"stat\": \"draft\",\n  \"share\": \"private\"\n}\n"
+						},
+						"description": "Update a post that currently authenticated user has access to edit it.\n\naccess can be detrmined by just owner of post.\n\n# note: \n- content-type can`t be changed.\n- all media array must sent completely.\n- ! all other attribute can be changed.\n\n# exceptions:\n- user has no access to edit content.\n- content not found.\n- content is locked.\n\n## Fields:\n- stat: publish|draft\n- share: public|private"
+					},
+					"response": [
+						{
+							"id": "68107863-4e01-4206-b1c1-b47a66ace715",
+							"name": "err.ResourceNotFound",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"enabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"enabled": true,
+										"description": "The mime type of this content"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": {\n    \"medias\": [\n      {\n        \"$bindata\": {\n          \"hash\": \"58c7dcb239288f0012569ed0\",\n          \"content_type\": \"image/jpeg\"\n        }\n      }\n    ],\n    \"description\": \"The Content Has Been Changed.\"\n  },\n  \"location\": {\n  \t\"caption\": \"Niavaran\",\n    \"geo\": {\n    \t\"lon\": 101.56,\n        \"lat\": 76.3\n   }\n  },\n  \"stat\": \"draft\",\n  \"share\": \"private\"\n}\n"
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Fri, 31 Mar 2017 17:30:43 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+								}
+							],
+							"cookie": [],
+							"responseTime": 98,
+							"body": "{\"status\":\"ERROR\",\"error\":{\"state\":\"exResourceNotFound\",\"code\":404,\"message\":\"Content Post (58de8be16c6b7a00132ea9a2) Not Found.\",\"_debug_\":{\"exception\":[{\"message\":\"Content Post (58de8be16c6b7a00132ea9a2) Not Found.\",\"class\":\"Module\\\\Content\\\\Exception\\\\exResourceNotFound\",\"file\":\"\\/var\\/www\\/html\\/vendor\\/poirot\\/mod-content\\/src\\/Content\\/Actions\\/Posts\\/EditPostAction.php\",\"line\":56}]}}}"
+						},
+						{
+							"id": "b5114d76-9098-4527-983b-374772c4885a",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"enabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"enabled": true,
+										"description": "The mime type of this content"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": {\n    \"medias\": [\n       {\n          \"hash\": \"58c7dcb239288f0012569ed0\",\n          \"content_type\": \"image/jpeg\"\n      }\n    ],\n    \"description\": \"The Content Has Been Changed.\"\n  },\n  \"location\": {\n  \t\"caption\": \"Niavaran\",\n    \"geo\": {\n    \t\"lon\": 101.56,\n        \"lat\": 76.3\n   }\n  },\n  \"stat\": \"draft\",\n  \"share\": \"private\"\n}\n"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Sat, 22 Apr 2017 05:54:12 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+								}
+							],
+							"cookie": [],
+							"responseTime": 145,
+							"body": "{\"status\":\"OK\",\"result\":{\"post\":{\"uid\":\"58faee8bf3c7d50016338c12\",\"content\":{\"medias\":[{\"storage_type\":\"tenderbin\",\"hash\":\"58c7dcb239288f0012569ed0\",\"content_type\":\"image\\/jpeg\"}],\"content_type\":\"general\",\"description\":\"The Content Has Been Changed.\"},\"stat\":null,\"stat_share\":\"private\",\"user\":{\"uid\":\"p18014445\"},\"location\":{\"caption\":\"Niavaran\",\"geo\":{\"lon\":101.56,\"lat\":76.3}},\"likes\":null,\"datetime_created\":{\"datetime\":{\"date\":\"2017-04-22 05:47:55.000000\",\"timezone_type\":1,\"timezone\":\"+00:00\"},\"timestamp\":1492840075}},\"_self\":{\"content_id\":\"58faee8bf3c7d50016338c12\"}}}"
+						}
+					]
+				},
+				{
+					"name": "Me - Delete Content",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Delete a post by currently authenticated user that has access to it."
+					},
+					"response": [
+						{
+							"id": "7bad814d-dff7-4bd1-a2dc-c35d88ca748b",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}",
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text",
+										"enabled": true,
+										"warning": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Fri, 31 Mar 2017 15:51:43 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 97,
+							"body": "{\"status\":\"OK\",\"result\":{\"stat\":\"deleted\",\"_self\":{\"content_id\":\"58de7aff6c6b7a00141a7132\"}}}"
+						},
+						{
+							"id": "45267d91-b6b5-4d00-a9d2-c374728784db",
+							"name": "err.ResourceNotFound",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}",
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text",
+										"enabled": true,
+										"warning": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Fri, 31 Mar 2017 17:29:42 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 97,
+							"body": "{\"status\":\"ERROR\",\"error\":{\"state\":\"exResourceNotFound\",\"code\":404,\"message\":\"Content Post (58de8be16c6b7a00132ea9a2) Not Found.\",\"_debug_\":{\"exception\":[{\"message\":\"Content Post (58de8be16c6b7a00132ea9a2) Not Found.\",\"class\":\"Module\\\\Content\\\\Exception\\\\exResourceNotFound\",\"file\":\"\\/var\\/www\\/html\\/vendor\\/poirot\\/mod-content\\/src\\/Content\\/Actions\\/Posts\\/DeletePostAction.php\",\"line\":56}]}}}"
+						}
+					]
+				},
+				{
+					"name": "Me - List and Filter Content Posts",
+					"request": {
+						"url": "{{server_url}}/posts?offset=58e269916c6b7a00131ada62&limit=2",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Used to retrieve content(s) by meta attributes.\n\nnote: Between Resources That Belong To Owner, Determine By Token.\n\n## Retrieve Specific Post Type\nwhen we want to filter posts by type. exp. show videos\n\n```\n?$post=content_type:general\n```\n\n## Posts published only for me\n```\n?$post=stat:publish|share:private\n```\n\n## Paginate Result\n```\n?offset=58e107fa6c6b7a00136318e3&limit=20\n```\n\n* offset is mongo object id \n\n# note:\n- posts with share:locked is disabled and will not showing in list.\n- users list for likes and comments has limited items to display, for retrieve the full list we can use like and comments endpoint."
+					},
+					"response": [
+						{
+							"id": "2d43084e-531c-4644-b8af-d67ba084d1b8",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"enabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "1734",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Sun, 19 Mar 2017 16:13:41 GMT",
+									"description": ""
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": ""
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": ""
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "92",
+							"body": "\n{\n  \"status\": \"OK\",\n  \"result\": {\n    \"count\": 1,\n    \"items\": [{\n      \"$post\": {\n        \"uid\": \"58c7dcb239288f8dcd8w32\",\n        \"content_type\": \"general\",\n        \"content\": {\n          \"caption\": \"any text content #with_hash_tag or @mention that will extracted.\",\n          \"media\": [{\n            \"$bindata\": {\n              \"hash\": \"58c7dcb239288f0012569ed0\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7dcb239288f0012569ed0\"\n          }, {\n            \"$bindata\": {\n              \"hash\": \"58c7d33339288f0012569eb4\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7d33339288f0012569eb4\"\n          }]\n        },\n        \"owner\": {\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          },\n          \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n        },\n        \"post_in\": {\n          \"$collection\": {\n            \"uid\": \"page_id\",\n            \"title\": \"Page Title\"\n          }\n        },\n        \"stat\": \"publish|draft\",\n        \"share\": \"public|private\"\n      },\n      \"location\": {\n        \"entitle\": \"Sohrevardi St.\"\n      },\n      \"has_comment_enabled\": true,\n      \"comment_count\": 1,\n      \"comments_truncated\": [{\n        \"$comment\": {\n          \"uid\": \"comment_id\",\n          \"content\": \"I am the comment.\",\n          \"point\": 13,\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          }\n        },\n        \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n      }],\n      \"like_count\": 100,\n      \"likes_truncated\": [{\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }, {\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }],\n      \"liked_by_me\": true\n    }]\n  },\n  \"_self\": {\n    \"skip\": null,\n    \"limit\": null\n  }\n}\n"
+						},
+						{
+							"id": "ad65e6c2-8b8e-4f96-9545-c05fe37a35e9",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts?offset=58e269916c6b7a00131ada62&limit=2",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"enabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Fri, 07 Apr 2017 20:28:30 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+								}
+							],
+							"cookie": [],
+							"responseTime": 118,
+							"body": "{\"status\":\"OK\",\"result\":{\"count\":2,\"items\":[{\"post\":{\"uid\":\"58e1e58d6c6b7a00113b2d32\",\"content\":{\"medias\":[{\"storage_type\":\"tenderbin\",\"hash\":\"58c7dcb239288f0012569ed0\",\"content_type\":\"image\\/jpeg\",\"_link\":\"http:\\/\\/server\\/media\\/58c7dcb239288f0012569ed0\"},{\"storage_type\":\"tenderbin\",\"hash\":\"58c7d33339288f0012569eb4\",\"content_type\":\"image\\/jpeg\",\"_link\":\"http:\\/\\/server\\/media\\/58c7d33339288f0012569eb4\"}],\"content_type\":\"general\",\"description\":\"any text content #with_hash_tag or @mention that will extracted.\"},\"stat\":\"draft\",\"stat_share\":\"private\",\"user\":{\"uid\":\"p18014445\"},\"location\":{\"caption\":\"Niavaran\",\"geo\":{\"lon\":101.56,\"lat\":76.3}},\"likes\":{\"count\":1,\"members\":[{\"user\":{\"uid\":\"p18014445\"}}]},\"datetime_created\":{\"datetime\":{\"date\":\"2017-04-03 06:02:53.000000\",\"timezone_type\":1,\"timezone\":\"+00:00\"}}}},{\"post\":{\"uid\":\"58e1082d6c6b7a00145b6913\",\"content\":{\"medias\":[{\"storage_type\":\"tenderbin\",\"hash\":\"58c7dcb239288f0012569ed0\",\"content_type\":\"image\\/jpeg\",\"_link\":\"http:\\/\\/server\\/media\\/58c7dcb239288f0012569ed0\"},{\"storage_type\":\"tenderbin\",\"hash\":\"58c7d33339288f0012569eb4\",\"content_type\":\"image\\/jpeg\",\"_link\":\"http:\\/\\/server\\/media\\/58c7d33339288f0012569eb4\"}],\"content_type\":\"general\",\"description\":\"any text content #with_hash_tag or @mention that will extracted.\"},\"stat\":\"publish\",\"stat_share\":\"public\",\"user\":{\"uid\":\"p18014445\"},\"location\":{\"caption\":\"Sohrevardi St.\",\"geo\":{\"lon\":53.4,\"lat\":58.9}},\"likes\":null,\"datetime_created\":{\"datetime\":{\"date\":\"2017-04-02 14:18:21.000000\",\"timezone_type\":1,\"timezone\":\"+00:00\"}}}}],\"_link_more\":\"\\/posts\\/?offset=58e1082d6c6b7a00145b6913&limit=2\",\"_self\":{\"offset\":\"58e269916c6b7a00131ada62\",\"limit\":2}}}"
+						}
+					]
+				},
+				{
+					"name": "Retrieve Content Post",
+					"request": {
+						"url": "{{server_url}}/posts/{{content_id}}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "## note:\n- only posts with stat publish and share public will attain here.\n- when user is owner of a post the draft and private posts also can be retrieved.\n\n## Exceptions:\n- Post may be locked.\n- Post is not found.\n- Post Access Denied."
+					},
+					"response": [
+						{
+							"id": "b31cfea6-5085-463d-a1bd-4f1940405fe1",
+							"name": "err.ResourceNotFound",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Fri, 31 Mar 2017 17:30:25 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 107,
+							"body": "{\"status\":\"ERROR\",\"error\":{\"state\":\"exResourceNotFound\",\"code\":404,\"message\":\"Content Post (58de8be16c6b7a00132ea9a2) Not Found.\",\"_debug_\":{\"exception\":[{\"message\":\"Content Post (58de8be16c6b7a00132ea9a2) Not Found.\",\"class\":\"Module\\\\Content\\\\Exception\\\\exResourceNotFound\",\"file\":\"\\/var\\/www\\/html\\/vendor\\/poirot\\/mod-content\\/src\\/Content\\/Actions\\/Posts\\/RetrievePostAction.php\",\"line\":48}]}}}"
+						},
+						{
+							"id": "74a18c0f-6459-4c5b-ab70-839c420348d2",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/posts/{{content_id}}",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "The mime type of this content"
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Mon, 03 Apr 2017 07:05:52 GMT",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": "Custom header"
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": "A name for the server"
+								},
+								{
+									"name": "Transfer-Encoding",
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 108,
+							"body": "{\"status\":\"OK\",\"result\":{\"post\":{\"uid\":\"58e1e58d6c6b7a00113b2d32\",\"content\":{\"medias\":[{\"storage_type\":\"tenderbin\",\"hash\":\"58c7dcb239288f0012569ed0\",\"content_type\":\"image\\/jpeg\",\"_link\":\"http:\\/\\/server\\/media\\/58c7dcb239288f0012569ed0\"}],\"content_type\":\"general\",\"description\":\"The Content Has Been Changed.\"},\"stat\":\"draft\",\"stat_share\":\"private\",\"user\":{\"uid\":\"p18014445\"},\"location\":{\"caption\":\"Niavaran\",\"geo\":{\"lon\":101.56,\"lat\":76.3}},\"likes\":{\"by_me\":true,\"count\":1,\"members\":[{\"user\":{\"uid\":\"p18014445\"}}]},\"datetime_created\":{\"datetime\":{\"date\":\"2017-04-03 06:02:53.000000\",\"timezone_type\":1,\"timezone\":\"+00:00\"}}},\"_self\":{\"content_id\":\"58e1e58d6c6b7a00113b2d32\"}}}"
+						}
+					]
+				},
+				{
+					"name": "@Username - List and Filter Content Posts",
+					"request": {
+						"url": "{{server_url}}/@username/posts",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Used to retrieve content(s) by meta attributes.\n\nnote: Posts That Belong To @username defined\n\nnote: to retrieve data with username that may vary or changed by user we first retrieve uid from server by username then used uid to find posts.\n\n## Retrieve Specific Post Type\nwhen we want to filter posts by type. exp. show videos\n\n```\n?$post=content_type:general\n```\n\n# note:\n- posts with share:locked is disabled and will not showing in list.\n- users list for likes and comments has limited items to display, for retrieve the full list we can use like and comments endpoint."
+					},
+					"response": [
+						{
+							"id": "09f4520c-299a-4664-9553-3e3e7438cd22",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/@{{username}}/posts",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"enabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "1734",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Sun, 19 Mar 2017 16:14:07 GMT",
+									"description": ""
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": ""
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": ""
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "103",
+							"body": "\n{\n  \"status\": \"OK\",\n  \"result\": {\n    \"count\": 1,\n    \"items\": [{\n      \"$post\": {\n        \"uid\": \"58c7dcb239288f8dcd8w32\",\n        \"content_type\": \"general\",\n        \"content\": {\n          \"caption\": \"any text content #with_hash_tag or @mention that will extracted.\",\n          \"media\": [{\n            \"$bindata\": {\n              \"hash\": \"58c7dcb239288f0012569ed0\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7dcb239288f0012569ed0\"\n          }, {\n            \"$bindata\": {\n              \"hash\": \"58c7d33339288f0012569eb4\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7d33339288f0012569eb4\"\n          }]\n        },\n        \"owner\": {\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          },\n          \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n        },\n        \"post_in\": {\n          \"$collection\": {\n            \"uid\": \"page_id\",\n            \"title\": \"Page Title\"\n          }\n        },\n        \"stat\": \"publish|draft\",\n        \"share\": \"public|private\"\n      },\n      \"location\": {\n        \"entitle\": \"Sohrevardi St.\"\n      },\n      \"has_comment_enabled\": true,\n      \"comment_count\": 1,\n      \"comments_truncated\": [{\n        \"$comment\": {\n          \"uid\": \"comment_id\",\n          \"content\": \"I am the comment.\",\n          \"point\": 13,\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          }\n        },\n        \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n      }],\n      \"like_count\": 100,\n      \"likes_truncated\": [{\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }, {\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }],\n      \"liked_by_me\": true\n    }]\n  },\n  \"_self\": {\n    \"skip\": null,\n    \"limit\": null\n  }\n}\n"
+						}
+					]
+				},
+				{
+					"name": "@UserID - List and Filter Content Posts",
+					"request": {
+						"url": "{{server_url}}/-user_id/posts",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Used to retrieve content(s) by meta attributes.\n\nnote: Posts That Belong To uid defined\n\nnote: to retrieve data with username that may vary or changed by user we first retrieve uid from server by username then used uid to find posts.\n\n## Retrieve Specific Post Type\nwhen we want to filter posts by type. exp. show videos\n\n```\n?$post=content_type:general\n```\n\n# note:\n- posts with share:locked is disabled and will not showing in list.\n- users list for likes and comments has limited items to display, for retrieve the full list we can use like and comments endpoint."
+					},
+					"response": [
+						{
+							"id": "37b8cd92-653d-4f8d-a9f3-33a4c7869ec8",
+							"name": "success",
+							"originalRequest": {
+								"url": "{{server_url}}/@{{username}}/posts",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}",
+										"enabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"enabled": true
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"name": "Connection",
+									"key": "Connection",
+									"value": "Keep-Alive",
+									"description": ""
+								},
+								{
+									"name": "Content-Length",
+									"key": "Content-Length",
+									"value": "1734",
+									"description": ""
+								},
+								{
+									"name": "Content-Type",
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": ""
+								},
+								{
+									"name": "Date",
+									"key": "Date",
+									"value": "Sun, 19 Mar 2017 16:14:07 GMT",
+									"description": ""
+								},
+								{
+									"name": "Keep-Alive",
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100",
+									"description": ""
+								},
+								{
+									"name": "Server",
+									"key": "Server",
+									"value": "Apache/2.4.23 (Ubuntu)",
+									"description": ""
+								},
+								{
+									"name": "Vary",
+									"key": "Vary",
+									"value": "Authorization",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "103",
+							"body": "\n{\n  \"status\": \"OK\",\n  \"result\": {\n    \"count\": 1,\n    \"items\": [{\n      \"$post\": {\n        \"uid\": \"58c7dcb239288f8dcd8w32\",\n        \"content_type\": \"general\",\n        \"content\": {\n          \"caption\": \"any text content #with_hash_tag or @mention that will extracted.\",\n          \"media\": [{\n            \"$bindata\": {\n              \"hash\": \"58c7dcb239288f0012569ed0\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7dcb239288f0012569ed0\"\n          }, {\n            \"$bindata\": {\n              \"hash\": \"58c7d33339288f0012569eb4\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7d33339288f0012569eb4\"\n          }]\n        },\n        \"owner\": {\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          },\n          \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n        },\n        \"post_in\": {\n          \"$collection\": {\n            \"uid\": \"page_id\",\n            \"title\": \"Page Title\"\n          }\n        },\n        \"stat\": \"publish|draft\",\n        \"share\": \"public|private\"\n      },\n      \"location\": {\n        \"entitle\": \"Sohrevardi St.\"\n      },\n      \"has_comment_enabled\": true,\n      \"comment_count\": 1,\n      \"comments_truncated\": [{\n        \"$comment\": {\n          \"uid\": \"comment_id\",\n          \"content\": \"I am the comment.\",\n          \"point\": 13,\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          }\n        },\n        \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n      }],\n      \"like_count\": 100,\n      \"likes_truncated\": [{\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }, {\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }],\n      \"liked_by_me\": true\n    }]\n  },\n  \"_self\": {\n    \"skip\": null,\n    \"limit\": null\n  }\n}\n"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Me - Browse",
+			"request": {
+				"url": "{{server_url}}/browse",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "Suggest Authorized user posts stream to explore. \n\nnote: has a pagination offset"
+			},
+			"response": [
+				{
+					"id": "6eeb56a2-4773-4f63-8936-d568de0fdf6f",
+					"name": "success",
+					"originalRequest": {
+						"url": "{{server_url}}/browse",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"enabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"enabled": true
+							}
+						],
+						"body": {}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"_postman_previewtype": "text",
+					"header": [
+						{
+							"name": "Connection",
+							"key": "Connection",
+							"value": "Keep-Alive",
+							"description": ""
+						},
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "1734",
+							"description": ""
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": ""
+						},
+						{
+							"name": "Date",
+							"key": "Date",
+							"value": "Sun, 19 Mar 2017 16:14:28 GMT",
+							"description": ""
+						},
+						{
+							"name": "Keep-Alive",
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100",
+							"description": ""
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Apache/2.4.23 (Ubuntu)",
+							"description": ""
+						},
+						{
+							"name": "Vary",
+							"key": "Vary",
+							"value": "Authorization",
+							"description": ""
+						}
+					],
+					"cookie": [],
+					"responseTime": "109",
+					"body": "\n{\n  \"status\": \"OK\",\n  \"result\": {\n    \"count\": 1,\n    \"items\": [{\n      \"$post\": {\n        \"uid\": \"58c7dcb239288f8dcd8w32\",\n        \"content_type\": \"general\",\n        \"content\": {\n          \"caption\": \"any text content #with_hash_tag or @mention that will extracted.\",\n          \"media\": [{\n            \"$bindata\": {\n              \"hash\": \"58c7dcb239288f0012569ed0\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7dcb239288f0012569ed0\"\n          }, {\n            \"$bindata\": {\n              \"hash\": \"58c7d33339288f0012569eb4\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7d33339288f0012569eb4\"\n          }]\n        },\n        \"owner\": {\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          },\n          \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n        },\n        \"post_in\": {\n          \"$collection\": {\n            \"uid\": \"page_id\",\n            \"title\": \"Page Title\"\n          }\n        },\n        \"stat\": \"publish|draft\",\n        \"share\": \"public|private\"\n      },\n      \"location\": {\n        \"entitle\": \"Sohrevardi St.\"\n      },\n      \"has_comment_enabled\": true,\n      \"comment_count\": 1,\n      \"comments_truncated\": [{\n        \"$comment\": {\n          \"uid\": \"comment_id\",\n          \"content\": \"I am the comment.\",\n          \"point\": 13,\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          }\n        },\n        \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n      }],\n      \"like_count\": 100,\n      \"likes_truncated\": [{\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }, {\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }],\n      \"liked_by_me\": true\n    }]\n  },\n  \"_self\": {\n    \"skip\": null,\n    \"limit\": null\n  }\n}\n"
+				}
+			]
+		},
+		{
+			"name": "Me - Discover (Home)",
+			"request": {
+				"url": "{{server_url}}/browse/discover",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "List Authorized user posts stream for home (show friends posts)\n\nnote: has a pagination offset"
+			},
+			"response": [
+				{
+					"id": "1365c292-686b-4267-9481-194c01efb974",
+					"name": "success",
+					"originalRequest": {
+						"url": "{{server_url}}/browse",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"enabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"enabled": true
+							}
+						],
+						"body": {}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"_postman_previewtype": "text",
+					"header": [
+						{
+							"name": "Connection",
+							"key": "Connection",
+							"value": "Keep-Alive",
+							"description": ""
+						},
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "1734",
+							"description": ""
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": ""
+						},
+						{
+							"name": "Date",
+							"key": "Date",
+							"value": "Sun, 19 Mar 2017 16:14:28 GMT",
+							"description": ""
+						},
+						{
+							"name": "Keep-Alive",
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100",
+							"description": ""
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Apache/2.4.23 (Ubuntu)",
+							"description": ""
+						},
+						{
+							"name": "Vary",
+							"key": "Vary",
+							"value": "Authorization",
+							"description": ""
+						}
+					],
+					"cookie": [],
+					"responseTime": "109",
+					"body": "\n{\n  \"status\": \"OK\",\n  \"result\": {\n    \"count\": 1,\n    \"items\": [{\n      \"$post\": {\n        \"uid\": \"58c7dcb239288f8dcd8w32\",\n        \"content_type\": \"general\",\n        \"content\": {\n          \"caption\": \"any text content #with_hash_tag or @mention that will extracted.\",\n          \"media\": [{\n            \"$bindata\": {\n              \"hash\": \"58c7dcb239288f0012569ed0\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7dcb239288f0012569ed0\"\n          }, {\n            \"$bindata\": {\n              \"hash\": \"58c7d33339288f0012569eb4\",\n              \"content_type\": \"image/jpeg\"\n            },\n            \"_link\": \"/bin/58c7d33339288f0012569eb4\"\n          }]\n        },\n        \"owner\": {\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          },\n          \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n        },\n        \"post_in\": {\n          \"$collection\": {\n            \"uid\": \"page_id\",\n            \"title\": \"Page Title\"\n          }\n        },\n        \"stat\": \"publish|draft\",\n        \"share\": \"public|private\"\n      },\n      \"location\": {\n        \"entitle\": \"Sohrevardi St.\"\n      },\n      \"has_comment_enabled\": true,\n      \"comment_count\": 1,\n      \"comments_truncated\": [{\n        \"$comment\": {\n          \"uid\": \"comment_id\",\n          \"content\": \"I am the comment.\",\n          \"point\": 13,\n          \"$user\": {\n            \"uid\": \"user_id\",\n            \"username\": \"usr.name\",\n            \"display_name\": \"Payam Naderi\"\n          }\n        },\n        \"_link_avatar\": \"//cdn/link/to/profile/picture\"\n      }],\n      \"like_count\": 100,\n      \"likes_truncated\": [{\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }, {\n        \"$user\": {\n          \"uid\": \"user_id\",\n          \"username\": \"usr.name\",\n          \"display_name\": \"Payam Naderi\"\n        }\n      }],\n      \"liked_by_me\": true\n    }]\n  },\n  \"_self\": {\n    \"skip\": null,\n    \"limit\": null\n  }\n}\n"
+				}
+			]
+		}
+	]
+}
