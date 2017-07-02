@@ -24,6 +24,7 @@ return [
                 return $c->value;
             })
         ),
+
         'ContentObjectContainer' => \Module\Content\Services\ContainerCappedContentObject::class,
     ],
     'nested' => [
