@@ -1,8 +1,9 @@
 <?php
 namespace Module\Content
 {
-
     use Module\Content\Services\ServiceClientTender;
+    use Poirot\Application\aSapi;
+    use Poirot\Application\Interfaces\iApplication;
     use Poirot\Application\Interfaces\Sapi;
     use Poirot\Application\ModuleManager\Interfaces\iModuleManager;
     use Poirot\Application\Sapi\Module\ContainerForFeatureActions;
@@ -28,6 +29,7 @@ namespace Module\Content
      *
      */
     class Module implements Sapi\iSapiModule
+        , Sapi\Module\Feature\iFeatureModuleInitSapi
         , Sapi\Module\Feature\iFeatureModuleInitModuleManager
         , Sapi\Module\Feature\iFeatureModuleMergeConfig
         , Sapi\Module\Feature\iFeatureModuleNestActions
@@ -36,6 +38,25 @@ namespace Module\Content
     {
         const CONF = 'module.content';
 
+
+        /**
+         * Init Module Against Application
+         *
+         * - determine sapi server, cli or http
+         *
+         * priority: 1000 A
+         *
+         * @param iApplication|aSapi $sapi Application Instance
+         *
+         * @return false|null False mean not setup with other module features (skip module)
+         * @throws \Exception
+         */
+        function initialize($sapi)
+        {
+            if ( \Poirot\isCommandLine( $sapi->getSapiName() ) )
+                // Sapi Is Not HTTP. SKIP Module Load!!
+                return false;
+        }
 
         /**
          * Initialize Module Manager

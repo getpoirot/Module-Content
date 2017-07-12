@@ -8,6 +8,7 @@ use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\TenderBinClient\Client;
+use Poirot\TenderBinClient\Exceptions\exUnexpectedValue;
 
 
 class CreatePostAction
@@ -94,7 +95,7 @@ class CreatePostAction
         } catch (\InvalidArgumentException $e)
         {
             // TODO Handle Validation ...
-            throw $e;
+            throw new exUnexpectedValue('Validation Failed', null,  400, $e);
         }
 
 
