@@ -18,7 +18,7 @@ return
                  *    [1] => routes defined callable
                  *     ...
                  */
-                '/module/oauth2client/actions/AssertToken',
+                '/module/oauth2client/actions/AssertToken' => 'token',
             ],
         ],
 
