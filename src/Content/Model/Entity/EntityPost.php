@@ -13,6 +13,7 @@ class EntityPost
     protected $geoLocation;
     /** @var LikesObject */
     protected $likes;
+    protected $isCommentEnabled = true;
 
 
     /**
@@ -96,5 +97,28 @@ class EntityPost
     function getLikes()
     {
         return $this->likes;
+    }
+
+    /**
+     * Set Whether Comments Are Allowed On Post
+     *
+     * @param bool $enabled
+     *
+     * @return $this
+     */
+    function setIsCommentEnabled($enabled = true)
+    {
+        $this->isCommentEnabled = (bool) $enabled;
+        return $this;
+    }
+
+    /**
+     * Whether Comments Are Allowed On Post?
+     *
+     * @return bool
+     */
+    function getIsCommentEnabled()
+    {
+        return $this->isCommentEnabled;
     }
 }

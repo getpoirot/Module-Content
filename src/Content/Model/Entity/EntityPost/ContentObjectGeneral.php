@@ -1,6 +1,9 @@
 <?php
 namespace Module\Content\Model\Entity\EntityPost;
 
+use Module\Content\Interfaces\Model\Entity\iEntityMediaObject;
+use Module\Content\Lib\FactoryMediaObject;
+
 
 class ContentObjectGeneral
     extends ContentObjectPlain
@@ -10,6 +13,28 @@ class ContentObjectGeneral
     /** @var []EntityPostMediaObject  */
     protected $medias = [];
 
+
+    /**
+     * @override Show Content Type Before Any Other When Converting Into Array
+     *           better json response to client
+     *
+     * @inheritdoc
+     */
+    function getContentType()
+    {
+        return parent::getContentType();
+    }
+
+    /**
+     * @override Show Description Before Any Other When Converting Into Array
+     *           better json response to client
+     *
+     * @inheritdoc
+     */
+    function getDescription()
+    {
+        return parent::getDescription();
+    }
 
     /**
      * Set Post Attached Medias
@@ -66,17 +91,14 @@ class ContentObjectGeneral
      */
     function with(array $options, $throwException = false)
     {
-        if (isset($options['medias']) && $medias = $options['medias']) {
+        if ( isset($options['medias']) && $medias = $options['medias'] ) {
             foreach ($options['medias'] as $i => $media) {
-                if (!$media instanceof MediaObjectTenderBin) {
-                    // Content Object May Fetch From DB Or Sent By Post Http Request
-                    $objectMedia = new MediaObjectTenderBin;
-                    $objectMedia->with( $objectMedia::parseWith($media) );
+                if (! $media instanceof iEntityMediaObject ) {
+                    $objectMedia = FactoryMediaObject::of($media);
                     $options['medias'][$i] = $objectMedia;
                 }
             }
         }
-
 
         parent::with($options, $throwException);
     }
