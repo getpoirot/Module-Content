@@ -45,12 +45,32 @@ class CreatePostAction
     function __invoke(iAccessToken $token = null)
     {
         # Assert Token
+        #
         $this->assertTokenByOwnerAndScope($token);
 
 
         # Create Post Entity From Http Request
+        #
         $hydratePost = new Content\Model\HydrateEntityPost(
             Content\Model\HydrateEntityPost::parseWith($this->request) );
+
+
+        # Assert Validate Entity
+        #
+        try
+        {
+            $entityPost  = new Content\Model\Entity\EntityPost($hydratePost);
+
+            // Determine Owner Identifier From Token
+            $entityPost->setOwnerIdentifier($token->getOwnerIdentifier());
+
+            // TODO Assert Validate Entity
+
+        } catch (\InvalidArgumentException $e)
+        {
+            // TODO Handle Validation ...
+            throw new exUnexpectedValue('Validation Failed', null,  400, $e);
+        }
 
 
         # Content May Include TenderBin Media
@@ -81,31 +101,13 @@ class CreatePostAction
         $_f_touch($content);
 
 
-        # Insert Post
-        #
-        try
-        {
-            $entityPost  = new Content\Model\Entity\EntityPost($hydratePost);
-
-            // Determine Owner Identifier From Token
-            $entityPost->setOwnerIdentifier($token->getOwnerIdentifier());
-
-            // TODO Assert Validate Entity
-
-        } catch (\InvalidArgumentException $e)
-        {
-            // TODO Handle Validation ...
-            throw new exUnexpectedValue('Validation Failed', null,  400, $e);
-        }
-
-
         # Persist Post Entity
-
+        #
         $post = $this->repoPosts->insert($entityPost);
 
 
         # Build Response:
-
+        #
         return [
             ListenerDispatch::RESULT_DISPATCH =>
                 Content\toArrayResponseFromPostEntity($post)

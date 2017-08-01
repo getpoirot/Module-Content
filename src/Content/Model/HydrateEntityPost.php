@@ -6,6 +6,7 @@ use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
 use Module\Content\Lib\FactoryContentObject;
 use Module\Content\Model\Entity\EntityPost;
 use Module\Content\Model\Entity\EntityPost\GeoObject;
+use Module\Content\Model\Entity\EntityPostBase;
 use Poirot\Std\Hydrator\aHydrateEntity;
 
 
@@ -24,9 +25,9 @@ class HydrateEntityPost
     protected $_contentType;
     protected $location;
     protected $content;
-    protected $stat;
-    protected $share;
-
+    protected $stat  = EntityPostBase::STAT_PUBLISH;
+    protected $share = EntityPostBase::STAT_SHARE_PUBLIC;
+    protected $isCommentEnabled = true;
 
     /**
      * Construct
@@ -70,6 +71,10 @@ class HydrateEntityPost
         $this->share = $share;
     }
 
+    function setIsCommentEnabled($enabled = true)
+    {
+        $this->isCommentEnabled = (bool) $enabled;
+    }
 
     // Hydration Getters:
     // .. defined as tEntityPostGetter
@@ -123,7 +128,6 @@ class HydrateEntityPost
     function getStatShare()
     {
         // Share
-        ($this->share) ?: $this->share = EntityPost::STAT_SHARE_PUBLIC;
         return $this->share;
     }
 
@@ -135,7 +139,15 @@ class HydrateEntityPost
      */
     function getStat()
     {
-        // TODO: Implement getStat() method.
+        return $this->stat;
+    }
+
+    /**
+     * @return boolean
+     */
+    function getIsCommentEnabled()
+    {
+        return $this->isCommentEnabled;
     }
 
     /**
