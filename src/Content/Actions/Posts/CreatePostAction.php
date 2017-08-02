@@ -7,8 +7,8 @@ use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\Std\Exceptions\exUnexpectedValue;
 use Poirot\TenderBinClient\Client;
-use Poirot\TenderBinClient\Exceptions\exUnexpectedValue;
 
 
 class CreatePostAction
@@ -66,10 +66,13 @@ class CreatePostAction
 
             // TODO Assert Validate Entity
 
-        } catch (\InvalidArgumentException $e)
+        } catch (exUnexpectedValue $e)
         {
             // TODO Handle Validation ...
             throw new exUnexpectedValue('Validation Failed', null,  400, $e);
+        }
+        catch (\Exception $e) {
+            throw $e;
         }
 
 
