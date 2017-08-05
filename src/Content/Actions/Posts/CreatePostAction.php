@@ -4,11 +4,12 @@ namespace Module\Content\Actions\Posts;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
+use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\Std\Exceptions\exUnexpectedValue;
 use Poirot\TenderBinClient\Client;
-use Poirot\TenderBinClient\Exceptions\exUnexpectedValue;
 
 
 class CreatePostAction
@@ -85,11 +86,14 @@ class CreatePostAction
 
             foreach ($traversable as $c)
             {
-                if ($c instanceof Content\Model\Entity\EntityPost\MediaObjectTenderBin) {
+                if ($c instanceof MediaObjectTenderBin) {
                     try {
                         $cTender->touch( $c->getHash() );
+                    } catch (Content\Exception\exUnknownContentType $e) {
+                        // Specific Content Client Exception
                     } catch (\Exception $e) {
-                        // TODO Maybe File Hash Not Found or something ...
+                        // Other Errors Throw To Next Layer!
+                        throw $e;
                     }
                 }
 
