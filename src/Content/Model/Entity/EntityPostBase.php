@@ -20,8 +20,8 @@ class EntityPostBase
 
     protected $uid;
     protected $content;
-    protected $stat;
-    protected $statShare;
+    protected $stat = self::STAT_PUBLISH;
+    protected $statShare = self::STAT_SHARE_PUBLIC;
     protected $datetimeCreated;
 
     protected $_available_stat = [
