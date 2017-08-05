@@ -62,6 +62,7 @@ namespace Module\Content
 namespace Module\Content\Lib
 {
 
+    use Module\Content\Exception\exUnknownContentType;
     use Module\Content\Interfaces\Model\Entity\iEntityMediaObject;
     use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
     use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
@@ -84,7 +85,9 @@ namespace Module\Content\Lib
         static function of($contentName, $contentData = null)
         {
             if (! ContentIOC::ContentObjectContainer()->has($contentName) )
-                throw new \Exception(sprintf('Content Of Type (%s) Has No Plugin Registered In System.', $contentName));
+                throw new exUnknownContentType(sprintf(
+                    'Content Of Type (%s) Has No Plugin Registered In System.', $contentName
+                ));
 
 
             /** @var iEntityPostContentObject $contentObject */
