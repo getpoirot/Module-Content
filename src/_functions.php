@@ -4,7 +4,7 @@ namespace Module\Content
     use Module\Content\Model\Entity\EntityPost;
     use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
     use Module\Content\Model\Entity\MemberObject;
-    use Poirot\TenderBinClient\Client;
+    use Poirot\TenderBinClient;
 
 
     /**
@@ -74,7 +74,7 @@ namespace Module\Content
             return;
 
 
-        /** @var Client $cTender */
+        /** @var TenderBinClient\Client $cTender */
         $cTender = \Module\Content\Services\IOC::ClientTender();
 
         foreach ($content as $c)
@@ -82,7 +82,7 @@ namespace Module\Content
             if ($c instanceof MediaObjectTenderBin) {
                 try {
                     $cTender->touch( $c->getHash() );
-                } catch (Content\Exception\exUnknownContentType $e) {
+                } catch (TenderBinClient\Exceptions\exResourceNotFound $e) {
                     // Specific Content Client Exception
                 } catch (\Exception $e) {
                     // Other Errors Throw To Next Layer!
