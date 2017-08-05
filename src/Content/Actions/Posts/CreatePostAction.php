@@ -67,10 +67,13 @@ class CreatePostAction
 
             // TODO Assert Validate Entity
 
-        } catch (\InvalidArgumentException $e)
+        } catch (exUnexpectedValue $e)
         {
             // TODO Handle Validation ...
             throw new exUnexpectedValue('Validation Failed', null,  400, $e);
+        }
+        catch (\Exception $e) {
+            throw $e;
         }
 
 
