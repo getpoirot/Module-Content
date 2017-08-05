@@ -4,12 +4,10 @@ namespace Module\Content\Actions\Posts;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
-use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Application\Exception\exAccessDenied;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
-use Poirot\TenderBinClient\Client;
 
 
 class EditPostAction
@@ -81,36 +79,7 @@ class EditPostAction
         # so touch-media file for infinite expiration
         #
         $content  = $hydratePost->getContent();
-
-        $_f_touch = function ($traversable) use (&$_f_touch)
-        {
-            if (! $traversable instanceof \Traversable )
-                // Do Nothing!!
-                return;
-
-
-            /** @var Client $cTender */
-            $cTender = \Module\Content\Services\IOC::ClientTender();
-
-            foreach ($traversable as $c)
-            {
-                if ($c instanceof MediaObjectTenderBin) {
-                    try {
-                        $cTender->touch( $c->getHash() );
-                    } catch (Content\Exception\exUnknownContentType $e) {
-                        // Specific Content Client Exception
-                    } catch (\Exception $e) {
-                        // Other Errors Throw To Next Layer!
-                        throw $e;
-                    }
-                }
-
-                elseif (is_array($c) || $c instanceof \Traversable)
-                    $_f_touch($c);
-            }
-        };
-
-        $_f_touch($content);
+        Content\touchTenderBinMediaContents($content);
 
         // Content Type May Not Changed!!
         $hydratePost->setContentType($post->getContent()->getContentType());

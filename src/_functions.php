@@ -2,7 +2,9 @@
 namespace Module\Content
 {
     use Module\Content\Model\Entity\EntityPost;
+    use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
     use Module\Content\Model\Entity\MemberObject;
+    use Poirot\TenderBinClient\Client;
 
 
     /**
@@ -56,6 +58,41 @@ namespace Module\Content
                 ],
             ],
         ];
+    }
+
+    /**
+     * Magic Touch Media Contents To Infinite Expiration
+     *
+     * @param \Traversable $content
+     *
+     * @throws \Exception
+     */
+    function touchTenderBinMediaContents($content)
+    {
+        if (! $content instanceof \Traversable )
+            // Do Nothing!!
+            return;
+
+
+        /** @var Client $cTender */
+        $cTender = \Module\Content\Services\IOC::ClientTender();
+
+        foreach ($content as $c)
+        {
+            if ($c instanceof MediaObjectTenderBin) {
+                try {
+                    $cTender->touch( $c->getHash() );
+                } catch (Content\Exception\exUnknownContentType $e) {
+                    // Specific Content Client Exception
+                } catch (\Exception $e) {
+                    // Other Errors Throw To Next Layer!
+                    throw $e;
+                }
+            }
+
+            elseif (is_array($c) || $c instanceof \Traversable)
+                touchTenderBinMediaContents($c);
+        }
     }
 }
 

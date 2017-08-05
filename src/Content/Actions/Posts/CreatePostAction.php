@@ -4,12 +4,10 @@ namespace Module\Content\Actions\Posts;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
-use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\Std\Exceptions\exUnexpectedValue;
-use Poirot\TenderBinClient\Client;
 
 
 class CreatePostAction
@@ -42,6 +40,7 @@ class CreatePostAction
      * @param iAccessToken|null $token
      *
      * @return array
+     * @throws \Exception
      */
     function __invoke(iAccessToken $token = null)
     {
@@ -81,31 +80,7 @@ class CreatePostAction
         # so touch-media file for infinite expiration
         #
         $content  = $hydratePost->getContent();
-
-        $_f_touch = function ($traversable) use (&$_f_touch)
-        {
-            /** @var Client $cTender */
-            $cTender = \Module\Content\Services\IOC::ClientTender();
-
-            foreach ($traversable as $c)
-            {
-                if ($c instanceof MediaObjectTenderBin) {
-                    try {
-                        $cTender->touch( $c->getHash() );
-                    } catch (Content\Exception\exUnknownContentType $e) {
-                        // Specific Content Client Exception
-                    } catch (\Exception $e) {
-                        // Other Errors Throw To Next Layer!
-                        throw $e;
-                    }
-                }
-
-                elseif (is_array($c) || $c instanceof \Traversable)
-                    $_f_touch($c);
-            }
-        };
-
-        $_f_touch($content);
+        Content\touchTenderBinMediaContents($content);
 
 
         # Persist Post Entity
