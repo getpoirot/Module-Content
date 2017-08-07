@@ -80,7 +80,7 @@ class CreatePostAction
         # so touch-media file for infinite expiration
         #
         $content  = $hydratePost->getContent();
-        Content\touchTenderBinMediaContents($content);
+        Content\assertMediaContents($content);
 
 
         # Persist Post Entity

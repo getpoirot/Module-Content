@@ -79,7 +79,7 @@ class EditPostAction
         # so touch-media file for infinite expiration
         #
         $content  = $hydratePost->getContent();
-        Content\touchTenderBinMediaContents($content);
+        Content\assertMediaContents($content);
 
         // Content Type May Not Changed!!
         $hydratePost->setContentType($post->getContent()->getContentType());
