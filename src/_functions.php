@@ -4,6 +4,8 @@ namespace Module\Content
     use Module\Content\Model\Entity\EntityPost;
     use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
     use Module\Content\Model\Entity\MemberObject;
+    use Poirot\Std\Type\StdArray;
+    use Poirot\Std\Type\StdTravers;
     use Poirot\TenderBinClient;
 
 
@@ -39,7 +41,7 @@ namespace Module\Content
         return [
             'post' => [
                 'uid'        => (string) $post->getUid(),
-                'content'    => $post->getContent(),
+                'content'    => embedLinkToMediaContents( $post->getContent() ),
                 'stat'       => $post->getStat(),
                 'stat_share' => $post->getStatShare(),
                 'user'       => new MemberObject( ['uid' => $post->getOwnerIdentifier()] ),
@@ -61,13 +63,45 @@ namespace Module\Content
     }
 
     /**
+     * Embed Retrieval Http Link To MediaObjects
+     *
+     * @param array|\Traversable $content Content include MediaObject
+     *
+     * @return array Prepared content include link(s)
+     */
+    function embedLinkToMediaContents($content)
+    {
+        if ($content instanceof \Traversable )
+            $content = StdTravers::of($content)->toArray();
+
+        if (! is_array($content) )
+            return $content;
+
+
+        $content = StdArray::of($content)->withWalk(function(&$val) {
+            if ($val instanceof MediaObjectTenderBin) {
+                $orig         = $val;
+                $val          = StdTravers::of($val)->toArray();
+                $val['_link'] = (string) \Module\Foundation\Actions::Path(
+                    'mod-content-media_cdn' // this name is reserved; @see mod-content.conf.php
+                    , [
+                        'hash' => $orig->getHash()
+                    ]
+                );
+            }
+        });
+
+        return $content->value; // instance access to internal array
+    }
+
+    /**
      * Magic Touch Media Contents To Infinite Expiration
      *
      * @param \Traversable $content
      *
      * @throws \Exception
      */
-    function touchTenderBinMediaContents($content)
+    function assertMediaContents($content)
     {
         if (! $content instanceof \Traversable )
             // Do Nothing!!
@@ -91,7 +125,7 @@ namespace Module\Content
             }
 
             elseif (is_array($c) || $c instanceof \Traversable)
-                touchTenderBinMediaContents($c);
+                assertMediaContents($c);
         }
     }
 }
