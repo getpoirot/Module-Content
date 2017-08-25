@@ -109,7 +109,7 @@ namespace Module\Content
 
 
         /** @var TenderBinClient\Client $cTender */
-        $cTender = \Module\TenderBinClient\Services\IOC::ClientTender();
+        $cTender = \Module\TenderBinClient\Services::ClientTender();
 
         foreach ($content as $c)
         {
