@@ -1,7 +1,6 @@
 <?php
 namespace Module\Content
 {
-    use Module\Content\Services\ServiceClientTender;
     use Poirot\Application\aSapi;
     use Poirot\Application\Interfaces\iApplication;
     use Poirot\Application\Interfaces\Sapi;
@@ -15,17 +14,26 @@ namespace Module\Content
 
 
     /**
+     * - We have Content Types Object  For Each Posts as
+     *   Registered Plugins into Container
+     *
+     *   Container Plugins Accessible From This:
+     *   Module\Content\Services::ContentPlugins()
+     *
+     *   Contents Can Be Created With Factory:
+     *   FactoryContentObject::of($type, $options)
+     *
+     *
      * - Using Mongo Db To Store Content.
      *
      *   @see mod-content.conf.php
      *
      *
      * - Using Tender-Bin Storage For Files.
-     *   through http client-tenderBin
-     *
-     *   also using oauth-client.
+     *   through client-tenderBin
      *
      *   @see ServiceClientTender
+     *   also using oauth-client.
      *
      */
     class Module implements Sapi\iSapiModule
@@ -75,10 +83,6 @@ namespace Module\Content
                 // MongoDriver Module Is Required.
                 $moduleManager->loadModule('MongoDriver');
 
-            if (!$moduleManager->hasLoaded('OAuth2Client'))
-                // Load OAuth2 Client To Assert Tokens.
-                $moduleManager->loadModule('OAuth2Client');
-
             if (!$moduleManager->hasLoaded('TenderBinClient'))
                 // Module Is Required.
                 $moduleManager->loadModule('TenderBinClient');
@@ -99,7 +103,7 @@ namespace Module\Content
          */
         function initConfig(iDataEntity $config)
         {
-            return \Poirot\Config\load(__DIR__ . '/../../config/mod-content');
+            return \Poirot\Config\load(__DIR__ . '/../config/mod-content');
         }
 
         /**
@@ -113,7 +117,7 @@ namespace Module\Content
          */
         function getActions()
         {
-            return \Poirot\Config\load(__DIR__ . '/../../config/mod-content.actions');
+            return \Poirot\Config\load(__DIR__ . '/../config/mod-content.actions');
         }
 
         /**
@@ -130,7 +134,7 @@ namespace Module\Content
          */
         function getServices(Container $moduleContainer = null)
         {
-            $conf = \Poirot\Config\load(__DIR__ . '/../../config/mod-content.services');
+            $conf = \Poirot\Config\load(__DIR__ . '/../config/mod-content.services');
             return $conf;
         }
 
@@ -150,7 +154,7 @@ namespace Module\Content
         ) {
             # Register Http Routes:
             if ($router) {
-                $routes = include __DIR__ . '/../../config/mod-content.routes.conf.php';
+                $routes = include __DIR__ . '/../config/mod-content.routes.conf.php';
                 $buildRoute = new BuildRouterStack;
                 $buildRoute->setRoutes($routes);
                 $buildRoute->build($router);
@@ -202,11 +206,13 @@ namespace Module\Content\Actions
     { }
 }
 
-namespace Module\Content\Services
+namespace Module\Content
 {
+    use Module\Content\Services\ContentPlugins;
+
     /**
-     * @method static ContainerCappedContentObject ContentObjectContainer()
+     * @method static ContentPlugins ContentPlugins()
      */
-    class IOC extends \IOC
+    class Services extends \IOC
     { }
 }

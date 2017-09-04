@@ -132,12 +132,10 @@ namespace Module\Content
 
 namespace Module\Content\Lib
 {
-
     use Module\Content\Exception\exUnknownContentType;
     use Module\Content\Interfaces\Model\Entity\iEntityMediaObject;
     use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
     use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
-    use Module\Content\Services\IOC as ContentIOC;
     use Poirot\Std\Interfaces\Pact\ipFactory;
 
 
@@ -155,14 +153,14 @@ namespace Module\Content\Lib
          */
         static function of($contentName, $contentData = null)
         {
-            if (! ContentIOC::ContentObjectContainer()->has($contentName) )
+            if (! \Module\Content\Services::ContentPlugins()->has($contentName) )
                 throw new exUnknownContentType(sprintf(
                     'Content Of Type (%s) Has No Plugin Registered In System.', $contentName
                 ));
 
 
             /** @var iEntityPostContentObject $contentObject */
-            $contentObject = ContentIOC::ContentObjectContainer()->get($contentName);
+            $contentObject = \Module\Content\Services::ContentPlugins()->get($contentName);
             $contentObject->with($contentObject::parseWith($contentData));
 
             return $contentObject;

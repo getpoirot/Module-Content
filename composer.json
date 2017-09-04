@@ -15,7 +15,7 @@
     }
     , "autoload"  : {
       "psr-4": {
-        "Module\\Content\\": "src/Content/"
+        "Module\\Content\\": "src/"
       },
       "files": [
         "src/_functions.php"

@@ -11,7 +11,7 @@ use Poirot\Ioc\Container\Service\ServicePluginLoader;
 use Poirot\Loader\LoaderMapResource;
 
 
-class ContainerCappedContentObject
+class ContentPlugins
     extends aContainerCapped
 {
     protected $_map_resolver_options = [

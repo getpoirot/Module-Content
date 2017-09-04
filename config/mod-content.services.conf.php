@@ -13,7 +13,7 @@
 
 return [
     'services' => [
-        'ContentObjectContainer' => \Module\Content\Services\ContainerCappedContentObject::class,
+        'ContentPlugins' => \Module\Content\Services\ContentPlugins::class,
     ],
     'nested' => [
         'repository' => [
