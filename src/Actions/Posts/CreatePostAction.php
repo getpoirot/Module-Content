@@ -75,7 +75,6 @@ class CreatePostAction
             throw $e;
         }
 
-
         # Content May Include TenderBin Media
         # so touch-media file for infinite expiration
         #
@@ -95,7 +94,4 @@ class CreatePostAction
                 Content\toArrayResponseFromPostEntity($post)
         ];
     }
-
-    // Helper Action Chains:
-
 }

@@ -22,7 +22,7 @@ class PostsRepo
      */
     protected function __init()
     {
-        if (!$this->persist)
+        if (! $this->persist )
             $this->setModelPersist(new Mongo\EntityPost);
     }
 
@@ -70,6 +70,7 @@ class PostsRepo
         # Convert given entity to Persistence Entity Object To Insert
         $entityMongo = new Mongo\EntityPost(new HydrateGetters($entity));
         $entityMongo->setUid($givenIdentifier);
+        $entityMongo->setOwnerIdentifier( $this->attainNextIdentifier($entity->getOwnerIdentifier()) );
         $entityMongo->setDateTimeCreated($dateCreated);
 
         # Persist BinData Record
@@ -202,7 +203,7 @@ class PostsRepo
         $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
 
         $condition = [
-            'owner_identifier' => (string) $ownerIdentifier,
+            'owner_identifier' => $this->attainNextIdentifier($ownerIdentifier),
         ] + $condition;
 
         if ($offset)

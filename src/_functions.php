@@ -162,7 +162,6 @@ namespace Module\Content\Lib
             /** @var iEntityPostContentObject $contentObject */
             $contentObject = \Module\Content\Services::ContentPlugins()->get($contentName);
             $contentObject->with($contentObject::parseWith($contentData));
-
             return $contentObject;
         }
     }

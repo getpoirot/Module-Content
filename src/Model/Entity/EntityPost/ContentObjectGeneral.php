@@ -10,6 +10,7 @@ class ContentObjectGeneral
 {
     const CONTENT_TYPE = 'general';
 
+    protected $title;
     /** @var []EntityPostMediaObject  */
     protected $medias = [];
 
@@ -34,6 +35,29 @@ class ContentObjectGeneral
     function getDescription()
     {
         return parent::getDescription();
+    }
+
+    /**
+     * Set Title
+     *
+     * @param string $title
+     *
+     * @return $this
+     */
+    function setTitle($title)
+    {
+        $this->title = (string) $title;
+        return $this;
+    }
+
+    /**
+     * Get Content Post Title
+     *
+     * @return string|null
+     */
+    function getTitle()
+    {
+        return $this->title;
     }
 
     /**
