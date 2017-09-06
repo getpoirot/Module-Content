@@ -1,6 +1,31 @@
 <?php
+use Module\Content\Events\EventsHeapOfContent;
+
 return [
-    
+
+    \Module\Content\Module::CONF => [
+        \Module\Content\Actions\aAction::CONF => [
+            // Events Section Of Events Builder
+            /** @see \Poirot\Events\Event\BuildEvent */
+            EventsHeapOfContent::RETRIEVE_CONTENT => [
+                'listeners' => [
+                    ['priority' => 1000,  'listener' => function($entityPost, $me) {
+                        // Implement this
+                        /** @var \Module\Content\Model\Entity\EntityPost $entityPost */
+                    }],
+                ],
+            ],
+            EventsHeapOfContent::RETRIEVE_CONTENT_RESULT => [
+                'listeners' => [
+                    ['priority' => 1000,  'listener' => function($result, $entityPost, $me) {
+                        // Implement this
+                        /** @var \Module\Content\Model\Entity\EntityPost $entityPost */
+                    }],
+                ],
+            ],
+        ],
+    ],
+
     # Mongo Driver:
 
     Module\MongoDriver\Module::CONF_KEY =>

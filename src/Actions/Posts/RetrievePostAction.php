@@ -3,6 +3,7 @@ namespace Module\Content\Actions\Posts;
 
 use Module\Content;
 use Module\Content\Actions\aAction;
+use Module\Content\Events\EventsHeapOfContent;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Application\Exception\exAccessDenied;
@@ -42,7 +43,7 @@ class RetrievePostAction
      *
      * @return array
      */
-    function __invoke($content_id = null, iAccessToken $token = null)
+    function __invoke($content_id = null, $token = null)
     {
         # Check Whether Content Post Exists?
         if( false === $post = $this->repoPosts->findOneMatchUid($content_id) )
@@ -70,17 +71,47 @@ class RetrievePostAction
         }
 
 
-        # Build Response
-
         $me = ($token) ? $token->getOwnerIdentifier() : null;
 
+        ## Event
+        #
+        /** @var Content\Model\Entity\EntityPost $post */
+        $post = $this->event()
+            ->trigger(EventsHeapOfContent::RETRIEVE_CONTENT, [
+                /** @see Content\Events\DataCollector */
+                'me' => $me, 'entity_post' => $post,
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getEntityPost();
+            });
+
+
+        # Build Response
+        #
+        $r  = Content\toArrayResponseFromPostEntity($post, $me) + [
+                '_self' => [
+                    'content_id' => $content_id,
+                ],
+            ];
+
+
+        ## Event
+        #
+        /** @var Content\Model\Entity\EntityPost $post */
+        $r = $this->event()
+            ->trigger(EventsHeapOfContent::RETRIEVE_CONTENT_RESULT, [
+                /** @see Content\Events\DataCollector */
+                'result' => $r, 'entity_post' => $post, 'me' => $me,
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getResult();
+            });
+
+
         return [
-            ListenerDispatch::RESULT_DISPATCH =>
-                Content\toArrayResponseFromPostEntity($post, $me) + [
-                    '_self' => [
-                        'content_id' => $content_id,
-                    ],
-                ]
+            ListenerDispatch::RESULT_DISPATCH => $r
         ];
     }
 }

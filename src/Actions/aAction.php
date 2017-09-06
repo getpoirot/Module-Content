@@ -1,9 +1,12 @@
 <?php
 namespace Module\Content\Actions;
 
-
+use Module\Content\Events\EventsHeapOfContent;
 use Module\Content\Model\Entity\EntityPost;
 use Poirot\Application\Exception\exAccessDenied;
+use Poirot\Events\Event\BuildEvent;
+use Poirot\Events\Event\MeeterIoc;
+use Poirot\Events\Interfaces\Respec\iEventProvider;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
@@ -16,9 +19,14 @@ use Poirot\OAuth2Client\Interfaces\iAccessToken;
  */
 abstract class aAction
     extends \Module\Foundation\Actions\aAction
+    implements iEventProvider
 {
+    const CONF = 'events';
+
     /** @var iHttpRequest */
     protected $request;
+    /** @var EventsHeapOfContent */
+    protected $events;
 
     protected $tokenMustHaveOwner  = true;
     protected $tokenMustHaveScopes = array(
@@ -35,6 +43,29 @@ abstract class aAction
         $this->request = $httpRequest;
     }
 
+    /**
+     * Get Events
+     *
+     * @return EventsHeapOfContent
+     */
+    function event()
+    {
+        if (! $this->events ) {
+            // Build Events From Merged Config
+            $conf   = $this->sapi()->config()->get( \Module\Content\Module::CONF );
+            $conf   = $conf[self::CONF];
+
+            $events = new EventsHeapOfContent;
+            $builds = new BuildEvent([ 'meeter' => new MeeterIoc, 'events' => $conf ]);
+            $builds->build($events);
+
+            $this->events = $events;
+        }
+
+        return $this->events;
+    }
+
+    // ..
 
     /**
      * Assert Token
