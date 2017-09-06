@@ -38,7 +38,7 @@ class ListPostsWhichUserLikedAction
      *
      * @return array
      */
-    function __invoke(iAccessToken $token = null)
+    function __invoke($token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

@@ -42,7 +42,7 @@ class CreatePostAction
      * @return array
      * @throws \Exception
      */
-    function __invoke(iAccessToken $token = null)
+    function __invoke($token = null)
     {
         # Assert Token
         #

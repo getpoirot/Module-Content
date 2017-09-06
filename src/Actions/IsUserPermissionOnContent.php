@@ -20,7 +20,7 @@ class IsUserPermissionOnContent
      *
      * @return bool
      */
-    function __invoke(EntityPost $post = null, iAccessToken $token = null)
+    function __invoke(EntityPost $post = null, $token = null)
     {
         if (! $token)
             // There is no token given ...

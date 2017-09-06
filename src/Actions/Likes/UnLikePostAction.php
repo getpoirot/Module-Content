@@ -48,7 +48,7 @@ class UnLikePostAction
      *
      * @return array
      */
-    function __invoke($content_id = null, iAccessToken $token = null)
+    function __invoke($content_id = null, $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

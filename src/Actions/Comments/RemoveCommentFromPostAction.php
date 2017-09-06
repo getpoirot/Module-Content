@@ -49,7 +49,7 @@ class RemoveCommentFromPostAction
      *
      * @return array
      */
-    function __invoke($comment_id = null, $content_id = null, iAccessToken $token = null)
+    function __invoke($comment_id = null, $content_id = null, $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

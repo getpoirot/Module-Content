@@ -52,7 +52,7 @@ class ListPostsOfUserAction
      * @return array
      * @throws \Exception
      */
-    function __invoke($username = null, $userid = null, iAccessToken $token = null)
+    function __invoke($username = null, $userid = null, $token = null)
     {
         # Assert Token
         $this->assertTokenByOwnerAndScope($token);

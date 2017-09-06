@@ -38,7 +38,7 @@ class ListCommentsOfPostAction
      *
      * @return array
      */
-    function __invoke($content_id = null, iAccessToken $token = null)
+    function __invoke($content_id = null, $token = null)
     {
         $q      = ParseRequestData::_($this->request)->parseQueryParams();
         $offset = (isset($q['offset'])) ? (int) $q['offset'] : null;
