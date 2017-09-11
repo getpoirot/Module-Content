@@ -4,9 +4,13 @@ use Module\Content\Events\EventsHeapOfContent;
 return [
 
     \Module\Content\Module::CONF => [
+
+        ## Events
+        #
         \Module\Content\Actions\aAction::CONF => [
             // Events Section Of Events Builder
             /** @see \Poirot\Events\Event\BuildEvent */
+
             EventsHeapOfContent::RETRIEVE_CONTENT => [
                 'listeners' => [
                     ['priority' => 1000,  'listener' => function($entityPost, $me) {
@@ -15,6 +19,7 @@ return [
                     }],
                 ],
             ],
+
             EventsHeapOfContent::RETRIEVE_CONTENT_RESULT => [
                 'listeners' => [
                     ['priority' => 1000,  'listener' => function($result, $entityPost, $me) {
@@ -23,6 +28,7 @@ return [
                     }],
                 ],
             ],
+
         ],
     ],
 
