@@ -85,6 +85,15 @@ interface iRepoPosts
     function findAllMatchWithOwnerId($ownerIdentifier, $expression = null, $offset = null, $limit = null);
 
     /**
+     * Get Count All Match By Given Owner UID
+     *
+     * @param string $ownerIdentifier Owner Identifier
+     *
+     * @return int
+     */
+    function getCountMatchWithOwnerId($ownerIdentifier);
+
+    /**
      * Find All Match By Given UIDs List
      *
      * @param []mixed      $uids

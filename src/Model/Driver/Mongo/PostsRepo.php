@@ -228,6 +228,22 @@ class PostsRepo
     }
 
     /**
+     * Get Count All Match By Given Owner UID
+     *
+     * @param string $ownerIdentifier Owner Identifier
+     *
+     * @return int
+     */
+    function getCountMatchWithOwnerId($ownerIdentifier)
+    {
+        $r = $this->_query()->count(
+            [ 'owner_identifier' => $this->attainNextIdentifier($ownerIdentifier) ]
+        );
+
+        return $r;
+    }
+
+    /**
      * Find All Match By Given UIDs List
      *
      * !! Consider Mongo Indexes When Using Custom Conditions !!
