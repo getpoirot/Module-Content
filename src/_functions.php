@@ -4,6 +4,7 @@ namespace Module\Content
     use Module\Content\Model\Entity\EntityPost;
     use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
     use Module\Content\Model\Entity\MemberObject;
+    use Module\Profile\Actions\Helpers\RetrieveProfiles;
     use Poirot\Std\Type\StdArray;
     use Poirot\Std\Type\StdTravers;
     use Poirot\TenderBinClient;
@@ -36,6 +37,16 @@ namespace Module\Content
         }
 
 
+
+        // TODO embed user detail must done within some attached events
+
+        $uid          = (string) $post->getOwnerIdentifier();
+        /** @var RetrieveProfiles $funListUsers */
+        $funListUsers = \IOC::GetIoC()->get('/module/profile/actions/ListUsersProfile');
+        $user         = $funListUsers([$uid]);
+        $user         = $user[$uid];
+
+
         #
 
         return [
@@ -44,7 +55,7 @@ namespace Module\Content
                 'content'    => embedLinkToMediaContents( $post->getContent() ),
                 'stat'       => $post->getStat(),
                 'stat_share' => $post->getStatShare(),
-                'user'       => new MemberObject( ['uid' => $post->getOwnerIdentifier()] ),
+                'user'       => $user,
                 'location'   => ($post->getLocation()) ? [
                     'caption' => $post->getLocation()->getCaption(),
                     'geo'     => [
