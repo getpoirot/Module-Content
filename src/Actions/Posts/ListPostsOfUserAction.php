@@ -64,6 +64,7 @@ class ListPostsOfUserAction
                 throw new \Exception('No Username or Id Given.');
 
             // Whois Username from OAuth ....
+            // TODO Username from OAUth
             $userid = 'p18014445';
         }
 
@@ -76,8 +77,10 @@ class ListPostsOfUserAction
 
 
 //        $expression   = \Module\MongoDriver\parseExpressionFromArray($q, ['stat'], 'allow');
+        $me = ($token) ? $token->getOwnerIdentifier() : null;
         $posts = $this->ListPostsOfUser(
-            $userid
+            $me
+            , $userid
             , \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public')
             , $offset
             , $limit + 1

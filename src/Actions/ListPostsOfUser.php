@@ -31,7 +31,7 @@ class ListPostsOfUser
      *
      * @return array
      */
-    function __invoke($owner_identifier = null, $expression = null, $offset = null, $limit = 30)
+    function __invoke($me = null, $owner_identifier = null, $expression = null, $offset = null, $limit = 30)
     {
         if (!$expression)
             $expression = \Module\MongoDriver\parseExpressionFromString('stat=publish|draft&stat_share=public|private');
@@ -44,8 +44,8 @@ class ListPostsOfUser
         );
 
         /** @var EntityPost $post */
-        $posts = \Poirot\Std\cast($persistPosts)->toArray(function (&$post) {
-            $post = \Module\Content\toArrayResponseFromPostEntity($post);
+        $posts = \Poirot\Std\cast($persistPosts)->toArray(function (&$post) use ($me) {
+            $post = \Module\Content\toArrayResponseFromPostEntity($post, $me);
         });
 
         return $posts;

@@ -15,7 +15,7 @@ use Poirot\OAuth2Client\Interfaces\iAccessToken;
  *
  * @method bool         IsUserPermissionOnContent(EntityPost $post, iAccessToken $token = null)
  * @method \Traversable ListPostsLikedByUser($owner_identifier, $skip = null, $limit = null)
- * @method array        ListPostsOfUser($owner_identifier, $expression = null, $offset = null, $limit = null)
+ * @method array        ListPostsOfUser($me, $owner_identifier, $expression = null, $offset = null, $limit = null)
  */
 abstract class aAction
     extends \Module\Foundation\Actions\aAction
