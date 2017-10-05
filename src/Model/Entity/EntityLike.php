@@ -20,6 +20,7 @@ class EntityLike
 
 
     /**
+     * // TODO remove this, considered in repo specific
      * Unique Identifier
      *
      * note: to ease search we can create identifier

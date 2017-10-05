@@ -54,22 +54,31 @@ class ListPostsOfUserAction
      */
     function __invoke($username = null, $userid = null, $token = null)
     {
-        # Assert Token
+        ## Assert Token
+        #
         $this->assertTokenByOwnerAndScope($token);
 
 
-        # Retrieve UserID From Username If id not given
+        ## Retrieve UserID From Username If id not given
+        #
         if ($userid === null) {
             if ($username === null)
                 throw new \Exception('No Username or Id Given.');
 
-            // Whois Username from OAuth ....
-            // TODO Username from OAUth
-            $userid = 'p18014445';
+            // Retrieve User Info From OAuth By username
+            $oauthInfo = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($username) {
+                $info = \Module\OAuth2Client\Services::OAuthFederate()
+                    ->getAccountInfoByUsername($username);
+
+                return $info;
+            });
+
+            $userid = $oauthInfo['user']['uid'];
         }
 
 
-        # Parse Request Query params
+        ## Parse Request Query params
+        #
         $q      = ParseRequestData::_($this->request)->parseQueryParams();
         // offset is Mongo ObjectID "58e107fa6c6b7a00136318e3"
         $offset = (isset($q['offset'])) ? $q['offset']       : null;

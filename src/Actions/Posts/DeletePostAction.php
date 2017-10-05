@@ -48,10 +48,12 @@ class DeletePostAction
     function __invoke($content_id = null, $token = null)
     {
         # Assert Token
+        #
         $this->assertTokenByOwnerAndScope($token);
 
 
         # Check Whether Content Post Exists?
+        #
         if( false === $post = $this->repoPosts->findOneMatchUid($content_id) )
             throw new Content\Exception\exResourceNotFound(sprintf(
                 'Content Post (%s) Not Found.'
