@@ -18,6 +18,7 @@ class CreatePostAction
 
 
     /**
+     * Construct
      *
      * @param iHttpRequest $httpRequest @IoC /HttpRequest
      * @param iRepoPosts   $repoPosts   @IoC /module/content/services/repository/Posts
@@ -71,9 +72,7 @@ class CreatePostAction
             // TODO Handle Validation ...
             throw new exUnexpectedValue('Validation Failed', null,  400, $e);
         }
-        catch (\Exception $e) {
-            throw $e;
-        }
+
 
         # Content May Include TenderBin Media
         # so touch-media file for infinite expiration
