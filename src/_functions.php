@@ -1,10 +1,10 @@
 <?php
 namespace Module\Content
 {
-    use Module\Content\Model\Entity\EntityPost;
-    use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
-    use Module\Profile\Actions\Helpers\RetrieveProfiles;
     use Poirot\TenderBinClient;
+    use Module\Content\Model\Entity\EntityPost;
+    use Module\Profile\Actions\Helpers\RetrieveProfiles;
+    use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
 
 
     /**
@@ -138,47 +138,6 @@ namespace Module\Content\Lib
             $contentObject = \Module\Content\Services::ContentPlugins()->get($contentName);
             $contentObject->with($contentObject::parseWith($contentData));
             return $contentObject;
-        }
-    }
-
-
-    class FactoryMediaObject
-        implements ipFactory
-    {
-        /**
-         * Factory With Valuable Parameter
-         *
-         * @param null  $mediaData
-         *
-         * @return iEntityMediaObject
-         * @throws \Exception
-         */
-        static function of($mediaData = null)
-        {
-            // Content Object May Fetch From DB Or Sent By Post Http Request
-
-            /*
-            {
-                "storage_type": "tenderbin",
-                "hash": "58c7dcb239288f0012569ed0",
-                "content_type": "image/jpeg"
-            }
-            */
-
-            if (! isset($mediaData['storage_type']) )
-                $mediaData['storage_type'] = 'tenderbin';
-
-            switch (strtolower($mediaData['storage_type'])) {
-                case 'tenderbin':
-                    $objectMedia = new MediaObjectTenderBin;
-                    $objectMedia->with( $objectMedia::parseWith($mediaData) );
-                    break;
-
-                default:
-                    throw new \Exception('Object Storage With Name (%s) Is Unknown.');
-            }
-
-            return $objectMedia;
         }
     }
 }
