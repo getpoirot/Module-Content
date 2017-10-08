@@ -2,7 +2,8 @@
 namespace Module\Content\Model\Entity\EntityPost;
 
 use Module\Content\Interfaces\Model\Entity\iEntityMediaObject;
-use Module\Content\Lib\FactoryMediaObject;
+use Poirot\TenderBinClient\FactoryMediaObject;
+use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
 
 
 class ContentObjectGeneral
