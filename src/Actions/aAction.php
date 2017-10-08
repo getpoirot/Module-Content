@@ -43,6 +43,9 @@ abstract class aAction
         $this->request = $httpRequest;
     }
 
+
+    // Implement Events
+
     /**
      * Get Events
      *

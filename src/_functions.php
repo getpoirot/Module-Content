@@ -36,13 +36,11 @@ namespace Module\Content
 
 
         // TODO embed user detail must done within some attached events
-
+        // TODO remove dependency (call with service)
         $uid          = (string) $post->getOwnerIdentifier();
         /** @var RetrieveProfiles $funListUsers */
-        $funListUsers = \IOC::GetIoC()->get('/module/profile/actions/ListUsersProfile');
-        $user         = $funListUsers([$uid]);
-        $user         = $user[$uid];
-
+        $user = \Module\Profile\Actions::RetrieveProfiles([$uid]);
+        $user = (isset($user[$uid])) ? $user[$uid] : null;
 
         #
 
