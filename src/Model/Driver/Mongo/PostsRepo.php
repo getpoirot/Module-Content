@@ -152,6 +152,29 @@ class PostsRepo
     }
 
     /**
+     * Lock Post With Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return mixed
+     */
+    function lockOneMatchUid($uid)
+    {
+        $r = $this->_query()->updateOne(
+            [
+                '_id' => $this->attainNextIdentifier($uid),
+            ]
+            , [
+                '$set' => [
+                    'stat' => EntityPost::STAT_LOCKED,
+                ]
+            ]
+        );
+
+        return ($r) ? $r : false;
+    }
+
+    /**
      * Find Entities Match With Given Expression
      *
      * !! Consider Mongo Indexes When Using Custom Conditions !!

@@ -62,6 +62,15 @@ interface iRepoPosts
     function deleteOneMatchUid($uid);
 
     /**
+     * Lock Entity With Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return mixed
+     */
+    function lockOneMatchUid($uid);
+
+    /**
      * Find Entities Match With Given Expression
      *
      * @param array    $expression Filter expression
