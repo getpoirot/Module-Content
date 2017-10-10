@@ -16,6 +16,10 @@ class LockPostAction
     /** @var iRepoPosts */
     protected $repoPosts;
 
+    protected $tokenMustHaveOwner = false;
+    protected $tokenMustHaveScopes = array(
+
+    );
 
     /**
      *
@@ -60,10 +64,6 @@ class LockPostAction
                 , $content_id
             ));
 
-
-        # Check User Has Access To Edit Post
-        if ($post->getStat() == Content\Model\Entity\EntityPost::STAT_LOCKED)
-            throw new exAccessDenied('Post Is Locked.');
 
         $isLocked = $this->repoPosts->lockOneMatchUid($post->getUid());
 

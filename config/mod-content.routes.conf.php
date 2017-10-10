@@ -141,17 +141,27 @@ return
 
                             ## LOCKED /posts/{{post_id}}/fed
                             #- Locked a post by federation.
-                            'lock' => [
-                                'route'   => 'RouteMethodSegment',
+                            'federation' => [
+                                'route' => 'RouteSegment',
                                 'options' => [
+                                    // 24 is length of content_id by persistence
                                     'criteria'    => '/fed',
-                                    'method'      => 'PUT',
-                                    'match_whole' => true,
+                                    'match_whole' => false,
                                 ],
-                                'params'  => [
-                                    ListenerDispatch::ACTIONS => [
-                                        \Module\Content\Actions\Posts\LockPostAction::class,
-                                    ],
+                                'routes' => [
+                                    'lock' => [
+                                        'route'   => 'RouteMethodSegment',
+                                        'options' => [
+                                            'criteria'    => '/lock',
+                                            'method'      => 'PUT',
+                                            'match_whole' => true,
+                                        ],
+                                        'params'  => [
+                                            ListenerDispatch::ACTIONS => [
+                                                \Module\Content\Actions\Posts\LockPostAction::class,
+                                            ],
+                                        ],
+                                    ]
                                 ],
                             ],
 
