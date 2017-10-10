@@ -43,9 +43,11 @@ class ListPostsOfUser
             , $limit
         );
 
+        $profiles = \Module\Profile\Actions::RetrieveProfiles([$owner_identifier]);
+
         /** @var EntityPost $post */
-        $posts = \Poirot\Std\cast($persistPosts)->toArray(function (&$post) use ($me) {
-            $post = \Module\Content\toArrayResponseFromPostEntity($post, $me);
+        $posts = \Poirot\Std\cast($persistPosts)->toArray(function (&$post) use ($me, $profiles) {
+            $post = \Module\Content\toArrayResponseFromPostEntity($post, $me, $profiles);
         });
 
         return $posts;

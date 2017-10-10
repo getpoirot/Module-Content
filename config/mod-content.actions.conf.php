@@ -17,7 +17,7 @@ return array(
         'BrowsePostsAction'         => \Module\Content\Actions\Posts\BrowsePostsAction::class,
 
         'IsUserPermissionOnContent' => \Module\Content\Actions\IsUserPermissionOnContent::class,
-        'ListPostsOfUser'               => \Module\Content\Actions\ListPostsOfUser::class,
+        'ListPostsOfUser'           => \Module\Content\Actions\ListPostsOfUser::class,
 
 
         // Like

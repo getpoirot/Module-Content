@@ -47,12 +47,12 @@ class ListCommentsOfPostAction
 
         # Retrieve Comments Of Given Post ID
         $persistComments = $this->repoComments->findAll(
-            \Module\MongoDriver\parseExpressionFromArray([
+            [
                 // We Consider All Item Liked Has _id from Mongo Collection
                 'item_identifier' => $this->repoComments->attainNextIdentifier($content_id),
                 'model'           => Content\Model\Entity\EntityComment::MODEL_POSTS,
                 'stat'            => 'publish', // all comments that has publish stat
-            ])
+            ]
             , $offset
             , $limit + 1
         );

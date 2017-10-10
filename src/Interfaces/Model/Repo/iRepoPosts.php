@@ -70,7 +70,7 @@ interface iRepoPosts
      *
      * @return \Traversable
      */
-    function findAll($expression, $offset = null, $limit = null);
+    function findAll(array $expression, $offset = null, $limit = null);
 
     /**
      * Find All Match By Given Owner UIDs List
@@ -82,7 +82,7 @@ interface iRepoPosts
      *
      * @return \Traversable
      */
-    function findAllMatchWithOwnerId($ownerIdentifier, $expression = null, $offset = null, $limit = null);
+    function findAllMatchWithOwnerId($ownerIdentifier, array $expression = null, $offset = null, $limit = null);
 
     /**
      * Get Count All Match By Given Owner UID
@@ -101,7 +101,7 @@ interface iRepoPosts
      *
      * @return \Traversable
      */
-    function findAllMatchUidWithin($uids, $expression = null);
+    function findAllMatchUidWithin($uids, array $expression = null);
 
     /**
      * Set a Like On Post By Given ID

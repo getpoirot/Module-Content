@@ -88,9 +88,10 @@ class CreatePostAction
 
         # Build Response:
         #
+        $profiles = \Module\Profile\Actions::RetrieveProfiles([ $token->getOwnerIdentifier() ]);
         return [
             ListenerDispatch::RESULT_DISPATCH =>
-                Content\toArrayResponseFromPostEntity($post)
+                Content\toArrayResponseFromPostEntity($post, null, $profiles)
         ];
     }
 }

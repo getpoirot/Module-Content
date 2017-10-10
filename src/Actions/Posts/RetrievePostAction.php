@@ -87,9 +87,11 @@ class RetrievePostAction
             });
 
 
+
         # Build Response
         #
-        $r  = Content\toArrayResponseFromPostEntity($post, $me) + [
+        $profiles = \Module\Profile\Actions::RetrieveProfiles([$me]);
+        $r        = Content\toArrayResponseFromPostEntity($post, $me, $profiles) + [
                 '_self' => [
                     'content_id' => $content_id,
                 ],

@@ -52,6 +52,6 @@ interface iRepoComments
      *
      * @return \Traversable
      */
-    function findAll($expression, $offset = null, $limit = null);
+    function findAll(array $expression, $offset = null, $limit = null);
 
 }

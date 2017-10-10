@@ -162,9 +162,10 @@ class PostsRepo
      *
      * @return \Traversable
      */
-    function findAll($expression, $offset = null, $limit = null)
+    function findAll(array $expression, $offset = null, $limit = null)
     {
-        $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+        $expression = \Module\MongoDriver\parseExpressionFromArray($expression);
+        $condition  = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
 
         if ($offset)
             $condition = [
@@ -198,9 +199,10 @@ class PostsRepo
      *
      * @return \Traversable
      */
-    function findAllMatchWithOwnerId($ownerIdentifier, $expression = null, $offset = null, $limit = null)
+    function findAllMatchWithOwnerId($ownerIdentifier, array $expression = null, $offset = null, $limit = null)
     {
-        $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+        $expression = \Module\MongoDriver\parseExpressionFromArray($expression);
+        $condition  = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
 
         $condition = [
             'owner_identifier' => $this->attainNextIdentifier($ownerIdentifier),
@@ -253,7 +255,7 @@ class PostsRepo
      *
      * @return \Traversable
      */
-    function findAllMatchUidWithin($uids, $expression = null)
+    function findAllMatchUidWithin($uids, array $expression = null)
     {
         $objIds = [];
         foreach ($uids as $id)
@@ -269,6 +271,7 @@ class PostsRepo
         ];
 
         if ($expression !== null) {
+            $expression = \Module\MongoDriver\parseExpressionFromArray($expression);
             $queryConditions
                 += \Module\MongoDriver\buildMongoConditionFromExpression($expression);
         }

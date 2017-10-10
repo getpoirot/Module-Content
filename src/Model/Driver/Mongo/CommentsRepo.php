@@ -158,9 +158,10 @@ class CommentsRepo
      *
      * @return \Traversable
      */
-    function findAll($expression, $offset = null, $limit = null)
+    function findAll(array $expression, $offset = null, $limit = null)
     {
-        $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+        $expression = \Module\MongoDriver\parseExpressionFromArray($expression);
+        $condition  = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
 
         if ($offset)
             $condition = [

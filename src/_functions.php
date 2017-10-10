@@ -11,11 +11,12 @@ namespace Module\Content
      * Build Array Response From Given Entity Object
      *
      * @param EntityPost  $post
-     * @param null|string $me   Current User Identifier
+     * @param null|string $me       Current User Identifier
+     * @param array       $profiles Default Users Profile Data
      *
      * @return array
      */
-    function toArrayResponseFromPostEntity(EntityPost $post, $me = null)
+    function toArrayResponseFromPostEntity(EntityPost $post, $me = null, array $profiles = [])
     {
         # Build Likes Response:
         $likes = ($post->getLikes()) ? [
@@ -34,36 +35,36 @@ namespace Module\Content
         }
 
 
-
         // TODO embed user detail must done within some attached events
         // TODO remove dependency (call with service)
-        $uid          = (string) $post->getOwnerIdentifier();
-        /** @var RetrieveProfiles $funListUsers */
-        $user = \Module\Profile\Actions::RetrieveProfiles([$uid]);
-        $user = (isset($user[$uid])) ? $user[$uid] : null;
+        $uid  = (string) $post->getOwnerIdentifier();
+        $user = [
+            'uid'    => $uid, ];
 
-        #
+        if (isset($profiles[$uid]) )
+            $user = $profiles[$uid];
+
+
+        ##
 
         return [
-            'post' => [
-                'uid'        => (string) $post->getUid(),
-                'content'    => TenderBinClient\embedLinkToMediaData( $post->getContent() ),
-                'stat'       => $post->getStat(),
-                'stat_share' => $post->getStatShare(),
-                'user'       => $user,
-                'location'   => ($post->getLocation()) ? [
-                    'caption' => $post->getLocation()->getCaption(),
-                    'geo'     => [
-                        'lon' => $post->getLocation()->getGeo('lon'),
-                        'lat' => $post->getLocation()->getGeo('lat'),
-                    ],
-                ] : null,
-                'likes'       => $likes,
-                'is_comment_enabled' => $post->getIsCommentEnabled(),
-                'datetime_created' => [
-                    'datetime'  => $post->getDateTimeCreated(),
-                    'timestamp' => $post->getDateTimeCreated()->getTimestamp(),
+            'uid'        => (string) $post->getUid(),
+            'content'    => TenderBinClient\embedLinkToMediaData( $post->getContent() ),
+            'stat'       => $post->getStat(),
+            'stat_share' => $post->getStatShare(),
+            'user'       => $user,
+            'location'   => ($post->getLocation()) ? [
+                'caption' => $post->getLocation()->getCaption(),
+                'geo'     => [
+                    'lon' => $post->getLocation()->getGeo('lon'),
+                    'lat' => $post->getLocation()->getGeo('lat'),
                 ],
+            ] : null,
+            'likes'       => $likes,
+            'is_comment_enabled' => $post->getIsCommentEnabled(),
+            'datetime_created' => [
+                'datetime'  => $post->getDateTimeCreated(),
+                'timestamp' => $post->getDateTimeCreated()->getTimestamp(),
             ],
         ];
     }

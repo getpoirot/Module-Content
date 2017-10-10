@@ -4,6 +4,7 @@ namespace Module\Content\Actions\Likes;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
+use Module\Content\Model\Entity\EntityPost;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
@@ -48,17 +49,32 @@ class ListPostsWhichUserLikedAction
         $limit = (isset($q['limit'])) ? (int) $q['limit'] : 30;
 
         # Retrieve Posts Liked By User
-        $posts = $this->ListPostsLikedByUser(
+        $crsr = $this->ListPostsLikedByUser(
             $token->getOwnerIdentifier()
             , $skip
             , $limit + 1
         );
 
-        $postsPrepared = [];
-        foreach ($posts as $post) {
-            // Create Response Items
-            $postsPrepared[] = Content\toArrayResponseFromPostEntity( $post, $token->getOwnerIdentifier() );
+        ## Retrieve Profiles For Posts Owner
+        #
+        $posts = [];
+        $postOwners = [];
+        /** @var EntityPost $post */
+        foreach ($crsr as $post) {
+            $posts[] = $post;
+            $ownerId = (string) $post->getOwnerIdentifier();
+            $postOwners[$ownerId] = true;
         }
+
+        $postOwners = array_keys($postOwners);
+
+        $profiles = \Module\Profile\Actions::RetrieveProfiles($postOwners);
+
+        $postsPrepared = [];
+        foreach ($posts as $post)
+            // Create Response Items
+            $postsPrepared[] = Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
+
 
         // Check whether to display fetch more link in response?
         $linkMore = null;

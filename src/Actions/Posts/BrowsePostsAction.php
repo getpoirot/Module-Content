@@ -6,9 +6,11 @@ use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityPost;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
+use Module\Profile\Actions\Helpers\RetrieveProfiles;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\Std\Type\StdArray;
 
 
 class BrowsePostsAction
@@ -60,19 +62,37 @@ class BrowsePostsAction
 
 
         # Retrieve All Latest Posts
-        $posts = $this->repoPosts->findAll(
+        $crsr = $this->repoPosts->findAll(
             \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public')
             , $offset
             , $limit + 1
         );
 
+        $posts = [];
+
+        ## Retrieve Profiles For Posts Owner
+        #
+        $postOwners = [];
         /** @var EntityPost $post */
-        $posts = \Poirot\Std\cast($posts)->toArray(function (&$post) use ($token) {
-            $post = \Module\Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier());
-        });
+        foreach ($crsr as $post) {
+            $posts[] = $post;
+            $ownerId = (string) $post->getOwnerIdentifier();
+            $postOwners[$ownerId] = true;
+        }
+
+        $postOwners = array_keys($postOwners);
+
+        /** @var RetrieveProfiles $funListUsers */
+        $profiles = \Module\Profile\Actions::RetrieveProfiles($postOwners);
 
 
-        # Build Response:
+        ## Build Response:
+        #
+        /** @var EntityPost $post */
+        $posts = StdArray::of($posts)->withWalk(function (&$post) use ($token, &$profiles) {
+            $post = \Module\Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
+        })->value;
+
 
         // Check whether to display fetch more link in response?
         $linkMore = null;
@@ -80,7 +100,7 @@ class BrowsePostsAction
             array_pop($posts);                     // skip augmented content to determine has more?
             $nextOffset = $posts[count($posts)-1]; // retrieve the next from this offset (less than this)
             $linkMore   = \Module\HttpFoundation\Actions::url(null);
-            $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['post']['uid']).'&limit='.$limit);
+            $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['uid']).'&limit='.$limit);
         }
 
         return [
