@@ -11,6 +11,7 @@ use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\Std\Type\StdArray;
+use Poirot\Std\Type\StdTravers;
 
 
 class BrowsePostsAction
@@ -73,10 +74,11 @@ class BrowsePostsAction
         ## Retrieve Profiles For Posts Owner
         #
         $postOwners = [];
-        /** @var EntityPost $post */
-        foreach ($crsr as $post) {
-            $posts[] = $post;
-            $ownerId = (string) $post->getOwnerIdentifier();
+        /** @var EntityPost $p */
+        foreach ($crsr as $p) {
+            $p->setContent(clone $p->getContent());
+            array_push($posts, $p);
+            $ownerId = (string) $p->getOwnerIdentifier();
             $postOwners[$ownerId] = true;
         }
 
@@ -85,12 +87,9 @@ class BrowsePostsAction
         /** @var RetrieveProfiles $funListUsers */
         $profiles = \Module\Profile\Actions::RetrieveProfiles($postOwners);
 
-
-        ## Build Response:
-        #
         /** @var EntityPost $post */
-        $posts = StdArray::of($posts)->withWalk(function (&$post) use ($token, &$profiles) {
-            $post = \Module\Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
+        $posts = StdArray::of($posts)->each(function ($post) use ($token, &$profiles) {
+            return \Module\Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
         })->value;
 
 
