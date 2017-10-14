@@ -61,6 +61,8 @@ class ListPostsWhichUserLikedAction
         $postOwners = [];
         /** @var EntityPost $post */
         foreach ($crsr as $post) {
+            // Create Response Items
+            $post->setContent(clone $post->getContent());
             $posts[] = $post;
             $ownerId = (string) $post->getOwnerIdentifier();
             $postOwners[$ownerId] = true;
@@ -71,9 +73,9 @@ class ListPostsWhichUserLikedAction
         $profiles = \Module\Profile\Actions::RetrieveProfiles($postOwners);
 
         $postsPrepared = [];
-        foreach ($posts as $post)
-            // Create Response Items
+        foreach ($posts as $post) {
             $postsPrepared[] = Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
+        }
 
 
         // Check whether to display fetch more link in response?
