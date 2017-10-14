@@ -73,12 +73,12 @@ class CreatePostAction
             throw new exUnexpectedValue('Validation Failed', null,  400, $e);
         }
 
-
         # Content May Include TenderBin Media
         # so touch-media file for infinite expiration
         #
         $content  = $hydratePost->getContent();
         Content\assertMediaContents($content);
+
 
 
         # Persist Post Entity

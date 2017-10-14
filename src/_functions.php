@@ -3,7 +3,6 @@ namespace Module\Content
 {
     use Poirot\TenderBinClient;
     use Module\Content\Model\Entity\EntityPost;
-    use Module\Profile\Actions\Helpers\RetrieveProfiles;
     use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
 
 
@@ -79,14 +78,13 @@ namespace Module\Content
      */
     function assertMediaContents($content)
     {
-        if (! $content instanceof \Traversable )
+        if (! ($content instanceof \Traversable || is_array($content)) )
             // Do Nothing!!
             return;
 
 
         /** @var TenderBinClient\Client $cTender */
         $cTender = \Module\TenderBinClient\Services::ClientTender();
-
         foreach ($content as $c)
         {
             if ($c instanceof MediaObjectTenderBin) {
@@ -100,8 +98,9 @@ namespace Module\Content
                 }
             }
 
-            elseif (is_array($c) || $c instanceof \Traversable)
+            elseif (is_array($c) || $c instanceof \Traversable) {
                 assertMediaContents($c);
+            }
         }
     }
 }
