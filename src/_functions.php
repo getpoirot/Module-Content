@@ -1,6 +1,9 @@
 <?php
 namespace Module\Content
 {
+
+    use Poirot\Std\Type\StdArray;
+    use Poirot\Std\Type\StdTravers;
     use Poirot\TenderBinClient;
     use Module\Content\Model\Entity\EntityPost;
     use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
@@ -48,7 +51,7 @@ namespace Module\Content
 
         return [
             'uid'        => (string) $post->getUid(),
-            'content'    => TenderBinClient\embedLinkToMediaData( $post->getContent() ),
+            'content'    => embedLinkToMediaData( $post->getContent() ),
             'stat'       => $post->getStat(),
             'stat_share' => $post->getStatShare(),
             'user'       => $user,
@@ -78,30 +81,59 @@ namespace Module\Content
      */
     function assertMediaContents($content)
     {
-        if (! ($content instanceof \Traversable || is_array($content)) )
+        if (!($content instanceof \Traversable || is_array($content)))
             // Do Nothing!!
             return;
 
 
         /** @var TenderBinClient\Client $cTender */
         $cTender = \Module\TenderBinClient\Services::ClientTender();
-        foreach ($content as $c)
-        {
+        foreach ($content as $c) {
             if ($c instanceof MediaObjectTenderBin) {
                 try {
-                    $cTender->touch( $c->getHash() );
+                    $cTender->touch($c->getHash());
                 } catch (TenderBinClient\Exceptions\exResourceNotFound $e) {
                     // Specific Content Client Exception
                 } catch (\Exception $e) {
                     // Other Errors Throw To Next Layer!
                     throw $e;
                 }
-            }
-
-            elseif (is_array($c) || $c instanceof \Traversable) {
+            } elseif (is_array($c) || $c instanceof \Traversable) {
                 assertMediaContents($c);
             }
         }
+    }
+
+
+    function embedLinkToMediaData($content)
+    {
+        if ($content instanceof \Traversable )
+            $content = StdTravers::of($content)->toArray();
+
+        if (! is_array($content) )
+            throw new \Exception('Medias is not an type of array.');
+
+
+        $content = StdArray::of($content)->withWalk(function(&$val) {
+            if (!$val instanceof MediaObjectTenderBin )
+                return;
+
+            $orig         = $val;
+            $link = (string) \Module\Foundation\Actions::Path(
+                'tenderbin-media_cdn' // this name is reserved; @see mod-content.conf.php
+                , [
+                    'hash' => $orig->getHash()
+                ]
+            );
+
+            $val          = StdTravers::of($val)->toArray();
+            $val['_link'] = [
+                'thumb' => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=150x150&url='.$link.'/file.jpg',
+                'large' => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=800x1000&url='.$link.'/file.jpg',
+            ];
+        });
+
+        return $content->value; // instance access to internal array
     }
 }
 
