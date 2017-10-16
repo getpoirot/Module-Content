@@ -105,6 +105,7 @@ namespace Module\Content
     }
 
 
+    // TODO Must Deprecated; Use TenderBinClient
     function embedLinkToMediaData($content)
     {
         if ($content instanceof \Traversable )
@@ -167,7 +168,7 @@ namespace Module\Content\Lib
 
 
             /** @var iEntityPostContentObject $contentObject */
-            $contentObject = \Module\Content\Services::ContentPlugins()->get($contentName);
+            $contentObject = \Module\Content\Services::ContentPlugins()->fresh($contentName);
             $contentObject->with($contentObject::parseWith($contentData));
             return $contentObject;
         }
