@@ -62,7 +62,6 @@ class ListPostsWhichUserLikedAction
         /** @var EntityPost $post */
         foreach ($crsr as $post) {
             // Create Response Items
-            $post->setContent(clone $post->getContent());
             $posts[] = $post;
             $ownerId = (string) $post->getOwnerIdentifier();
             $postOwners[$ownerId] = true;
@@ -98,7 +97,5 @@ class ListPostsWhichUserLikedAction
             ],
         ];
     }
-
-    // Helper Action Chains:
 
 }
