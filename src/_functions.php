@@ -92,6 +92,7 @@ namespace Module\Content
             if ($c instanceof MediaObjectTenderBin) {
                 try {
                     $cTender->touch($c->getHash());
+
                 } catch (TenderBinClient\Exceptions\exResourceNotFound $e) {
                     // Specific Content Client Exception
                 } catch (\Exception $e) {
@@ -105,6 +106,7 @@ namespace Module\Content
     }
 
 
+    // TODO Must Deprecated; Use TenderBinClient
     function embedLinkToMediaData($content)
     {
         if ($content instanceof \Traversable )
@@ -128,8 +130,8 @@ namespace Module\Content
 
             $val          = StdTravers::of($val)->toArray();
             $val['_link'] = [
-                'thumb' => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=150x150&url='.$link.'/file.jpg',
-                'large' => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=800x1000&url='.$link.'/file.jpg',
+                'thumb' => 'http://'.SERVER_OPTIMIZER.'/?type=resize&size=150x150&url='.$link.'/file.jpg',
+                'large' => 'http://'.SERVER_OPTIMIZER.'/?type=resize&size=800x1000&url='.$link.'/file.jpg',
             ];
         });
 
@@ -140,9 +142,7 @@ namespace Module\Content
 namespace Module\Content\Lib
 {
     use Module\Content\Exception\exUnknownContentType;
-    use Module\Content\Interfaces\Model\Entity\iEntityMediaObject;
     use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
-    use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
     use Poirot\Std\Interfaces\Pact\ipFactory;
 
 
@@ -167,7 +167,7 @@ namespace Module\Content\Lib
 
 
             /** @var iEntityPostContentObject $contentObject */
-            $contentObject = \Module\Content\Services::ContentPlugins()->get($contentName);
+            $contentObject = \Module\Content\Services::ContentPlugins()->fresh($contentName);
             $contentObject->with($contentObject::parseWith($contentData));
             return $contentObject;
         }
