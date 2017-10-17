@@ -4,7 +4,6 @@ namespace Module\Content\Actions;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityLike;
-use Module\Content\Model\Entity\EntityPost;
 
 
 class ListPostsLikedByUser

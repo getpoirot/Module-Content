@@ -92,6 +92,7 @@ namespace Module\Content
             if ($c instanceof MediaObjectTenderBin) {
                 try {
                     $cTender->touch($c->getHash());
+
                 } catch (TenderBinClient\Exceptions\exResourceNotFound $e) {
                     // Specific Content Client Exception
                 } catch (\Exception $e) {
@@ -129,7 +130,7 @@ namespace Module\Content
 
             $val          = StdTravers::of($val)->toArray();
             $val['_link'] = [
-                'thumb' => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=150x150&url='.$link.'/file.jpg',
+                'thumb' => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=400x400&url='.$link.'/file.jpg',
                 'large' => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=800x1000&url='.$link.'/file.jpg',
             ];
         });
