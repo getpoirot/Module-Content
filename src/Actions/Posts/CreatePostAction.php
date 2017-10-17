@@ -5,6 +5,7 @@ use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
+use Module\Content\Events\EventsHeapOfContent;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\Std\Exceptions\exUnexpectedValue;
@@ -80,7 +81,6 @@ class CreatePostAction
         Content\assertMediaContents($content);
 
 
-
         # Persist Post Entity
         #
         $post = $this->repoPosts->insert($entityPost);
@@ -88,10 +88,26 @@ class CreatePostAction
 
         # Build Response:
         #
+        # TODO: move RetrieveProfiles outside
         $profiles = \Module\Profile\Actions::RetrieveProfiles([ $token->getOwnerIdentifier() ]);
+        $r = Content\toArrayResponseFromPostEntity($post, null, $profiles);
+
+
+        ## Event
+        #
+        /** @var Content\Model\Entity\EntityPost $post */
+        $r = $this->event()
+            ->trigger(EventsHeapOfContent::AFTER_CREATE_CONTENT, [
+                /** @see Content\Events\DataCollector */
+                'result' => $r, 'entity_post' => $post, 'me' => $token->getOwnerIdentifier()
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getResult();
+            });
+
         return [
-            ListenerDispatch::RESULT_DISPATCH =>
-                Content\toArrayResponseFromPostEntity($post, null, $profiles)
+            ListenerDispatch::RESULT_DISPATCH => $r
         ];
     }
 }
