@@ -11,6 +11,7 @@ class EventsHeapOfContent
 {
     const RETRIEVE_CONTENT        = 'retrieve.content';
     const RETRIEVE_CONTENT_RESULT = 'retrieve.content.result';
+    const AFTER_CREATE_CONTENT    = 'create.content';
 
 
     /**
@@ -24,6 +25,7 @@ class EventsHeapOfContent
         // attach default event names:
         $this->bind( new Event(self::RETRIEVE_CONTENT) );
         $this->bind( new Event(self::RETRIEVE_CONTENT_RESULT) );
+        $this->bind( new Event(self::AFTER_CREATE_CONTENT) );
     }
 
 

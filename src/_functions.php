@@ -142,9 +142,7 @@ namespace Module\Content
 namespace Module\Content\Lib
 {
     use Module\Content\Exception\exUnknownContentType;
-    use Module\Content\Interfaces\Model\Entity\iEntityMediaObject;
     use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
-    use Module\Content\Model\Entity\EntityPost\MediaObjectTenderBin;
     use Poirot\Std\Interfaces\Pact\ipFactory;
 
 
