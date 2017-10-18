@@ -79,7 +79,7 @@ class ListPostsOfMeAction
             array_pop($posts);                     // skip augmented content to determine has more?
             $nextOffset = $posts[count($posts)-1]; // retrieve the next from this offset (less than this)
             $linkMore   = \Module\HttpFoundation\Actions::url(null);
-            $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['post']['uid']).'&limit='.$limit);
+            $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['uid']).'&limit='.$limit);
         }
 
         return [
