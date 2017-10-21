@@ -80,6 +80,19 @@ class CreatePostAction
         $content  = $hydratePost->getContent();
         Content\assertMediaContents($content);
 
+        ## Event
+        #
+        /** @var Content\Model\Entity\EntityPost $post */
+        $entityPost = $this->event()
+            ->trigger(EventsHeapOfContent::BEFORE_CREATE_CONTENT, [
+                /** @see Content\Events\DataCollector */
+                'entity_post' => $post, 'me' => $token->getOwnerIdentifier()
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getEntityPost();
+            });
+
 
         # Persist Post Entity
         #
