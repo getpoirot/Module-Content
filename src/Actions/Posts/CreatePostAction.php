@@ -86,7 +86,7 @@ class CreatePostAction
         $entityPost = $this->event()
             ->trigger(EventsHeapOfContent::BEFORE_CREATE_CONTENT, [
                 /** @see Content\Events\DataCollector */
-                'entity_post' => $post, 'me' => $token->getOwnerIdentifier()
+                'entity_post' => $entityPost, 'me' => $token->getOwnerIdentifier()
             ])
             ->then(function ($collector) {
                 /** @var Content\Events\DataCollector $collector */
