@@ -58,36 +58,46 @@ class ListCommentsOfPostAction
         );
 
 
+        $userIds=[];
         $comments  = [];
-        /** @var Content\Model\Entity\EntityComment $comment */
-        foreach ($persistComments as $comment)
+        /** @var Content\Model\Entity\EntityComment $cm */
+        foreach ($persistComments as $cm)
         {
-/*            if ($comment->getStat() == $comment::STAT_IGNORE)
-                // Ignored Comment Displayed For Owner
-                if ($comment->getOwnerIdentifier() !== $token->getOwnerIdentifier())
-                    // Don't Display this comment
-                    continue;*/
+            $userIds[(string)$cm->getOwnerIdentifier()] = $cm->getOwnerIdentifier();
 
-            $cid = (string) $comment->getUid();
+            $cid = (string) $cm->getUid();
             $comments[] = [
                 'comment' => [
                     'uid'     => $cid,
-                    'content' => $comment->getContent(),
-                    'user' => new Content\Model\Entity\MemberObject([
-                        'uid' => $comment->getOwnerIdentifier(),
-                    ])
+                    'content' => $cm->getContent(),
+
+                    'user' => [
+                        'uid'     => $cm->getOwnerIdentifier(),
+                        'profile' => [],
+                    ],
                 ]
             ];
         }
+        #embed profile to response
+        #
+        $profiles = \Module\Profile\Actions::RetrieveProfiles($userIds);
 
+        foreach ($comments as $i => $cm)
+        {
+            $cmOwner = $cm['comment']['user']['uid'];
+            if ( isset($profiles[$cmOwner]) ) {
+                $cm['comment']['user']['profile'] = $profiles[$cmOwner];
+            }
 
+            $comments[$i] = $cm;
+        }
         # Build Response:
 
         // Check whether to display fetch more link in response?
         $linkMore = null;
         if (count($comments) > $limit) {
             array_pop($comments);                       // skip augmented content to determine has more?
-            $nextOffset = $comment[count($comments)-1]; // retrieve the next from this offset (less than this)
+            $nextOffset = $cm[count($comments)-1]; // retrieve the next from this offset (less than this)
             $linkMore   = \Module\HttpFoundation\Actions::url(null, array('content_id' => $content_id));
             $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['comment']['uid']).'&limit='.$limit);
         }
