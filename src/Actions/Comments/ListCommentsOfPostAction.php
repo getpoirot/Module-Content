@@ -45,7 +45,8 @@ class ListCommentsOfPostAction
         $limit  = (isset($q['limit']))  ? (int) $q['limit']  : 30;
 
 
-        # Retrieve Comments Of Given Post ID
+        ## Retrieve Comments Of Given Post ID
+        #
         $persistComments = $this->repoComments->findAll(
             [
                 // We Consider All Item Liked Has _id from Mongo Collection
@@ -58,7 +59,7 @@ class ListCommentsOfPostAction
         );
 
 
-        $userIds=[];
+        $userIds   = [];
         $comments  = [];
         /** @var Content\Model\Entity\EntityComment $cm */
         foreach ($persistComments as $cm)
@@ -78,21 +79,24 @@ class ListCommentsOfPostAction
                 ]
             ];
         }
+
+
         #embed profile to response
         #
         $profiles = \Module\Profile\Actions::RetrieveProfiles($userIds);
 
-        foreach ($comments as $i => $cm)
-        {
+        foreach ($comments as $i => $cm) {
             $cmOwner = $cm['comment']['user']['uid'];
-            if ( isset($profiles[$cmOwner]) ) {
+
+            if ( isset($profiles[$cmOwner]) )
                 $cm['comment']['user']['profile'] = $profiles[$cmOwner];
-            }
 
             $comments[$i] = $cm;
         }
-        # Build Response:
 
+
+        ## Build Response:
+        #
         // Check whether to display fetch more link in response?
         $linkMore = null;
         if (count($comments) > $limit) {
@@ -101,6 +105,7 @@ class ListCommentsOfPostAction
             $linkMore   = \Module\HttpFoundation\Actions::url(null, array('content_id' => $content_id));
             $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['comment']['uid']).'&limit='.$limit);
         }
+
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
@@ -115,7 +120,4 @@ class ListCommentsOfPostAction
             ],
         ];
     }
-
-    // Helper Action Chains:
-
 }
