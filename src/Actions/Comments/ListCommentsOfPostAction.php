@@ -71,11 +71,8 @@ class ListCommentsOfPostAction
                 'comment' => [
                     'uid'     => $cid,
                     'content' => $cm->getContent(),
-
-                    'user' => [
-                        'uid'     => $cm->getOwnerIdentifier(),
-                        'profile' => [],
-                    ],
+                    'user' => [],
+                    'user_id' => $cm->getOwnerIdentifier(),
                 ]
             ];
         }
@@ -85,13 +82,15 @@ class ListCommentsOfPostAction
         #
         $profiles = \Module\Profile\Actions::RetrieveProfiles($userIds);
 
+
         foreach ($comments as $i => $cm) {
-            $cmOwner = $cm['comment']['user']['uid'];
+            $cmOwner = $cm['comment']['user_id'];
+            unset($cm['comment']['user_id']);
 
             if ( isset($profiles[$cmOwner]) )
-                $cm['comment']['user']['profile'] = $profiles[$cmOwner];
-
+                $cm['comment']['user'] = $profiles[$cmOwner];
             $comments[$i] = $cm;
+
         }
 
 
