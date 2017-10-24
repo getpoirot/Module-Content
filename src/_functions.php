@@ -1,7 +1,6 @@
 <?php
 namespace Module\Content
 {
-
     use Poirot\Std\Type\StdArray;
     use Poirot\Std\Type\StdTravers;
     use Poirot\TenderBinClient;
@@ -106,7 +105,6 @@ namespace Module\Content
     }
 
 
-    // TODO Must Deprecated; Use TenderBinClient
     function embedLinkToMediaData($content)
     {
         if ($content instanceof \Traversable )
@@ -130,8 +128,13 @@ namespace Module\Content
 
             $val          = StdTravers::of($val)->toArray();
             $val['_link'] = [
-                'thumb' => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=150x150&url='.$link.'/file.jpg',
-                'large' => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=800x1400&url='.$link.'/file.jpg',
+                'thumb'      => $link.'?ver=thumb',
+                'low_thumb'  => $link.'?ver=low_thumb',
+                'small'      => $link.'?ver=small',
+                'low_small'  => $link.'?ver=low_small',
+                'large'      => $link.'?ver=large',
+                'low_large'  => $link.'?ver=low_large',
+                'origin' => $link,
             ];
         });
 

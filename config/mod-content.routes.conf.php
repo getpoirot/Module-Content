@@ -37,7 +37,7 @@ return
                 ],
                 'params'  => [
                     ListenerDispatch::ACTIONS => [
-                        '/module/content/actions/RetrievePostAction',
+                        \Module\Content\Actions\Posts\RetrievePostAction::class,
                     ],
                 ],
             ],
@@ -62,7 +62,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                '/module/content/actions/ListPostsOfMeAction',
+                                \Module\Content\Actions\Posts\ListPostsOfMeAction::class,
                             ],
                         ],
                     ],
@@ -78,7 +78,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                '/module/content/actions/CreatePostAction',
+                                \Module\Content\Actions\Posts\CreatePostAction::class,
                             ],
                         ],
                     ],
@@ -93,7 +93,23 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                '/module/content/actions/ListPostsWhichUserLikedAction',
+                                \Module\Content\Actions\Likes\ListPostsWhichUserLikedAction::class,
+                            ],
+                        ],
+                    ],
+
+                    ## GET /posts/liked
+                    #- Get the list of recent media liked by the owner.
+                    'medias' => [
+                        'route'   => 'RouteMethodSegment',
+                        'options' => [
+                            'criteria'    => '/medias',
+                            'method'      => 'POST',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                \Module\Content\Actions\UploadMediaAction::class,
                             ],
                         ],
                     ],
@@ -118,7 +134,7 @@ return
                                 ],
                                 'params'  => [
                                     ListenerDispatch::ACTIONS => [
-                                        '/module/content/actions/EditPostAction',
+                                        \Module\Content\Actions\Posts\EditPostAction::class,
                                     ],
                                 ],
                             ],
@@ -134,7 +150,7 @@ return
                                 ],
                                 'params'  => [
                                     ListenerDispatch::ACTIONS => [
-                                        '/module/content/actions/DeletePostAction',
+                                        \Module\Content\Actions\Posts\DeletePostAction::class,
                                     ],
                                 ],
                             ],
@@ -181,7 +197,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                '/module/content/actions/ListPostLikesAction',
+                                                \Module\Content\Actions\Likes\ListPostLikesAction::class,
                                             ],
                                         ],
                                     ],
@@ -194,7 +210,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                '/module/content/actions/LikePostAction',
+                                                \Module\Content\Actions\Likes\LikePostAction::class,
                                             ],
                                         ],
                                     ],
@@ -207,7 +223,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                '/module/content/actions/UnLikePostAction',
+                                                \Module\Content\Actions\Likes\UnLikePostAction::class,
                                             ],
                                         ],
                                     ],
@@ -230,7 +246,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                '/module/content/actions/ListCommentsOfPostAction',
+                                                \Module\Content\Actions\Comments\ListCommentsOfPostAction::class,
                                             ],
                                         ],
                                     ],
@@ -243,7 +259,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                '/module/content/actions/AddCommentOnPostAction',
+                                                \Module\Content\Actions\Comments\AddCommentOnPostAction::class,
                                             ],
                                         ],
                                     ],
@@ -258,7 +274,7 @@ return
                                         ],
                                         'params'  => [
                                             ListenerDispatch::ACTIONS => [
-                                                '/module/content/actions/RemoveCommentFromPostAction',
+                                                \Module\Content\Actions\Comments\RemoveCommentFromPostAction::class,
                                             ],
                                         ],
                                     ],
@@ -290,7 +306,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                '/module/content/actions/ListPostsOfUserAction',
+                                \Module\Content\Actions\Posts\ListPostsOfUserAction::class,
                             ],
                         ],
                     ],
@@ -321,7 +337,7 @@ return
                         ],
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
-                                '/module/content/actions/BrowsePostsAction',
+                                \Module\Content\Actions\Posts\BrowsePostsAction::class,
                             ],
                         ],
                     ],
