@@ -64,18 +64,23 @@ class AddCommentOnPostAction
             ->setModel( Content\Model\Entity\EntityComment::MODEL_POSTS )
         ;
 
-        # Persist Comment
+        ## Persist Comment
+        #
         $comment = $this->repoComments->insert($comment);
 
+
+        ## Build Response
+        #
+        $commentOwnerId = (string) $comment->getOwnerIdentifier();
+
+        $profiles = \Module\Profile\Actions::RetrieveProfiles([$commentOwnerId]);
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
                 'comment' => [
                     'uid'     => (string) $comment->getUid(),
                     'content' => $comment->getContent(),
-                    'user'    => [
-                        'uid' => $comment->getOwnerIdentifier(),
-                    ],
+                    'user'    => $profiles[$commentOwnerId],
                 ],
                 '_self'   => [
                     'content_id' => $content_id,
@@ -83,7 +88,4 @@ class AddCommentOnPostAction
             ],
         ];
     }
-
-    // Helper Action Chains:
-
 }

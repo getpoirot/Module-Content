@@ -59,38 +59,37 @@ class ListCommentsOfPostAction
         );
 
 
+        ## Build Response
+        #
         $userIds   = [];
         $comments  = [];
         /** @var Content\Model\Entity\EntityComment $cm */
         foreach ($persistComments as $cm)
         {
-            $userIds[(string)$cm->getOwnerIdentifier()] = $cm->getOwnerIdentifier();
+            $commentOwnerId = (string)$cm->getOwnerIdentifier();
+
+            $userIds[$commentOwnerId] = true;
 
             $cid = (string) $cm->getUid();
             $comments[] = [
-                'comment' => [
-                    'uid'     => $cid,
-                    'content' => $cm->getContent(),
-                    'user' => [],
-                    'user_id' => $cm->getOwnerIdentifier(),
-                ]
+                'uid'     => $cid,
+                'content' => $cm->getContent(),
+                'user' => [
+                    'uid' => $commentOwnerId,
+                ],
             ];
         }
 
-
-        #embed profile to response
-        #
+        // Embed profile to response
+        //
         $profiles = \Module\Profile\Actions::RetrieveProfiles($userIds);
 
-
         foreach ($comments as $i => $cm) {
-            $cmOwner = $cm['comment']['user_id'];
-            unset($cm['comment']['user_id']);
-
+            $cmOwner = $cm['comment']['user']['uid'];
             if ( isset($profiles[$cmOwner]) )
                 $cm['comment']['user'] = $profiles[$cmOwner];
-            $comments[$i] = $cm;
 
+            $comments[$i] = $cm;
         }
 
 
@@ -99,7 +98,7 @@ class ListCommentsOfPostAction
         // Check whether to display fetch more link in response?
         $linkMore = null;
         if (count($comments) > $limit) {
-            array_pop($comments);                       // skip augmented content to determine has more?
+            array_pop($comments);                  // skip augmented content to determine has more?
             $nextOffset = $cm[count($comments)-1]; // retrieve the next from this offset (less than this)
             $linkMore   = \Module\HttpFoundation\Actions::url(null, array('content_id' => $content_id));
             $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['comment']['uid']).'&limit='.$limit);
