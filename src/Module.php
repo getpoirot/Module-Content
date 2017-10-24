@@ -165,44 +165,17 @@ namespace Module\Content
 }
 
 
-namespace Module\Content\Actions
+namespace Module\Content
 {
-    use Module\Content\Actions\Comments\AddCommentOnPostAction;
-    use Module\Content\Actions\Comments\ListCommentsOfPostAction;
-    use Module\Content\Actions\Comments\RemoveCommentFromPostAction;
-    use Module\Content\Actions\Likes\LikePostAction;
-    use Module\Content\Actions\Likes\ListPostLikesAction;
-    use Module\Content\Actions\Likes\ListPostsWhichUserLikedAction;
-    use Module\Content\Actions\Likes\UnLikePostAction;
-    use Module\Content\Actions\Posts\BrowsePostsAction;
-    use Module\Content\Actions\Posts\CreatePostAction;
-    use Module\Content\Actions\Posts\DeletePostAction;
-    use Module\Content\Actions\Posts\EditPostAction;
-    use Module\Content\Actions\Posts\ListPostsOfMeAction;
-    use Module\Content\Actions\Posts\ListPostsOfUserAction;
-    use Module\Content\Actions\Posts\RetrievePostAction;
-
+    use Module\Content\Actions\IsUserPermissionOnContent;
 
     /**
-     * @property CreatePostAction      $CreatePostAction
-     * @property EditPostAction        $EditPostAction
-     * @property DeletePostAction      $DeletePostAction
-     * @property RetrievePostAction    $RetrievePostAction
-     * @property ListPostsOfMeAction   $ListPostsOfMeAction
-     * @property ListPostsOfUserAction $ListPostsOfUserAction
-     * @property BrowsePostsAction     $BrowsePostsAction
-     *
-     * @property LikePostAction                $LikePostAction
-     * @property UnLikePostAction              $UnLikePostAction
-     * @property ListPostLikesAction           $ListPostLikesAction
-     * @property ListPostsWhichUserLikedAction $ListPostsWhichUserLikedAction
-     *
-     * @property AddCommentOnPostAction      $AddCommentOnPostAction
-     * @property RemoveCommentFromPostAction $RemoveCommentFromPostAction
-     * @property ListCommentsOfPostAction    $ListCommentsOfPostAction
+     * @see IsUserPermissionOnContent
+     * @method static bool IsUserPermissionOnContent($post, $token)
+     * ...............................................................
      *
      */
-    class IOC extends \IOC
+    class Actions extends \IOC
     { }
 }
 

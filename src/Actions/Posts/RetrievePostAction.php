@@ -58,7 +58,7 @@ class RetrievePostAction
         if ($post->getStat() == Content\Model\Entity\EntityPost::STAT_LOCKED)
             throw new exAccessDenied('Access Denied, Post Is Locked.');
 
-        if (! $this->IsUserPermissionOnContent($post, $token)) {
+        if (! \Module\Content\Actions::IsUserPermissionOnContent($post, $token) ) {
             // only posts with stat publish and share public will attain here
             if (!
                (  $post->getStat()      == Content\Model\Entity\EntityPost::STAT_PUBLISH
