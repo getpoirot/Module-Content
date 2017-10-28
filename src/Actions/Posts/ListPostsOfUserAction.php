@@ -8,6 +8,7 @@ use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Module\Content\Events\EventsHeapOfContent;
 
 
 class ListPostsOfUserAction
@@ -95,6 +96,17 @@ class ListPostsOfUserAction
             , $limit + 1
         );
 
+        ## Event
+        #
+        $posts = $this->event()
+            ->trigger(EventsHeapOfContent::RETRIEVE_POSTS_RESULT, [
+                /** @see Content\Events\DataCollector */
+                'me' => $me, 'posts' => $posts, 'entityPost' => new Content\Model\Entity\EntityPost()
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getResult();
+            });
 
         # Build Response:
 
