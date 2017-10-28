@@ -101,7 +101,7 @@ class ListPostsOfUserAction
         $posts = $this->event()
             ->trigger(EventsHeapOfContent::RETRIEVE_POSTS_RESULT, [
                 /** @see Content\Events\DataCollector */
-                'me' => $me, 'posts' => $posts, 'entityPost' => new Content\Model\Entity\EntityPost()
+                'me' => $me, 'posts' => $posts
             ])
             ->then(function ($collector) {
                 /** @var Content\Events\DataCollector $collector */

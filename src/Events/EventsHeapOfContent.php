@@ -68,7 +68,7 @@ class DataCollector
         return $this->me;
     }
 
-    function setEntityPost(EntityPost $post)
+    function setEntityPost(EntityPost $post = null)
     {
         $this->entity = $post;
     }
