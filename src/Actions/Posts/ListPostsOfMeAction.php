@@ -62,7 +62,7 @@ class ListPostsOfMeAction
 
 //        $expression   = \Module\MongoDriver\parseExpressionFromArray($q, ['stat'], 'allow');
         $me = ($token) ? $token->getOwnerIdentifier() : null;
-        $posts = $this->ListPostsOfUser(
+        $posts = \Module\Content\Actions::ListPostsOfUser(
             $me
             , $token->getOwnerIdentifier()
             , \Module\MongoDriver\parseExpressionFromString('stat=publish|draft')

@@ -168,10 +168,18 @@ namespace Module\Content
 namespace Module\Content
 {
     use Module\Content\Actions\IsUserPermissionOnContent;
+    use Module\Content\Actions\ListPostsLikedByUser;
+    use Module\Content\Actions\ListPostsOfUser;
 
     /**
      * @see IsUserPermissionOnContent
      * @method static bool IsUserPermissionOnContent($post, $token)
+     * ...............................................................
+     * @see ListPostsLikedByUser
+     * @method static bool ListPostsLikedByUser($owner_identifier = null, $skip = null, $limit = 30)
+     * ...............................................................
+     * @see ListPostsOfUser
+     * @method static bool ListPostsOfUser($me = null, $owner_identifier = null, $expression = null, $offset = null, $limit = 30)
      * ...............................................................
      *
      */

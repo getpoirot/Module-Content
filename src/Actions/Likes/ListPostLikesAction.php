@@ -91,7 +91,4 @@ class ListPostLikesAction
             ],
         ];
     }
-
-    // Helper Action Chains:
-
 }

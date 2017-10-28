@@ -49,7 +49,7 @@ class ListPostsWhichUserLikedAction
         $limit = (isset($q['limit'])) ? (int) $q['limit'] : 30;
 
         # Retrieve Posts Liked By User
-        $crsr = $this->ListPostsLikedByUser(
+        $crsr = \Module\Content\Actions::ListPostsLikedByUser(
             $token->getOwnerIdentifier()
             , $skip
             , $limit + 1

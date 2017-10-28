@@ -87,7 +87,7 @@ class ListPostsOfUserAction
 
 //        $expression   = \Module\MongoDriver\parseExpressionFromArray($q, ['stat'], 'allow');
         $me = ($token) ? $token->getOwnerIdentifier() : null;
-        $posts = $this->ListPostsOfUser(
+        $posts = \Module\Content\Actions::ListPostsOfUser(
             $me
             , $userid
             , \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public')
