@@ -9,6 +9,7 @@ use Module\Content\Events\EventsHeapOfContent;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\Std\Exceptions\exUnexpectedValue;
+use Module\Content\Model\PostValidate;
 
 
 class CreatePostAction
@@ -57,6 +58,7 @@ class CreatePostAction
             Content\Model\HydrateEntityPost::parseWith($this->request) );
 
 
+
         # Assert Validate Entity
         #
         try
@@ -65,6 +67,9 @@ class CreatePostAction
 
             // Determine Owner Identifier From Token
             $entityPost->setOwnerIdentifier($token->getOwnerIdentifier());
+
+            __(new PostValidate($entityPost))
+                ->assertValidate();
 
             // TODO Assert Validate Entity
 

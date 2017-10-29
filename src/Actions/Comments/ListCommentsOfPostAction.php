@@ -40,6 +40,7 @@ class ListCommentsOfPostAction
      */
     function __invoke($content_id = null, $token = null)
     {
+
         $q      = ParseRequestData::_($this->request)->parseQueryParams();
         $offset = (isset($q['offset'])) ? (int) $q['offset'] : null;
         $limit  = (isset($q['limit']))  ? (int) $q['limit']  : 30;
@@ -71,6 +72,7 @@ class ListCommentsOfPostAction
             $userIds[$commentOwnerId] = true;
 
             $cid = (string) $cm->getUid();
+
             $comments[] = [
                 'uid'     => $cid,
                 'content' => $cm->getContent(),
@@ -82,16 +84,17 @@ class ListCommentsOfPostAction
 
         // Embed profile to response
         //
-        $profiles = \Module\Profile\Actions::RetrieveProfiles($userIds);
+
+        $profiles = \Module\Profile\Actions::RetrieveProfiles(array_keys($userIds));
+
 
         foreach ($comments as $i => $cm) {
-            $cmOwner = $cm['comment']['user']['uid'];
+            $cmOwner = $cm['user']['uid'];
             if ( isset($profiles[$cmOwner]) )
-                $cm['comment']['user'] = $profiles[$cmOwner];
+                $cm['user'] = $profiles[$cmOwner];
 
             $comments[$i] = $cm;
         }
-
 
         ## Build Response:
         #

@@ -77,11 +77,11 @@ class AddCommentOnPostAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
-                'comment' => [
+
                     'uid'     => (string) $comment->getUid(),
                     'content' => $comment->getContent(),
                     'user'    => $profiles[$commentOwnerId],
-                ],
+
                 '_self'   => [
                     'content_id' => $content_id,
                 ],
