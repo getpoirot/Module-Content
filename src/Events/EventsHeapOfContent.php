@@ -13,6 +13,7 @@ class EventsHeapOfContent
     const RETRIEVE_CONTENT_RESULT = 'retrieve.content.result';
     const AFTER_CREATE_CONTENT    = 'post.create.content';
     const BEFORE_CREATE_CONTENT   = 'pre.create.content';
+    const RETRIEVE_POSTS_RESULT   = 'retrieve.posts.result';
 
 
     /**
@@ -28,6 +29,7 @@ class EventsHeapOfContent
         $this->bind( new Event(self::RETRIEVE_CONTENT_RESULT) );
         $this->bind( new Event(self::BEFORE_CREATE_CONTENT) );
         $this->bind( new Event(self::AFTER_CREATE_CONTENT) );
+        $this->bind( new Event(self::RETRIEVE_POSTS_RESULT) );
     }
 
 
@@ -66,7 +68,7 @@ class DataCollector
         return $this->me;
     }
 
-    function setEntityPost(EntityPost $post)
+    function setEntityPost(EntityPost $post = null)
     {
         $this->entity = $post;
     }
