@@ -42,7 +42,7 @@ class ListCommentsOfPostAction
     {
 
         $q      = ParseRequestData::_($this->request)->parseQueryParams();
-        $offset = (isset($q['offset'])) ? (int) $q['offset'] : null;
+        $offset = (isset($q['offset'])) ? (string) $q['offset'] : null;
         $limit  = (isset($q['limit']))  ? (int) $q['limit']  : 30;
 
 
@@ -96,14 +96,16 @@ class ListCommentsOfPostAction
             $comments[$i] = $cm;
         }
 
+        $comments = array_values($comments);
+
         ## Build Response:
         #
         // Check whether to display fetch more link in response?
         $linkMore = null;
         if (count($comments) > $limit) {
-            array_pop($comments);                  // skip augmented content to determine has more?
+            array_pop($comments);// skip augmented content to determine has more?
             $nextOffset = $comments[count($comments)-1]; // retrieve the next from this offset (less than this)
-            $linkMore   = \Module\HttpFoundation\Actions::url(null, array('content_id' => $content_id));
+            $linkMore   = \Module\HttpFoundation\Actions::url(null);
             $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['uid']).'&limit='.$limit);
         }
 
@@ -111,7 +113,7 @@ class ListCommentsOfPostAction
         return [
             ListenerDispatch::RESULT_DISPATCH => [
                 'count' => count($comments),
-                'items' => array_values($comments),
+                'items' => $comments,
                 '_link_more' => $linkMore,
                 '_self' => [
                     'content_id' => $content_id,
