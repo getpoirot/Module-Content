@@ -102,9 +102,9 @@ class ListCommentsOfPostAction
         $linkMore = null;
         if (count($comments) > $limit) {
             array_pop($comments);                  // skip augmented content to determine has more?
-            $nextOffset = $cm[count($comments)-1]; // retrieve the next from this offset (less than this)
+            $nextOffset = $comments[count($comments)-1]; // retrieve the next from this offset (less than this)
             $linkMore   = \Module\HttpFoundation\Actions::url(null, array('content_id' => $content_id));
-            $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['comment']['uid']).'&limit='.$limit);
+            $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['uid']).'&limit='.$limit);
         }
 
 
