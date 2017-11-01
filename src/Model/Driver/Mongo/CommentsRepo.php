@@ -7,6 +7,7 @@ use Module\Content\Model\Driver\Mongo;
 
 use Module\MongoDriver\Model\Repository\aRepository;
 use MongoDB\BSON\ObjectID;
+use MongoDB\Operation\FindOneAndUpdate;
 
 
 class CommentsRepo
@@ -117,19 +118,29 @@ class CommentsRepo
     }
 
     /**
-     * Remove a Comment Entity
+     * Soft Remove a Comment Entity
      *
      * @param iEntityComment $entity
      *
-     * @return int
+     * @return iEntityComment
      */
-    function remove(iEntityComment $entity)
+    function updateStatToDeleted    (iEntityComment $entity)
     {
-        $r = $this->_query()->deleteMany([
-            '_id' => $this->attainNextIdentifier( $entity->getUid() )
-        ]);
+        $r = $this->_query()->findOneAndUpdate(
+            [
+                '_id' => $this->attainNextIdentifier( $entity->getUid() )
+            ]
+            , [
+                '$set' => [
+                    'stat' => iRepoComments::STAT_DELETED,
+                ],
+            ]
+            , [
+                'returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER
+            ]
+        );
 
-        return $r->getDeletedCount();
+        return $r;
     }
 
 

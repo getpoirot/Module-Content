@@ -64,7 +64,7 @@ class RemoveCommentFromPostAction
                 // Current User Is Owner Of Comment:
                 // so comment will be removed.
 
-                $this->repoComments->remove($comment);
+                $this->repoComments->updateStatToDeleted($comment);
             }
             else
             {
