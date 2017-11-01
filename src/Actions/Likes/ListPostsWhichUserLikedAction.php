@@ -9,6 +9,7 @@ use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Module\Content\Events\EventsHeapOfContent;
 
 
 class ListPostsWhichUserLikedAction
@@ -76,6 +77,18 @@ class ListPostsWhichUserLikedAction
             $postsPrepared[] = Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
         }
 
+        ## Event
+        #
+        $me = ($token) ? $token->getOwnerIdentifier() : null;
+        $postsPrepared = $this->event()
+            ->trigger(EventsHeapOfContent::RETRIEVE_POSTS_RESULT, [
+                /** @see Content\Events\DataCollector */
+                'me' => $me, 'posts' => $postsPrepared
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getResult();
+            });
 
         // Check whether to display fetch more link in response?
         $linkMore = null;
