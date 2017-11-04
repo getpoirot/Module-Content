@@ -109,13 +109,13 @@ class ListPostsWhichUserLikedAction
         #
         $me = ($token) ? $token->getOwnerIdentifier() : null;
         $postsPrepared = $this->event()
-            ->trigger(EventsHeapOfContent::RETRIEVE_POSTS_RESULT, [
+            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
                 /** @see Content\Events\DataCollector */
                 'me' => $me, 'posts' => $postsPrepared
             ])
             ->then(function ($collector) {
                 /** @var Content\Events\DataCollector $collector */
-                return $collector->getResult();
+                return $collector->getPosts();
             });
 
         // Check whether to display fetch more link in response?
