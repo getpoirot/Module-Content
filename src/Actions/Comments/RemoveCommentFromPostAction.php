@@ -64,16 +64,14 @@ class RemoveCommentFromPostAction
                 // Current User Is Owner Of Comment:
                 // so comment will be removed.
 
-                $this->repoComments->updateStatToDeleted($comment);
+                $this->repoComments->remove($comment);
             }
             else
             {
-                // May Current User Is Owner Of Content Post,
-                // so comment must be ignored.
+                // Comments From Content Owner; All Soft Deleted!!
                 $post = $this->repoPosts->findOneMatchUid($content_id);
                 if ( $post && ((string)$post->getOwnerIdentifier() === (string)$token->getOwnerIdentifier()) ) {
-                    $comment->setStat($comment::STAT_IGNORE);
-                    $this->repoComments->save($comment);
+                    $this->repoComments->removeSoftly($comment);
 
                 } else
                     // Current User Have Not Access To Remove Comment

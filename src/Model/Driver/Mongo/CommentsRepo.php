@@ -118,13 +118,29 @@ class CommentsRepo
     }
 
     /**
+     * Remove a Comment Entity
+     *
+     * @param iEntityComment $entity
+     *
+     * @return int
+     */
+    function remove(iEntityComment $entity)
+    {
+        $r = $this->_query()->deleteMany([
+            '_id' => $this->attainNextIdentifier( $entity->getUid() )
+        ]);
+
+        return $r->getDeletedCount();
+    }
+
+    /**
      * Soft Remove a Comment Entity
      *
      * @param iEntityComment $entity
      *
      * @return iEntityComment
      */
-    function updateStatToDeleted    (iEntityComment $entity)
+    function removeSoftly(iEntityComment $entity)
     {
         $r = $this->_query()->findOneAndUpdate(
             [
@@ -132,7 +148,7 @@ class CommentsRepo
             ]
             , [
                 '$set' => [
-                    'stat' => iRepoComments::STAT_DELETED,
+                    'stat' => iEntityComment::STAT_IGNORE,
                 ],
             ]
             , [
@@ -161,6 +177,32 @@ class CommentsRepo
     }
 
     /**
+     * Retrieve All Active Comments For An Entity Model
+     *
+     * @param string $model
+     * @param mixed  $itemIdentifier
+     * @param mixed  $offset
+     * @param int    $limit
+     *
+     * @return \Traversable
+     */
+    function findAllCommentsFor($model, $itemIdentifier, $offset = null, $limit = 30)
+    {
+        $comments = $this->findAll(
+            [
+                // We Consider All Item Liked Has _id from Mongo Collection
+                'item_identifier' => $this->attainNextIdentifier($itemIdentifier),
+                'model'           => (string) $model,
+                'stat'            => iEntityComment::STAT_PUBLISH, // all comments that has publish stat
+            ]
+            , $offset
+            , $limit + 1
+        );
+
+        return $comments;
+    }
+
+    /**
      * Find Entities Match With Given Expression
      *
      * @param array    $expression Filter expression
@@ -169,9 +211,13 @@ class CommentsRepo
      *
      * @return \Traversable
      */
-    function findAll(array $expression, $offset = null, $limit = null)
+    function findAll($expression, $offset = null, $limit = null)
     {
-        $expression = \Module\MongoDriver\parseExpressionFromArray($expression);
+        if (is_string($expression))
+            $expression = \Module\MongoDriver\parseExpressionFromString($expression);
+        else
+            $expression = \Module\MongoDriver\parseExpressionFromArray($expression);
+
         $condition  = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
 
         if ($offset)

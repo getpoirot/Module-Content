@@ -13,7 +13,7 @@ use Poirot\OAuth2Client\Interfaces\iAccessToken;
 class ListCommentsOfPostAction
     extends aAction
 {
-    /** @var Content\Model\Driver\Mongo\CommentsRepo */
+    /** @var iRepoComments */
     protected $repoComments;
 
 
@@ -40,21 +40,16 @@ class ListCommentsOfPostAction
      */
     function __invoke($content_id = null, $token = null)
     {
-
         $q      = ParseRequestData::_($this->request)->parseQueryParams();
         $offset = (isset($q['offset'])) ? (string) $q['offset'] : null;
-        $limit  = (isset($q['limit']))  ? (int) $q['limit']  : 30;
+        $limit  = (isset($q['limit']))  ? (int)    $q['limit']  : 30;
 
 
         ## Retrieve Comments Of Given Post ID
         #
-        $persistComments = $this->repoComments->findAll(
-            [
-                // We Consider All Item Liked Has _id from Mongo Collection
-                'item_identifier' => $this->repoComments->attainNextIdentifier($content_id),
-                'model'           => Content\Model\Entity\EntityComment::MODEL_POSTS,
-                'stat'            => 'publish', // all comments that has publish stat
-            ]
+        $persistComments = $this->repoComments->findAllCommentsFor(
+            Content\Model\Entity\EntityComment::MODEL_POSTS
+            , $content_id
             , $offset
             , $limit + 1
         );
@@ -87,7 +82,6 @@ class ListCommentsOfPostAction
 
         $profiles = \Module\Profile\Actions::RetrieveProfiles(array_keys($userIds));
 
-
         foreach ($comments as $i => $cm) {
             $cmOwner = $cm['user']['uid'];
             if ( isset($profiles[$cmOwner]) )
@@ -117,7 +111,7 @@ class ListCommentsOfPostAction
                 '_link_more' => $linkMore,
                 '_self' => [
                     'content_id' => $content_id,
-                    'skip'       => $offset,
+                    'offset'     => $offset,
                     'limit'      => $limit,
                 ],
             ],

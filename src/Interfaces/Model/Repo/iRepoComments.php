@@ -6,8 +6,6 @@ use Module\Content\Interfaces\Model\Entity\iEntityComment;
 
 interface iRepoComments
 {
-    const STAT_ACTIVE = 'active';
-    const STAT_DELETED = 'deleted';
     /**
      * Insert Comment Entity
      *
@@ -27,13 +25,22 @@ interface iRepoComments
     function save(iEntityComment $entity);
 
     /**
+     * Remove a Comment Entity
+     *
+     * @param iEntityComment $entity
+     *
+     * @return int
+     */
+    function remove(iEntityComment $entity);
+
+    /**
      * Soft Remove a Comment Entity
      *
      * @param iEntityComment $entity
      *
      * @return boolean
      */
-    function updateStatToDeleted(iEntityComment $entity);
+    function removeSoftly(iEntityComment $entity);
 
     /**
      * Find Match By Given UID
@@ -45,14 +52,28 @@ interface iRepoComments
     function findOneMatchUid($uid);
 
     /**
+     * Retrieve All Active Comments For An Entity Model
+     *
+     * @param string $model
+     * @param mixed $itemIdentifier
+     * @param mixed $offset
+     * @param int $limit
+     *
+     * @return \Traversable
+     */
+    function findAllCommentsFor($model, $itemIdentifier, $offset = null, $limit = 30);
+
+    /**
      * Find Entities Match With Given Expression
      *
-     * @param array    $expression Filter expression
+     * @param array $expression Filter expression
      * @param int|null $offset
      * @param int|null $limit
      *
      * @return \Traversable
      */
-    function findAll(array $expression, $offset = null, $limit = null);
+    function findAll($expression, $offset = null, $limit = null);
 
 }
+
+

@@ -4,7 +4,8 @@ namespace Module\Content\Interfaces\Model\Entity;
 
 interface iEntityComment
 {
-    const STAT_IGNORE = 'ignore';
+    const STAT_PUBLISH = 'publish';
+    const STAT_IGNORE  = 'ignore';
 
 
     /**

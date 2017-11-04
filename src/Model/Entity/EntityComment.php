@@ -18,7 +18,7 @@ class EntityComment
     protected $ownerIdentifier;
     protected $model;
     protected $voteCount = 0;
-    protected $stat = 'publish';
+    protected $stat = self::STAT_PUBLISH;
     /** @var \DateTime */
     protected $datetimeCreated;
 
