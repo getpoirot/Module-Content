@@ -12,6 +12,7 @@ class EntityLike
     const MODEL_POSTS = 'posts';
 
 
+    protected $identifier;
     protected $itemIdentifier;
     protected $ownerIdentifier;
     protected $model;
@@ -20,21 +21,23 @@ class EntityLike
 
 
     /**
-     * // TODO remove this, considered in repo specific
-     * Unique Identifier
+     * Set Identifier
      *
-     * note: to ease search we can create identifier
-     *       from given owner_identifier, item_identifier, model
+     * @param mixed $identifier
+     */
+    function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * Unique Identifier
      *
      * @return mixed
      */
-    function get_Uid()
+    function getIdentifier()
     {
-        return md5(
-            $this->getOwnerIdentifier()
-            . $this->getModel()
-            . $this->getItemIdentifier()
-        );
+        return $this->identifier;
     }
 
     /**

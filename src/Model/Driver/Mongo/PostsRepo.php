@@ -278,7 +278,7 @@ class PostsRepo
      *
      * @return \Traversable
      */
-    function findAllMatchUidWithin($uids, array $expression = null)
+    function findAllMatchUidWithin($uids, $expression = null)
     {
         $objIds = [];
         foreach ($uids as $id)
@@ -294,7 +294,11 @@ class PostsRepo
         ];
 
         if ($expression !== null) {
-            $expression = \Module\MongoDriver\parseExpressionFromArray($expression);
+            if (is_string($expression))
+                $expression = \Module\MongoDriver\parseExpressionFromString($expression);
+            else
+                $expression = \Module\MongoDriver\parseExpressionFromArray($expression);
+
             $queryConditions
                 += \Module\MongoDriver\buildMongoConditionFromExpression($expression);
         }

@@ -12,7 +12,7 @@ interface iEntityLike
      *
      * @return mixed
      */
-    function get_Uid();
+    function getIdentifier();
 
     /**
      * Get Owner Who Like Something

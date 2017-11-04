@@ -17,6 +17,16 @@ class EntityLike
 
     // Mongonize DateCreated
 
+    function set_Id($identifier)
+    {
+        return $this->setIdentifier($identifier);
+    }
+
+    function get_Id()
+    {
+        return $this->getIdentifier();
+    }
+
     /**
      * Set Created Date
      *

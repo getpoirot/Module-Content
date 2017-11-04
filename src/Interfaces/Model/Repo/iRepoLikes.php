@@ -32,24 +32,24 @@ interface iRepoLikes
     /**
      * Find Entities Match With Given Identifier And Model
      *
-     * @param mixed    $item_identifier
+     * @param mixed    $itemIdentifier
      * @param string   $model
-     * @param int|null $skip
+     * @param int|null $offset
      * @param int|null $limit
      *
      * @return \Traversable
      */
-    function findByItemIdentifierOfModel($item_identifier, $model, $skip = null, $limit = null);
+    function findByItemIdentifierOfModel($itemIdentifier, $model, $offset = null, $limit = null);
 
     /**
      * Find Entities Liked By Owner In Model X
      *
-     * @param mixed  $owner_identifier
-     * @param string $model
-     * @param int|null $skip
+     * @param mixed    $ownerIdentifier
+     * @param string   $model
+     * @param int|null $offset
      * @param int|null $limit
      *
      * @return \Traversable
      */
-    function findAllItemsOfOwnerAndModel($owner_identifier, $model, $skip = null, $limit = null);
+    function findAllItemsOfOwnerAndModel($ownerIdentifier, $model, $offset = null, $limit = null);
 }

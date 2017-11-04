@@ -29,32 +29,21 @@ class ListPostsLikedByUser
     /**
      * Find posts liked by the user owner
      *
-     * @param string   $owner_identifier Owner Identifier
-     * @param int|null $skip
+     * @param string   $ownerIdentifier Owner Identifier
+     * @param int|null $offset
      * @param int|null $limit
      *
      * @return \Traversable
      */
-    function __invoke($owner_identifier = null, $skip = null, $limit = 30)
+    function __invoke($ownerIdentifier = null, $offset = null, $limit = 30)
     {
         $likedPost = $this->repoLikes->findAllItemsOfOwnerAndModel(
-            $owner_identifier
+            $ownerIdentifier
             , EntityLike::MODEL_POSTS
-            , $skip
+            , $offset
             , $limit
         );
 
-        /** @var EntityLike $like */
-        $posts_id = [];
-        foreach ($likedPost as $like) {
-            $posts_id[] = $like->getItemIdentifier();
-        }
-
-        $posts = $this->repoPosts->findAllMatchUidWithin(
-            $posts_id
-            , \Module\MongoDriver\parseExpressionFromString('stat=publish|draft')
-        );
-
-        return $posts;
+        return $likedPost;
     }
 }

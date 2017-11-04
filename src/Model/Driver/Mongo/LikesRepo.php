@@ -20,7 +20,7 @@ class LikesRepo
      */
     protected function __init()
     {
-        if (!$this->persist)
+        if (! $this->persist )
             $this->setModelPersist(new Mongo\EntityLike);
     }
 
@@ -57,9 +57,14 @@ class LikesRepo
      */
     function save(iEntityLike $entity)
     {
+        /*
+         *  note: to ease search we can create identifier
+         *  from given owner_identifier, item_identifier, model
+         */
+
         $r = $this->_query()->updateOne(
             [
-                '_uid' => $entity->get_Uid(),
+                '_uid' => $this->_makeUid($entity),
 
                 /* Use UID that combine all of fields into hashed value
                  *
@@ -102,7 +107,7 @@ class LikesRepo
     function remove(iEntityLike $entity)
     {
         $r = $this->_query()->deleteMany([
-            '_uid' => $entity->get_Uid()
+            '_uid' => $this->_makeUid($entity)
         ]);
 
         return $r->getDeletedCount();
@@ -111,24 +116,32 @@ class LikesRepo
     /**
      * Find Entities Match With Given Identifier And Model
      *
-     * @param mixed    $item_identifier
+     * @param mixed    $itemIdentifier
      * @param string   $model
-     * @param int|null $skip
+     * @param int|null $offset
      * @param int|null $limit
      *
      * @return \Traversable
      */
-    function findByItemIdentifierOfModel($item_identifier, $model, $skip = null, $limit = null)
+    function findByItemIdentifierOfModel($itemIdentifier, $model, $offset = null, $limit = null)
     {
+        $condition = [
+            // We Consider All Item Liked Has _id from Mongo Collection
+            'item_identifier' => $this->attainNextIdentifier($itemIdentifier),
+            'model'           => $model
+        ];
+
+        if ($offset)
+            $condition = [
+                    '_id' => [
+                        '$lt' => $this->attainNextIdentifier($offset),
+                    ]
+                ] + $condition;
+
         $r = $this->_query()->find(
-            [
-                                  // We Consider All Item Liked Has _id from Mongo Collection
-                'item_identifier' => $this->attainNextIdentifier($item_identifier),
-                'model'           => $model
-            ],
-            [
+            $condition
+            , [
                 'limit' => $limit,
-                'skip'  => $skip,
                 'sort' => [
                     '_id' => -1
                 ],
@@ -141,26 +154,53 @@ class LikesRepo
     /**
      * Find Entities Liked By Owner In Model X
      *
-     * @param mixed  $owner_identifier
-     * @param string $model
-     * @param int|null $skip
+     * @param mixed    $ownerIdentifier
+     * @param string   $model
+     * @param int|null $offset
      * @param int|null $limit
      *
      * @return \Traversable
      */
-    function findAllItemsOfOwnerAndModel($owner_identifier, $model, $skip = null, $limit = null)
+    function findAllItemsOfOwnerAndModel($ownerIdentifier, $model, $offset = null, $limit = null)
     {
+        $condition = [
+            'owner_identifier' => (string) $ownerIdentifier,
+            'model'            => $model
+        ];
+
+        if ($offset)
+            $condition = [
+                    '_id' => [
+                        '$lt' => $this->attainNextIdentifier($offset),
+                    ]
+                ] + $condition;
+
         $r = $this->_query()->find(
-            [
-                'owner_identifier' => (string) $owner_identifier,
-                'model'            => $model
-            ],
-            [
+            $condition
+            , [
                 'limit' => $limit,
-                'skip'  => $skip,
+                'sort'  => [
+                    '_id' => -1,
+                ],
             ]
         );
 
         return $r;
+    }
+
+
+    // ..
+
+    /**
+     * @param iEntityLike $entity
+     * @return string
+     */
+    private function _makeUid($entity)
+    {
+        return md5(
+            $entity->getOwnerIdentifier()
+            . $entity->getModel()
+            . $entity->getItemIdentifier()
+        );
     }
 }

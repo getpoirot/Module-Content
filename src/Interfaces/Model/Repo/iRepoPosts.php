@@ -110,7 +110,7 @@ interface iRepoPosts
      *
      * @return \Traversable
      */
-    function findAllMatchUidWithin($uids, array $expression = null);
+    function findAllMatchUidWithin($uids, $expression = null);
 
     /**
      * Set a Like On Post By Given ID

@@ -43,16 +43,16 @@ class ListPostLikesAction
      */
     function __invoke($content_id = null)
     {
-        $q     = ParseRequestData::_($this->request)->parseQueryParams();
-        $skip  = (isset($q['skip']))  ? (int) $q['skip']  : null;
-        $limit = (isset($q['limit'])) ? (int) $q['limit'] : 30;
+        $q      = ParseRequestData::_($this->request)->parseQueryParams();
+        $offset = (isset($q['offset'])) ? (int) $q['offset'] : null;
+        $limit  = (isset($q['limit']))  ? (int) $q['limit']  : 30;
 
 
         # Retrieve Users Who Liked a Post
         $cursor = $this->repoLikes->findByItemIdentifierOfModel(
             $content_id
             , EntityLike::MODEL_POSTS
-            , $skip
+            , $offset
             , $limit + 1
         );
 
@@ -63,6 +63,7 @@ class ListPostLikesAction
             $member->setUid($like->getOwnerIdentifier());
 
             $likes[] = [
+                'uid'  => $like->getIdentifier(),
                 'user' => $member,
             ];
         }
@@ -73,8 +74,9 @@ class ListPostLikesAction
         // Check whether to display fetch more link in response?
         $linkMore = null;
         if (count($likes) > $limit) {
+            $next     = array_pop($likes);
             $linkMore = \Module\HttpFoundation\Actions::url(null, array('content_id' => $content_id));
-            $linkMore = (string) $linkMore->uri()->withQuery('skip='.($skip+$limit).'&limit='.$limit);
+            $linkMore = (string) $linkMore->uri()->withQuery('offset='.$next['uid'].'&limit='.$limit);
         }
 
 
@@ -85,7 +87,7 @@ class ListPostLikesAction
                 '_link_more' => $linkMore,
                 '_self' => [
                     'content_id' => $content_id,
-                    'skip'       => $skip,
+                    'offset'     => $offset,
                     'limit'      => $limit,
                 ],
             ],
