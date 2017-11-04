@@ -12,6 +12,7 @@ use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\Std\Type\StdArray;
 use Poirot\Std\Type\StdTravers;
+use Module\Content\Events\EventsHeapOfContent;
 
 
 class BrowsePostsAction
@@ -92,6 +93,18 @@ class BrowsePostsAction
             return \Module\Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
         })->value;
 
+        ## Event
+        #
+        $me = ($token) ? $token->getOwnerIdentifier() : null;
+        $posts = $this->event()
+            ->trigger(EventsHeapOfContent::RETRIEVE_POSTS_RESULT, [
+                /** @see Content\Events\DataCollector */
+                'me' => $me, 'posts' => $posts
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getResult();
+            });
 
         // Check whether to display fetch more link in response?
         $linkMore = null;

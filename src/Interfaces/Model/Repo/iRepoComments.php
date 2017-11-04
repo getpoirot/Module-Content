@@ -6,6 +6,8 @@ use Module\Content\Interfaces\Model\Entity\iEntityComment;
 
 interface iRepoComments
 {
+    const STAT_ACTIVE = 'active';
+    const STAT_DELETED = 'deleted';
     /**
      * Insert Comment Entity
      *
@@ -25,14 +27,13 @@ interface iRepoComments
     function save(iEntityComment $entity);
 
     /**
-     * Remove a Comment Entity
+     * Soft Remove a Comment Entity
      *
      * @param iEntityComment $entity
      *
-     * @return int
+     * @return boolean
      */
-    function remove(iEntityComment $entity);
-
+    function updateStatToDeleted(iEntityComment $entity);
 
     /**
      * Find Match By Given UID
