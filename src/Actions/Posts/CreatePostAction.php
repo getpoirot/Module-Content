@@ -68,10 +68,12 @@ class CreatePostAction
             // Determine Owner Identifier From Token
             $entityPost->setOwnerIdentifier($token->getOwnerIdentifier());
 
-            __(new PostValidate($entityPost))
-                ->assertValidate();
 
             // TODO Assert Validate Entity
+            /*
+            __(new PostValidate($entityPost))
+                ->assertValidate();
+            */
 
         } catch (exUnexpectedValue $e)
         {
