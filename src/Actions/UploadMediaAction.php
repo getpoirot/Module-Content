@@ -66,8 +66,7 @@ class UploadMediaAction
         ## Store Image Into Object Storage
         #
         $r      = $this->_storeMedia($media, $token);
-        $binArr = $r;
-
+        $binArr = $r['bindata'];
 
         return [
             ListenerDispatch::RESULT_DISPATCH => $binArr,
