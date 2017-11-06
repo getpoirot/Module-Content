@@ -127,6 +127,7 @@ namespace Module\Content
             );
 
             $val          = StdTravers::of($val)->toArray();
+            /*
             $val['_link'] = [
                 'thumb'      => $link.'?ver=thumb',
                 'low_thumb'  => $link.'?ver=low_thumb',
@@ -135,6 +136,16 @@ namespace Module\Content
                 'large'      => $link.'?ver=large',
                 'low_large'  => $link.'?ver=low_large',
                 'origin' => $link,
+            ];
+            */
+            $val['_link'] = [
+                'thumb'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=200x200&url='.$link.'/file.jpg',
+                'low_thumb'  => null,
+                'small'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
+                'low_small'  => null,
+                'large'      => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=800x1400&url='.$link.'/file.jpg',
+                'low_large'  => null,
+                'origin'     => $link,
             ];
         });
 
