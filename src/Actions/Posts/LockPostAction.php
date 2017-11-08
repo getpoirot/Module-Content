@@ -5,7 +5,6 @@ use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
-use Poirot\Application\Exception\exAccessDenied;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
@@ -79,7 +78,4 @@ class LockPostAction
             ],
         ];
     }
-
-
-    // Helper Action Chains:
 }

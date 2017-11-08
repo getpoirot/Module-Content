@@ -297,18 +297,45 @@ return
                 'routes' => [
                     ## /@username/posts
                     #- Used to retrieve user`s posts by meta attributes.
-                    'list_posts' => [
+                    'posts' => [
                         'route'   => 'RouteMethodSegment',
                         'options' => [
                             'criteria' => '/posts',
                             'method'   => 'GET',
-                            'match_whole' => true,
+                            'match_whole' => false,
                         ],
-                        'params'  => [
-                            ListenerDispatch::ACTIONS => [
-                                \Module\Content\Actions\Posts\ListPostsOfUserAction::class,
+
+                        'routes' => [
+                            'list' => [
+                                'route'   => 'RouteMethodSegment',
+                                'options' => [
+                                    'criteria' => '/',
+                                    'method'   => 'GET',
+                                    'match_whole' => true,
+                                ],
+                                'params'  => [
+                                    ListenerDispatch::ACTIONS => [
+                                        \Module\Content\Actions\Posts\ListPostsOfUserAction::class,
+                                    ],
+                                ],
+                            ],
+
+                            'retrieve' => [
+                                'route'   => 'RouteMethodSegment',
+                                'options' => [
+                                    // 24 is length of content_id by persistence
+                                    'criteria' => '/:content_id~\w{24}~',
+                                    'method'   => 'GET',
+                                    'match_whole' => true,
+                                ],
+                                'params'  => [
+                                    ListenerDispatch::ACTIONS => [
+                                        \Module\Content\Actions\Posts\RetrievePostAction::class,
+                                    ],
+                                ],
                             ],
                         ],
+
                     ],
                 ], // end users routes
             ], // end users

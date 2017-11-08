@@ -5,8 +5,10 @@ use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
+use Poirot\Application\Exception\exRouteNotMatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
+use Poirot\OAuth2Client\Exception\exUserNotFound;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Module\Content\Events\EventsHeapOfContent;
 
@@ -66,13 +68,18 @@ class ListPostsOfUserAction
             if ($username === null)
                 throw new \Exception('No Username or Id Given.');
 
-            // Retrieve User Info From OAuth By username
-            $oauthInfo = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($username) {
-                $info = \Module\OAuth2Client\Services::OAuthFederate()
-                    ->getAccountInfoByUsername($username);
+            try {
+                // Retrieve User Info From OAuth By username
+                $oauthInfo = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($username) {
+                    $info = \Module\OAuth2Client\Services::OAuthFederate()
+                        ->getAccountInfoByUsername($username);
 
-                return $info;
-            });
+                    return $info;
+                });
+            } catch (exUserNotFound $e) {
+                throw new exRouteNotMatch('User Not Found', null, $e);
+            }
+
 
             $userid = $oauthInfo['user']['uid'];
         }
@@ -96,17 +103,6 @@ class ListPostsOfUserAction
             , $limit + 1
         );
 
-        ## Event
-        #
-        $posts = $this->event()
-            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
-                /** @see Content\Events\DataCollector */
-                'me' => $me, 'posts' => $posts
-            ])
-            ->then(function ($collector) {
-                /** @var Content\Events\DataCollector $collector */
-                return $collector->getPosts();
-            });
 
         # Build Response:
 

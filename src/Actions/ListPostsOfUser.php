@@ -1,12 +1,16 @@
 <?php
 namespace Module\Content\Actions;
 
+use Module\Content;
+use Module\Content\Events\EventsHeapOfContent;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityPost;
 
 
 class ListPostsOfUser
+    extends aAction
 {
+    /** @var iRepoPosts */
     protected $repoPosts;
 
 
@@ -43,12 +47,27 @@ class ListPostsOfUser
             , $limit
         );
 
+
         $profiles = \Module\Profile\Actions::RetrieveProfiles([$owner_identifier]);
 
         /** @var EntityPost $post */
         $posts = \Poirot\Std\cast($persistPosts)->toArray(function (&$post) use ($me, $profiles) {
             $post = \Module\Content\toArrayResponseFromPostEntity($post, $me, $profiles);
         });
+
+
+        ## Event
+        #
+        $posts = $this->event()
+            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
+                /** @see Content\Events\DataCollector */
+                'me' => $me, 'posts' => $posts
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getPosts();
+            });
+
 
         return $posts;
     }
