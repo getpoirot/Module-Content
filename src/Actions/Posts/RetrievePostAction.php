@@ -90,6 +90,7 @@ class RetrievePostAction
 
         # Build Response
         #
+        $share   = (string)\Module\HttpFoundation\Actions::url(null)->uri();
         $profiles = \Module\Profile\Actions::RetrieveProfiles([$post->getOwnerIdentifier()]);
         $r        = Content\toArrayResponseFromPostEntity($post, $me, $profiles) + [
                 '_self' => [
