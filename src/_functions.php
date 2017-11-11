@@ -127,7 +127,7 @@ namespace Module\Content
             );
 
             $val          = StdTravers::of($val)->toArray();
-            /*
+
             $val['_link'] = [
                 'thumb'      => $link.'?ver=thumb',
                 'low_thumb'  => $link.'?ver=low_thumb',
@@ -137,7 +137,8 @@ namespace Module\Content
                 'low_large'  => $link.'?ver=low_large',
                 'origin' => $link,
             ];
-            */
+
+            /*
             // TODO Dirty fix; remove from optimizer
             $val['_link'] = [
                 'thumb'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=200x200&url='.$link.'/file.jpg',
@@ -148,7 +149,9 @@ namespace Module\Content
                 'low_large'  => null,
                 'origin'     => $link,
             ];
+            */
         });
+
 
         return $content->value; // instance access to internal array
     }
