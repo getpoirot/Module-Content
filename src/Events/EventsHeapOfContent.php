@@ -1,6 +1,7 @@
 <?php
 namespace Module\Content\Events;
 
+use Module\Content\Interfaces\Model\Entity\iEntityComment;
 use Module\Content\Model\Entity\EntityPost;
 use Poirot\Events\Event;
 use Poirot\Events\EventHeap;
@@ -14,6 +15,9 @@ class EventsHeapOfContent
     const AFTER_CREATE_CONTENT    = 'post.create.content';
     const BEFORE_CREATE_CONTENT   = 'pre.create.content';
     const LIST_POSTS_RESULT       = 'list.posts.result';
+
+    const BEFORE_ADD_COMMENT      = 'before.comment.add';
+    const AFTER_ADD_COMMENT       = 'after.comment.add';
 
 
     /**
@@ -30,6 +34,13 @@ class EventsHeapOfContent
         $this->bind( new Event(self::BEFORE_CREATE_CONTENT) );
         $this->bind( new Event(self::AFTER_CREATE_CONTENT) );
         $this->bind( new Event(self::LIST_POSTS_RESULT) );
+
+        // Comments:
+        $this->bind( new Event(self::BEFORE_ADD_COMMENT, new Event\BuildEvent([
+            'collector' => new DataTransferOfComments ])) );
+
+        $this->bind( new Event(self::AFTER_ADD_COMMENT, new Event\BuildEvent([
+            'collector' => new DataTransferOfComments ])) );
     }
 
 
@@ -42,6 +53,51 @@ class EventsHeapOfContent
     function collector($options = null)
     {
         return parent::collector($options);
+    }
+}
+
+class DataTransferOfComments
+    extends Event\DataCollector
+{
+    /** @var iEntityComment */
+    protected $comment;
+    /** @var array */
+    protected $result;
+
+
+    /**
+     * @return iEntityComment
+     */
+    function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param iEntityComment $comment
+     */
+    function setComment(iEntityComment $comment = null)
+    {
+        $this->comment = $comment;
+    }
+
+
+    // after.comment.add
+
+    /**
+     * @return array
+     */
+    function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param array $result
+     */
+    function setResult($result)
+    {
+        $this->result = $result;
     }
 }
 

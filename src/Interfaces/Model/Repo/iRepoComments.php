@@ -55,13 +55,14 @@ interface iRepoComments
      * Retrieve All Active Comments For An Entity Model
      *
      * @param string $model
-     * @param mixed $itemIdentifier
-     * @param mixed $offset
-     * @param int $limit
+     * @param mixed  $itemIdentifier
+     * @param mixed  $ownerIdentifier
+     * @param mixed  $offset
+     * @param int    $limit
      *
      * @return \Traversable
      */
-    function findAllCommentsFor($model, $itemIdentifier, $offset = null, $limit = 30);
+    function findAllCommentsFor($model, $itemIdentifier, $ownerIdentifier = null, $offset = null, $limit = 30);
 
     /**
      * Find Entities Match With Given Expression

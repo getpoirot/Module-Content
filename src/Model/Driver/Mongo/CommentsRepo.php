@@ -181,20 +181,29 @@ class CommentsRepo
      *
      * @param string $model
      * @param mixed  $itemIdentifier
+     * @param mixed  $ownerIdentifier
      * @param mixed  $offset
      * @param int    $limit
      *
      * @return \Traversable
      */
-    function findAllCommentsFor($model, $itemIdentifier, $offset = null, $limit = 30)
+    function findAllCommentsFor($model, $itemIdentifier, $ownerIdentifier = null, $offset = null, $limit = 30)
     {
+        $condition = [
+            // We Consider All Item Liked Has _id from Mongo Collection
+            'item_identifier' => $this->attainNextIdentifier($itemIdentifier),
+            'model'           => (string) $model,
+            'stat'            => iEntityComment::STAT_PUBLISH, // all comments that has publish stat
+        ];
+
+        if ($ownerIdentifier !== null)
+            $condition += [
+                'owner_identifier' => $ownerIdentifier
+            ];
+
+
         $comments = $this->findAll(
-            [
-                // We Consider All Item Liked Has _id from Mongo Collection
-                'item_identifier' => $this->attainNextIdentifier($itemIdentifier),
-                'model'           => (string) $model,
-                'stat'            => iEntityComment::STAT_PUBLISH, // all comments that has publish stat
-            ]
+            $condition
             , $offset
             , $limit + 1
         );

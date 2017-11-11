@@ -50,6 +50,7 @@ class ListCommentsOfPostAction
         $persistComments = $this->repoComments->findAllCommentsFor(
             Content\Model\Entity\EntityComment::MODEL_POSTS
             , $content_id
+            , null // retrieve all users comment
             , $offset
             , $limit + 1
         );

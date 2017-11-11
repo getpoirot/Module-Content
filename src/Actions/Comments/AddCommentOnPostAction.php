@@ -46,16 +46,20 @@ class AddCommentOnPostAction
      */
     function __invoke($content_id = null, $token = null)
     {
-        # Assert Token
+        ## Assert Token
+        #
         $this->assertTokenByOwnerAndScope($token);
 
 
+        ## Validate Comment
+        #
         $_posts = ParseRequestData::_($this->request)->parseBody();
         if (!isset($_posts['comment']) || empty($_posts['comment']))
             throw new \InvalidArgumentException('Comment is empty.');
 
 
-        # Add Comment To Given Post Content With Id
+        ## Add Comment To Given Post Content With Id
+        #
         $comment = new Content\Model\Entity\EntityComment;
         $comment
             ->setItemIdentifier($content_id)
@@ -63,6 +67,22 @@ class AddCommentOnPostAction
             ->setContent( $_posts['comment'] )
             ->setModel( Content\Model\Entity\EntityComment::MODEL_POSTS )
         ;
+
+
+        ## Events
+        #
+        /** @var Content\Interfaces\Model\Entity\iEntityComment $comment */
+        $comment = $this->event()->trigger(
+            Content\Events\EventsHeapOfContent::BEFORE_ADD_COMMENT
+            , [
+                /** @see Content\Events\DataTransferOfComments */
+                'comment' => $comment
+            ]
+        )->then(function ($collector) {
+            /** @var Content\Events\DataTransferOfComments $collector */
+            return $collector->getComment();
+        });
+
 
         ## Persist Comment
         #
@@ -72,20 +92,35 @@ class AddCommentOnPostAction
         ## Build Response
         #
         $commentOwnerId = (string) $comment->getOwnerIdentifier();
+        $profiles       = \Module\Profile\Actions::RetrieveProfiles([$commentOwnerId]);
 
-        $profiles = \Module\Profile\Actions::RetrieveProfiles([$commentOwnerId]);
+        $result = [
+            'uid'     => (string) $comment->getUid(),
+            'content' => $comment->getContent(),
+            'user'    => $profiles[$commentOwnerId],
+
+            '_self'   => [
+                'content_id' => $content_id,
+            ],
+        ];
+
+
+        ## Event
+        #
+        /** @var Content\Model\Entity\EntityPost $post */
+        $result = $this->event()
+            ->trigger(Content\Events\EventsHeapOfContent::AFTER_ADD_COMMENT, [
+                /** @see Content\Events\DataTransferOfComments */
+                'result' => $result, 'comment' => $comment,
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataTransferOfComments $collector */
+                return $collector->getResult();
+            });
+
 
         return [
-            ListenerDispatch::RESULT_DISPATCH => [
-
-                    'uid'     => (string) $comment->getUid(),
-                    'content' => $comment->getContent(),
-                    'user'    => $profiles[$commentOwnerId],
-
-                '_self'   => [
-                    'content_id' => $content_id,
-                ],
-            ],
+            ListenerDispatch::RESULT_DISPATCH => $result,
         ];
     }
 }
