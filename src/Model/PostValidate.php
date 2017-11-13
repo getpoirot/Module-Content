@@ -1,32 +1,27 @@
 <?php
 namespace Module\Content\Model;
 
-use Module\Content\Interfaces\Model\Entity\iEntityPost;
-use MongoDB\Exception\UnexpectedValueException;
 use Poirot\Std\aValidator;
+use Module\Content\Interfaces\Model\Entity\iEntityPost;
 use Poirot\Std\Exceptions\exUnexpectedValue;
 use Poirot\Std\Hydrator\HydrateGetters;
+
 
 class PostValidate
     extends aValidator
 {
+    /** @var iEntityPost */
     protected $entity;
-
 
 
     /**
      * Construct
      *
      * @param iEntityPost $entity
-     *
      */
     function __construct(iEntityPost $entity = null)
     {
         $this->entity = $entity;
-
-
-
-
     }
 
 
