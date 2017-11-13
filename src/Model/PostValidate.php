@@ -1,6 +1,7 @@
 <?php
 namespace Module\Content\Model;
 
+use Module\Content\Model\Entity\EntityPost\ContentObjectGeneral;
 use Poirot\Std\aValidator;
 use Module\Content\Interfaces\Model\Entity\iEntityPost;
 use Poirot\Std\Exceptions\exUnexpectedValue;
@@ -36,37 +37,62 @@ class PostValidate
 
         $content = $this->entity->getContent();
 
-        if (!$content)
+        if (! $content )
             $exceptions[] = new exUnexpectedValue('Parameter %s is required.', 'content');
-        else
-        {
-
-            /** @var HydrateGetters $value */
-            $contentBody = $content->getIterator()->_getGetterProperties();
-            $contentBody = $content->getIterator()->_getGetterProperties();
-
-            ## replace more than 3 eneter two 1
-            #
-            $contentBody['title'] = preg_replace('/(\r\n|\n|\r){3,}/', "$1$1", $contentBody['title']);
-            $contentBody['description'] = preg_replace('/(\r\n|\n|\r){3,}/', "$1$1", $contentBody['description']);
-
-            #remove all tab and first white space and end white space
-            #
-            $contentBody['title'] = trim(preg_replace('/\t+/', '',  $contentBody['title']));
-            $contentBody['description'] = trim(preg_replace('/\t+/', '',  $contentBody['description']));
 
 
-            if (empty($contentBody['description']))
-            {
-                $exceptions[] = new exUnexpectedValue('description is required');
+        if ($content instanceof ContentObjectGeneral) {
+
+            // Title:
+            //
+            if ($title = $content->getTitle()) {
+                $title = $this->_assertNewLine( $this->_assertTrim($title) );
+                $content->setTitle($title);
             }
-            $content->with($contentBody);
-            $this->entity->setContent($content);
 
+
+            // Description:
+            //
+            $description = $content->getDescription();
+
+            // Validate Length Of Content When We Have No Media
+            $medias = $content->getMedias();
+            if (count($medias) == 0) {
+                if (function_exists('mb_strlen'))
+                    $len = mb_strlen($description);
+                else
+                    $len = strlen($description);
+
+
+                if ($len < 15)
+                    throw new exUnexpectedValue('Content Description Length Is Less Than Minimum.');
+
+                if ($len > 1200)
+                    throw new exUnexpectedValue('Content Description Length Is More Than Maximum.');
+            }
+
+
+            // Assert Content
+            $description = $this->_assertNewLine($description);
+            $description = $this->_assertTrim($description);
+
+            $content->setDescription($description);
         }
+
 
         return $exceptions;
     }
 
 
+    // ..
+
+    private function _assertNewLine($description)
+    {
+        return preg_replace( '/\t+/', '',  preg_replace('/(\r\n|\n|\r){3,}/', "$1$1", $description) );
+    }
+
+    private function _assertTrim($description)
+    {
+        return trim($description);
+    }
 }

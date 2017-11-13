@@ -70,10 +70,8 @@ class CreatePostAction
 
 
             // TODO Assert Validate Entity
-            /*
             __(new PostValidate($entityPost))
                 ->assertValidate();
-            */
 
         } catch (exUnexpectedValue $e)
         {
@@ -87,9 +85,10 @@ class CreatePostAction
         $content  = $hydratePost->getContent();
         Content\assertMediaContents($content);
 
+
         ## Event
         #
-        /** @var Content\Model\Entity\EntityPost $post */
+        /** @var Content\Model\Entity\EntityPost $entityPost */
         $entityPost = $this->event()
             ->trigger(EventsHeapOfContent::BEFORE_CREATE_CONTENT, [
                 /** @see Content\Events\DataCollector */
