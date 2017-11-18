@@ -3,14 +3,15 @@
  * Registered Actions For Content
  * @see \Poirot\Ioc\Container\BuildContainer
  */
-return array(
-    'services' => array(
+return [
+    'services' => [
         // Post
-        'IsUserPermissionOnContent' => \Module\Content\Actions\IsUserPermissionOnContent::class,
         'ListPostsOfUser'           => \Module\Content\Actions\ListPostsOfUser::class,
+        'FindLatestPosts'           => \Module\Content\Actions\Posts\FindLatestPosts::class,
+        'IsUserPermissionOnContent' => \Module\Content\Actions\IsUserPermissionOnContent::class,
 
 
         // Like
         'ListPostsLikedByUser'          => \Module\Content\Actions\ListPostsLikedByUser::class,
-    ),
-);
+    ],
+];

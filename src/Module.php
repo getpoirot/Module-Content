@@ -1,12 +1,12 @@
 <?php
 namespace Module\Content
 {
+    use Poirot\Ioc\Container;
     use Poirot\Application\aSapi;
     use Poirot\Application\Interfaces\iApplication;
     use Poirot\Application\Interfaces\Sapi;
     use Poirot\Application\ModuleManager\Interfaces\iModuleManager;
     use Poirot\Application\Sapi\Module\ContainerForFeatureActions;
-    use Poirot\Ioc\Container;
     use Poirot\Ioc\Container\BuildContainer;
     use Poirot\Router\BuildRouterStack;
     use Poirot\Router\Interfaces\iRouterStack;
@@ -170,6 +170,7 @@ namespace Module\Content
     use Module\Content\Actions\IsUserPermissionOnContent;
     use Module\Content\Actions\ListPostsLikedByUser;
     use Module\Content\Actions\ListPostsOfUser;
+    use Module\Content\Actions\Posts\FindLatestPosts;
 
     /**
      * @see IsUserPermissionOnContent
@@ -181,7 +182,8 @@ namespace Module\Content
      * @see ListPostsOfUser
      * @method static bool ListPostsOfUser($me = null, $owner_identifier = null, $expression = null, $offset = null, $limit = 30)
      * ...............................................................
-     *
+     * @see FindLatestPosts
+     * @method static array FindLatestPosts($me = null, $limit = null, $offset = null)
      */
     class Actions extends \IOC
     { }

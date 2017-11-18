@@ -2,39 +2,19 @@
 namespace Module\Content\Actions\Posts;
 
 use Module\Content;
+use Poirot\Std\Type\StdArray;
 use Module\Content\Actions\aAction;
-use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityPost;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Actions\Helpers\RetrieveProfiles;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
-use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
-use Poirot\Std\Type\StdArray;
-use Poirot\Std\Type\StdTravers;
 use Module\Content\Events\EventsHeapOfContent;
 
 
 class BrowsePostsAction
     extends aAction
 {
-    /** @var iRepoPosts */
-    protected $repoPosts;
-
-
-    /**
-     *
-     * @param iHttpRequest $httpRequest @IoC /HttpRequest
-     * @param iRepoPosts   $repoPosts   @IoC /module/content/services/repository/Posts
-     */
-    function __construct(iHttpRequest $httpRequest, iRepoPosts $repoPosts)
-    {
-        parent::__construct($httpRequest);
-
-        $this->repoPosts = $repoPosts;
-    }
-
-
     /**
      * Suggest user posts stream to explore
      *
@@ -52,7 +32,8 @@ class BrowsePostsAction
      */
     function __invoke($token = null)
     {
-        # Assert Token
+        ## Assert Token
+        #
         $this->assertTokenByOwnerAndScope($token);
 
 
@@ -63,49 +44,14 @@ class BrowsePostsAction
         $limit  = (isset($q['limit']))  ? (int) $q['limit']  : 30;
 
 
-        # Retrieve All Latest Posts
-        $crsr = $this->repoPosts->findAll(
-            \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public')
-            , $offset
-            , $limit + 1
-        );
-
-        $posts = [];
-
-        ## Retrieve Profiles For Posts Owner
+        ## Retrieve Posts
         #
-        $postOwners = [];
-        /** @var EntityPost $p */
-        foreach ($crsr as $p) {
-            $p->setContent(clone $p->getContent());
-            array_push($posts, $p);
-            $ownerId = (string) $p->getOwnerIdentifier();
-            $postOwners[$ownerId] = true;
-        }
+        $me    = ($token) ? $token->getOwnerIdentifier() : null;
+        $posts = \Module\Content\Actions::FindLatestPosts($me, $limit+1, $offset);
 
-        $postOwners = array_keys($postOwners);
 
-        /** @var RetrieveProfiles $funListUsers */
-        $profiles = \Module\Profile\Actions::RetrieveProfiles($postOwners);
-
-        /** @var EntityPost $post */
-        $posts = StdArray::of($posts)->each(function ($post) use ($token, &$profiles) {
-            return \Module\Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
-        })->value;
-
-        ## Event
+        ## Build Response
         #
-        $me = ($token) ? $token->getOwnerIdentifier() : null;
-        $posts = $this->event()
-            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
-                /** @see Content\Events\DataCollector */
-                'me' => $me, 'posts' => $posts
-            ])
-            ->then(function ($collector) {
-                /** @var Content\Events\DataCollector $collector */
-                return $collector->getPosts();
-            });
-
         // Check whether to display fetch more link in response?
         $linkMore = null;
         if (count($posts) > $limit) {
