@@ -2,14 +2,10 @@
 namespace Module\Content\Actions\Posts;
 
 use Module\Content;
-use Poirot\Std\Type\StdArray;
 use Module\Content\Actions\aAction;
-use Module\Content\Model\Entity\EntityPost;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
-use Module\Profile\Actions\Helpers\RetrieveProfiles;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
-use Module\Content\Events\EventsHeapOfContent;
 
 
 class BrowsePostsAction

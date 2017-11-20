@@ -56,11 +56,12 @@ class UploadMediaAction
         ## Validate Uploaded Media
         #
         if (! isset($request['media']) )
-            throw exUnexpectedValue::paramIsRequired('pic');
+            throw exUnexpectedValue::paramIsRequired('media');
+
 
         /** @var UploadedFile $media */
         if (! ( $media = $request['media'] ) instanceof UploadedFile)
-            throw new exUnexpectedValue('pic must be uploaded file.');
+            throw new exUnexpectedValue('Media must be uploaded file.');
 
 
         ## Store Image Into Object Storage

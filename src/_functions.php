@@ -138,6 +138,7 @@ namespace Module\Content
                 'origin' => $link,
             ];
 
+
             /*
             // TODO Dirty fix; remove from optimizer
             $val['_link'] = [
