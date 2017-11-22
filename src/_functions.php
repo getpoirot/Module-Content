@@ -140,7 +140,6 @@ namespace Module\Content
 
 
             /*
-            // TODO Dirty fix; remove from optimizer
             $val['_link'] = [
                 'thumb'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=200x200&url='.$link.'/file.jpg',
                 'low_thumb'  => null,

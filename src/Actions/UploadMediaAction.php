@@ -99,10 +99,10 @@ class UploadMediaAction
             , [
                 '_segment'         => 'contents',
                 '__after_created'  => '{ "versions":[{ 
-                  "thumb":     {"optimage": {"type": "crop",   "size": "200x200", "q": 80}}, 
-                  "low_thumb": {"optimage": {"type": "crop",   "size": "200x200", "q": 10}}, 
-                  "small":     {"optimage": {"type": "crop",   "size": "400x400", "q": 80}}, 
-                  "low_small": {"optimage": {"type": "crop",   "size": "400x400", "q": 10}}, 
+                  "thumb":     {"optimage": {"type": "crop",   "size": "200x200" , "q": 80}}, 
+                  "low_thumb": {"optimage": {"type": "crop",   "size": "200x200" , "q": 10}}, 
+                  "small":     {"optimage": {"type": "resize", "size": "400x700", "q": 80}}, 
+                  "low_small": {"optimage": {"type": "resize", "size": "400x700", "q": 10}}, 
                   "large":     {"optimage": {"type": "resize", "size": "800x1400", "q": 80}}, 
                   "low_large": {"optimage": {"type": "resize", "size": "800x1400", "q": 10}}
                 }]}',

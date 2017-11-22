@@ -291,7 +291,7 @@ return
             'users' => [
                 'route'   => 'RouteSegment',
                 'options' => [
-                    'criteria' => '/<@:username~[a-zA-Z.]+~><-:userid~\w+~>',
+                    'criteria' => '/<u/:username~[a-zA-Z0-9._]+~><-:userid~\w+~>',
                     'match_whole' => false,
                 ],
                 'routes' => [
