@@ -5,17 +5,21 @@ use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoComments;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
+use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
+// TODO remove repoPosts and notif action
 class AddCommentOnPostAction
     extends aAction
 {
     /** @var iRepoLikes */
     protected $repoComments;
+    /** @var iRepoPosts */
+    protected $repoPosts;
 
 
     /**
@@ -23,12 +27,14 @@ class AddCommentOnPostAction
      *
      * @param iHttpRequest  $httpRequest  @IoC /HttpRequest
      * @param iRepoComments $repoComments @IoC /module/content/services/repository/Comments
+     * @param iRepoPosts    $repoPosts    @IoC /module/content/services/repository/Posts
      */
-    function __construct(iHttpRequest $httpRequest, iRepoComments $repoComments)
+    function __construct(iHttpRequest $httpRequest, iRepoComments $repoComments, iRepoPosts $repoPosts)
     {
         parent::__construct($httpRequest);
 
         $this->repoComments = $repoComments;
+        $this->repoPosts = $repoPosts;
     }
 
     /**
@@ -89,6 +95,38 @@ class AddCommentOnPostAction
         $comment = $this->repoComments->insert($comment);
 
 
+
+        // TODO with events
+        $visitorId = (string) $token->getOwnerIdentifier();
+        $profiles  = \Module\Profile\Actions::RetrieveProfiles([$visitorId]);
+        $profiles  = $profiles[$visitorId];
+
+        $userName  = (isset($profiles['fullname']))
+            ? $profiles['fullname']
+            : '@'.$profiles['username'];
+
+
+        $titlePost = 'شما';
+        $post      = $this->repoPosts->findOneMatchUid($content_id);
+        $content   = $post->getContent();
+        if ( $content  instanceof Content\Model\Entity\EntityPost\ContentObjectGeneral ) {
+            $titlePost = $content->getTitle();
+            $titlePost = (! empty($titlePost) ) ? $titlePost : 'شما';
+        }
+
+        $ownerId = (string) $post->getOwnerIdentifier();
+
+        if ($visitorId !== $ownerId) {
+            \Module\Fcm\Actions::SendNotification()
+                ->sendSimple(
+                    'نظر روی پست شما'
+                    , sprintf('%s روی پست %s نظر داده است.', $userName, $titlePost)
+                    , [ $ownerId ]
+                );
+
+        }
+
+
         ## Build Response
         #
         $commentOwnerId = (string) $comment->getOwnerIdentifier();
@@ -107,7 +145,6 @@ class AddCommentOnPostAction
 
         ## Event
         #
-        /** @var Content\Model\Entity\EntityPost $post */
         $result = $this->event()
             ->trigger(Content\Events\EventsHeapOfContent::AFTER_ADD_COMMENT, [
                 /** @see Content\Events\DataTransferOfComments */
