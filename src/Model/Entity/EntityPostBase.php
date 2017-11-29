@@ -10,9 +10,10 @@ class EntityPostBase
     extends DataOptionsOpen
     implements iEntityPost
 {
-    const STAT_PUBLISH = 'publish';
-    const STAT_DRAFT   = 'draft';
-    const STAT_LOCKED  = 'locked';
+    const STAT_PUBLISH          = 'publish';
+    const STAT_DRAFT            = 'draft';
+    const STAT_LOCKED           = 'locked';
+    const STAT_WORK_IN_PROGRESS = 'wip';
 
     const STAT_SHARE_PUBLIC  = 'public';
     const STAT_SHARE_PRIVATE = 'private';
@@ -28,6 +29,7 @@ class EntityPostBase
         self::STAT_PUBLISH,
         self::STAT_DRAFT,
         self::STAT_LOCKED,
+        self::STAT_WORK_IN_PROGRESS
     ];
 
     protected $_available_stat_share = [
