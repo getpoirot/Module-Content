@@ -60,7 +60,8 @@ namespace Module\Content
         #
         $contentWithMediaLinks = \Poirot\TenderBinClient\embedLinkToMediaData(
             $post->getContent()
-            , function ($contentWithMediaLinks) {
+            , function ($contentWithMediaLinks)
+            {
                 $link = $contentWithMediaLinks['_link'];
 
                 /*
@@ -84,9 +85,10 @@ namespace Module\Content
                     'low_large'  => $link.'?ver=low_large',
                     'origin'     => $link,
                 ];
+
+                return $contentWithMediaLinks;
             }
         );
-
 
 
         return [
