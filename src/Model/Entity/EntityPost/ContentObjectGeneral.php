@@ -3,7 +3,7 @@ namespace Module\Content\Model\Entity\EntityPost;
 
 use Module\Content\Interfaces\Model\Entity\iEntityMediaObject;
 use Poirot\TenderBinClient\FactoryMediaObject;
-use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
+use Poirot\TenderBinClient\Model\aMediaObject;
 
 
 class ContentObjectGeneral
@@ -91,11 +91,11 @@ class ContentObjectGeneral
     /**
      * Attach Media To Post
      *
-     * @param MediaObjectTenderBin $media
+     * @param aMediaObject $media
      *
      * @return $this
      */
-    function addMedia(MediaObjectTenderBin $media)
+    function addMedia(aMediaObject $media)
     {
         $this->medias[] = $media;
         return $this;
@@ -119,7 +119,12 @@ class ContentObjectGeneral
         if ( isset($options['medias']) && $medias = $options['medias'] ) {
             foreach ($options['medias'] as $i => $media) {
                 if (! $media instanceof iEntityMediaObject ) {
-                    $objectMedia = FactoryMediaObject::of($media);
+                    // SET_STORAGE
+                    $storageType = null;
+                    if ( isset($media['storage_type']) )
+                        $storageType = $media['storage_type'];
+
+                    $objectMedia = FactoryMediaObject::of($media, $storageType);
                     $options['medias'][$i] = $objectMedia;
                 }
             }

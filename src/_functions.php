@@ -1,8 +1,6 @@
 <?php
 namespace Module\Content
 {
-    use Poirot\Std\Type\StdArray;
-    use Poirot\Std\Type\StdTravers;
     use Poirot\TenderBinClient;
     use Module\Content\Model\Entity\EntityPost;
     use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
@@ -42,15 +40,58 @@ namespace Module\Content
         $user = [
             'uid'    => $uid, ];
 
-        if (isset($profiles[$uid]) )
+        if ( isset($profiles[$uid]) )
             $user = $profiles[$uid];
 
 
-        ##
+        /*
+         * [
+         *   [
+                [storage_type] => tenderbin
+                [hash] => 59eda4e595a8c1035460b282
+                [content_type] => image/jpeg
+                [_link] => http://storage.apanajapp.com/bin/59eda4e595a8c1035460b282
+             ]
+             ...
+           ]
+         */
+
+        ## Embed Versions Into Response
+        #
+        $contentWithMediaLinks = \Poirot\TenderBinClient\embedLinkToMediaData(
+            $post->getContent()
+            , function ($contentWithMediaLinks) {
+                $link = $contentWithMediaLinks['_link'];
+
+                /*
+                $val['_link'] = [
+                    'thumb'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=200x200&url='.$link.'/file.jpg',
+                    'low_thumb'  => null,
+                    'small'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
+                    'low_small'  => null,
+                    'large'      => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=800x1400&url='.$link.'/file.jpg',
+                    'low_large'  => null,
+                    'origin'     => $link,
+                ];
+                */
+
+                $contentWithMediaLinks['_link'] = [
+                    'thumb'      => $link.'?ver=thumb',
+                    'low_thumb'  => $link.'?ver=low_thumb',
+                    'small'      => $link.'?ver=small',
+                    'low_small'  => $link.'?ver=low_small',
+                    'large'      => $link.'?ver=large',
+                    'low_large'  => $link.'?ver=low_large',
+                    'origin'     => $link,
+                ];
+            }
+        );
+
+
 
         return [
             'uid'        => (string) $post->getUid(),
-            'content'    => embedLinkToMediaData( $post->getContent() ),
+            'content'    => $contentWithMediaLinks,
             'stat'       => $post->getStat(),
             'stat_share' => $post->getStatShare(),
             'user'       => $user,
@@ -85,12 +126,14 @@ namespace Module\Content
             return;
 
 
-        /** @var TenderBinClient\Client $cTender */
-        $cTender = \Module\TenderBinClient\Services::ClientTender();
         foreach ($content as $c) {
             if ($c instanceof MediaObjectTenderBin) {
+
+                $handler = TenderBinClient\FactoryMediaObject::hasHandlerOfStorage($c->getStorageType());
+
                 try {
-                    $cTender->touch($c->getHash());
+                    if ($handler)
+                        $handler->client()->touch( $c->getHash() );
 
                 } catch (TenderBinClient\Exceptions\exResourceNotFound $e) {
                     // Specific Content Client Exception
@@ -98,62 +141,11 @@ namespace Module\Content
                     // Other Errors Throw To Next Layer!
                     throw $e;
                 }
+
             } elseif (is_array($c) || $c instanceof \Traversable) {
                 assertMediaContents($c);
             }
         }
-    }
-
-
-    function embedLinkToMediaData($content)
-    {
-        if ($content instanceof \Traversable )
-            $content = StdTravers::of($content)->toArray();
-
-        if (! is_array($content) )
-            throw new \Exception('Medias is not an type of array.');
-
-
-        $content = StdArray::of($content)->withWalk(function(&$val) {
-            if (!$val instanceof MediaObjectTenderBin )
-                return;
-
-            $orig         = $val;
-            $link = (string) \Module\Foundation\Actions::Path(
-                'tenderbin-media_cdn' // this name is reserved; @see mod-content.conf.php
-                , [
-                    'hash' => $orig->getHash()
-                ]
-            );
-
-            $val          = StdTravers::of($val)->toArray();
-
-            $val['_link'] = [
-                'thumb'      => $link.'?ver=thumb',
-                'low_thumb'  => $link.'?ver=low_thumb',
-                'small'      => $link.'?ver=small',
-                'low_small'  => $link.'?ver=low_small',
-                'large'      => $link.'?ver=large',
-                'low_large'  => $link.'?ver=low_large',
-                'origin' => $link,
-            ];
-
-
-            /*
-            $val['_link'] = [
-                'thumb'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=200x200&url='.$link.'/file.jpg',
-                'low_thumb'  => null,
-                'small'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
-                'low_small'  => null,
-                'large'      => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=800x1400&url='.$link.'/file.jpg',
-                'low_large'  => null,
-                'origin'     => $link,
-            ];
-            */
-        });
-
-
-        return $content->value; // instance access to internal array
     }
 }
 

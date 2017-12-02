@@ -70,7 +70,11 @@ class UploadMediaAction
         $binArr = $r['bindata'];
 
         return [
-            ListenerDispatch::RESULT_DISPATCH => $binArr,
+            ListenerDispatch::RESULT_DISPATCH => [
+                'storage_type' => 'tenderbin',
+                'hash'         => $binArr['hash'],
+                'content_type' => $binArr['content_type'],
+            ],
         ];
     }
 
