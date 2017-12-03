@@ -129,7 +129,7 @@ namespace Module\Content
 
 
         foreach ($content as $c) {
-            if ($c instanceof MediaObjectTenderBin) {
+            if ($c instanceof TenderBinClient\Model\aMediaObject) {
 
                 $handler = TenderBinClient\FactoryMediaObject::hasHandlerOfStorage($c->getStorageType());
 

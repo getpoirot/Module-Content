@@ -1,36 +1,22 @@
 <?php
 namespace Module\Content\Actions;
 
+use Module\Apanaj\Storage\HandleIrTenderBin;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\ApiClient\AccessTokenObject;
 use Poirot\ApiClient\TokenProviderSolid;
 use Poirot\Http\HttpMessage\Request;
-use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\Psr7\UploadedFile;
 use Poirot\Std\Exceptions\exUnexpectedValue;
-use Poirot\TenderBinClient\Client;
+use Poirot\TenderBinClient\FactoryMediaObject;
 
 
 class UploadMediaAction
     extends aAction
 {
-    /** @var Client */
-    protected $storage;
-
-
-    /**
-     * UploadMediaAction constructor.
-     *
-     * @param Client       $storageClient @IoC /module/tenderBinClient/services/ClientTender
-     * @param iHttpRequest $httpRequest
-     */
-    function __construct(Client $storageClient, iHttpRequest $httpRequest)
-    {
-        $this->storage = $storageClient;
-
-        parent::__construct($httpRequest);
-    }
+//    const STORAGE_TYPE = HandleIrTenderBin::STORAGE_TYPE;
+    const STORAGE_TYPE = 'tenderbin';
 
 
     /**
@@ -71,7 +57,7 @@ class UploadMediaAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
-                'storage_type' => 'tenderbin',
+                'storage_type' => self::STORAGE_TYPE,
                 'hash'         => $binArr['hash'],
                 'content_type' => $binArr['content_type'],
             ],
@@ -91,12 +77,18 @@ class UploadMediaAction
      */
     private function _storeMedia($media, $token)
     {
+        $storageType = self::STORAGE_TYPE;
+        $handler     = FactoryMediaObject::hasHandlerOfStorage($storageType);
+
+
+        $c = $handler->client();
+
         // Request Behalf of User as Owner With Token
-        $this->storage->setTokenProvider(new TokenProviderSolid(
+        $c->setTokenProvider(new TokenProviderSolid(
             new AccessTokenObject(['access_token' => $token->getIdentifier()])
         ));
 
-        $r = $this->storage->store(
+        $r = $c->store(
             fopen($media->getTmpName(), 'rb')
             , null
             , $media->getClientFilename()
