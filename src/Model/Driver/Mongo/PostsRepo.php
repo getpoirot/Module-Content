@@ -175,6 +175,30 @@ class PostsRepo
     }
 
     /**
+     * Change Post Status By UID
+     *
+     * @param mixed $uid
+     * @param string $status
+     *
+     * @return bool|\MongoDB\UpdateResult
+     */
+    function changeStat($uid, $status)
+    {
+        $r = $this->_query()->updateOne(
+            [
+                '_id' => $this->attainNextIdentifier($uid),
+            ]
+            , [
+                '$set' => [
+                    'stat' => $status,
+                ]
+            ]
+        );
+
+        return ($r) ? $r : false;
+    }
+
+    /**
      * Find Entities Match With Given Expression
      *
      * !! Consider Mongo Indexes When Using Custom Conditions !!

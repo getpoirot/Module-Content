@@ -71,6 +71,14 @@ interface iRepoPosts
     function lockOneMatchUid($uid);
 
     /**
+     * Change Post Status By UID
+     *
+     * @param mixed  $uid
+     * @param string $status
+     */
+    function changeStat($uid, $status);
+
+    /**
      * Find Entities Match With Given Expression
      *
      * @param array    $expression Filter expression
