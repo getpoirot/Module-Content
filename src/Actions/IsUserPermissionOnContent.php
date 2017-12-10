@@ -1,17 +1,12 @@
 <?php
 namespace Module\Content\Actions;
 
-use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityPost;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
 class IsUserPermissionOnContent
 {
-    /** @var iRepoPosts */
-    protected $repoPosts;
-
-
     /**
      * Check Whether Current User (By Token) Has Permission On Content?
      *

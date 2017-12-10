@@ -1,5 +1,6 @@
 <?php
 use Module\Content\Events\EventsHeapOfContent;
+use Module\Content\Events\RetrieveContent\OnRetrieveContentEmbedProfile;
 
 return [
 
@@ -13,23 +14,22 @@ return [
 
             EventsHeapOfContent::RETRIEVE_CONTENT => [
                 'listeners' => [
-                    ['priority' => 1000,  'listener' => function($entityPost, $me) {
-                        // Implement this
-                        /** @var \Module\Content\Model\Entity\EntityPost $entityPost */
-                    }],
+                    ['priority' => 1000,  'listener' => OnRetrieveContentEmbedProfile::class ],
                 ],
             ],
 
             EventsHeapOfContent::RETRIEVE_CONTENT_RESULT => [
                 'listeners' => [
-                    ['priority' => 1000,  'listener' => function($result, $entityPost, $me) {
+                    ['priority' => 1000,  'listener' => function($result, $me) {
                         // Implement this
                         /** @var \Module\Content\Model\Entity\EntityPost $entityPost */
                     }],
+                    ['priority' => 10000, 'listener' => \Module\Content\Events\OnThatConvertToArray::class ],
+                    ['priority' => 1000,  'listener' => \Module\Content\Events\OnThatEmbedProfiles::class ],
+                    ['priority' => 1000,  'listener' => \Module\Content\Events\OnThatEmbedMediaLinks::class ],
                 ],
             ],
-
-
+            
         ],
     ],
 

@@ -2,17 +2,18 @@
 namespace Module\Content\Actions\Likes;
 
 use Module\Content;
+use MongoDB\Driver\Cursor;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoLikes;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityLike;
 use Module\Content\Model\Entity\EntityPost;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
-use MongoDB\Driver\Cursor;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Module\Content\Events\EventsHeapOfContent;
+use Poirot\Std\Type\StdArray;
 
 
 class ListPostsWhichUserLikedAction
@@ -77,46 +78,33 @@ class ListPostsWhichUserLikedAction
 
         // ignore one more limit to detect has next page
         array_pop($postsFromLiked);
-        $postCrsr = $this->repoPosts->findAllMatchUidWithin(
-            $postsFromLiked
-            , 'stat=publish'
+
+        $posts = \Module\Content\Actions::FindPostsWithIds(
+            $postsFromLiked,
+            \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public')
         );
 
-
-        ## Retrieve Profiles For Posts Owner
-        #
-        $posts = [];
-        $postOwners = [];
-        /** @var EntityPost $post */
-        foreach ($postCrsr as $post) {
-            // Create Response Items
-            $posts[] = $post;
-
-            $ownerId              = (string) $post->getOwnerIdentifier();
-            $postOwners[$ownerId] = true;
-        }
-
-        $postOwners = array_keys($postOwners);
-        $profiles   = \Module\Profile\Actions::RetrieveProfiles($postOwners);
-
-        $postsPrepared = [];
-        foreach ($posts as $post) {
-            $postId                 = (string) $post->getUid();
-            $postsPrepared[$postId] = Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier(), $profiles);
-        }
 
         ## Event
         #
         $me = ($token) ? $token->getOwnerIdentifier() : null;
-        $postsPrepared = $this->event()
+        $posts = $this->event()
             ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
                 /** @see Content\Events\DataCollector */
-                'me' => $me, 'posts' => $postsPrepared
+                'me' => $me, 'posts' => $posts
             ])
             ->then(function ($collector) {
                 /** @var Content\Events\DataCollector $collector */
                 return $collector->getPosts();
             });
+
+
+        /** @var EntityPost $post */
+        $posts = StdArray::of($posts)->each(function ($post) use ($token) {
+            return \Module\Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier());
+        })->value;
+
+
 
         // Check whether to display fetch more link in response?
         $linkMore = null;
@@ -127,8 +115,8 @@ class ListPostsWhichUserLikedAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
-                'count'      => count($postsPrepared),
-                'items'      => array_values($postsPrepared),
+                'count'      => count($postsFromLiked),
+                'items'      => $posts,
                 '_link_more' => $linkMore,
                 '_self' => [
                     'offset'     => $offset,
@@ -137,5 +125,4 @@ class ListPostsWhichUserLikedAction
             ],
         ];
     }
-
 }

@@ -9,4 +9,6 @@ interface iEntityMediaObject
     function getHash();
 
     function getContentType();
+
+    function get_Link();
 }

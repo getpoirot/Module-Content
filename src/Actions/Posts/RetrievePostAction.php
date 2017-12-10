@@ -90,8 +90,7 @@ class RetrievePostAction
 
         # Build Response
         #
-        $profiles = \Module\Profile\Actions::RetrieveProfiles([$post->getOwnerIdentifier()]);
-        $r        = Content\toArrayResponseFromPostEntity($post, $me, $profiles) + [
+        $r        = Content\toArrayResponseFromPostEntity($post, $me) + [
                 '_self' => [
                     'content_id' => $content_id,
                 ],

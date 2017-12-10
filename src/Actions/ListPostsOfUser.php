@@ -47,27 +47,23 @@ class ListPostsOfUser
             , $limit
         );
 
-
-        $profiles = \Module\Profile\Actions::RetrieveProfiles([$owner_identifier]);
-
-        /** @var EntityPost $post */
-        $posts = \Poirot\Std\cast($persistPosts)->toArray(function (&$post) use ($me, $profiles) {
-            $post = \Module\Content\toArrayResponseFromPostEntity($post, $me, $profiles);
-        });
-
-
         ## Event
         #
         $posts = $this->event()
             ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
                 /** @see Content\Events\DataCollector */
-                'me' => $me, 'posts' => $posts
+                'me' => $me, 'posts' => $persistPosts
             ])
             ->then(function ($collector) {
                 /** @var Content\Events\DataCollector $collector */
                 return $collector->getPosts();
             });
 
+
+        /** @var EntityPost $post */
+        $posts = \Poirot\Std\cast($posts)->toArray(function (&$post) use ($me) {
+            $post = \Module\Content\toArrayResponseFromPostEntity($post, $me);
+        });
 
         return $posts;
     }

@@ -171,8 +171,12 @@ namespace Module\Content
     use Module\Content\Actions\ListPostsLikedByUser;
     use Module\Content\Actions\ListPostsOfUser;
     use Module\Content\Actions\Posts\FindLatestPosts;
+    use Module\Content\ActionsHelper\FindPostsWithIds;
 
     /**
+     * @see FindPostsWithIds
+     * @method  static bool FindPostsWithIds(array $postIds, $expression = null)
+     * ...............................................................
      * @see IsUserPermissionOnContent
      * @method static bool IsUserPermissionOnContent($post, $token)
      * ...............................................................

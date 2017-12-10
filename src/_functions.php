@@ -3,7 +3,6 @@ namespace Module\Content
 {
     use Poirot\TenderBinClient;
     use Module\Content\Model\Entity\EntityPost;
-    use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
 
 
     /**
@@ -11,11 +10,10 @@ namespace Module\Content
      *
      * @param EntityPost  $post
      * @param null|string $me       Current User Identifier
-     * @param array       $profiles Default Users Profile Data
      *
      * @return array
      */
-    function toArrayResponseFromPostEntity(EntityPost $post, $me = null, array $profiles = [])
+    function toArrayResponseFromPostEntity(EntityPost $post, $me = null)
     {
         # Build Likes Response:
         $likes = ($post->getLikes()) ? [
@@ -34,66 +32,16 @@ namespace Module\Content
         }
 
 
-        // TODO embed user detail must done within some attached events
-        // TODO remove dependency (call with service)
-        $uid  = (string) $post->getOwnerIdentifier();
         $user = [
-            'uid'    => $uid, ];
+            'uid' => $post->getOwnerIdentifier(), ];
 
-        if ( isset($profiles[$uid]) )
-            $user = $profiles[$uid];
-
-
-        /*
-         * [
-         *   [
-                [storage_type] => tenderbin
-                [hash] => 59eda4e595a8c1035460b282
-                [content_type] => image/jpeg
-                [_link] => http://storage.apanajapp.com/bin/59eda4e595a8c1035460b282
-             ]
-             ...
-           ]
-         */
-
-        ## Embed Versions Into Response
-        #
-        $contentWithMediaLinks = \Poirot\TenderBinClient\embedLinkToMediaData(
-            $post->getContent()
-            , function ($contentWithMediaLinks)
-            {
-                $link = $contentWithMediaLinks['_link'];
-
-                /*
-                $val['_link'] = [
-                    'thumb'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=200x200&url='.$link.'/file.jpg',
-                    'low_thumb'  => null,
-                    'small'      => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
-                    'low_small'  => null,
-                    'large'      => 'http://optimizer.'.SERVER_NAME.'/?type=resize&size=800x1400&url='.$link.'/file.jpg',
-                    'low_large'  => null,
-                    'origin'     => $link,
-                ];
-                */
-
-                $contentWithMediaLinks['_link'] = [
-                    'thumb'      => $link.'?ver=thumb',
-                    'low_thumb'  => $link.'?ver=low_thumb',
-                    'small'      => $link.'?ver=small',
-                    'low_small'  => $link.'?ver=low_small',
-                    'large'      => $link.'?ver=large',
-                    'low_large'  => $link.'?ver=low_large',
-                    'origin'     => $link,
-                ];
-
-                return $contentWithMediaLinks;
-            }
-        );
+        if ( $profile = $post->getOwnerProfile() )
+            $user = $profile;
 
 
         return [
             'uid'        => (string) $post->getUid(),
-            'content'    => $contentWithMediaLinks,
+            'content'    => TenderBinClient\embedLinkToMediaData($post->getContent()),
             'stat'       => $post->getStat(),
             'stat_share' => $post->getStatShare(),
             'user'       => $user,

@@ -6,7 +6,6 @@ use Poirot\Std\Type\StdArray;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityPost;
-use Module\Profile\Actions\Helpers\RetrieveProfiles;
 use Module\Content\Events\EventsHeapOfContent;
 
 
@@ -54,44 +53,24 @@ class FindLatestPosts
             , $limit
         );
 
-
-        $posts = [];
-
-        ## Retrieve Profiles For Posts Owner
-        #
-        $postOwners = [];
-        /** @var EntityPost $p */
-        foreach ($crsr as $p) {
-            $p->setContent(clone $p->getContent());
-            array_push($posts, $p);
-            $ownerId = (string) $p->getOwnerIdentifier();
-            $postOwners[$ownerId] = true;
-        }
-
-
-        $postOwners = array_keys($postOwners);
-
-        /** @var RetrieveProfiles $funListUsers */
-        $profiles = \Module\Profile\Actions::RetrieveProfiles($postOwners);
-
-        /** @var EntityPost $post */
-        $posts = StdArray::of($posts)->each(function ($post) use ($me, &$profiles) {
-            return \Module\Content\toArrayResponseFromPostEntity($post, $me, $profiles);
-        })->value;
-
-
         ## Event
         #
         /** @var array $posts */
         $posts = $this->event()
             ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
                 /** @see Content\Events\DataCollector */
-                'me' => $me, 'posts' => $posts
+                'me' => $me, 'posts' => $crsr
             ])
             ->then(function ($collector) {
                 /** @var Content\Events\DataCollector $collector */
                 return $collector->getPosts();
             });
+
+
+        /** @var EntityPost $post */
+        $posts = StdArray::of($posts)->each(function ($post) use ($me) {
+            return \Module\Content\toArrayResponseFromPostEntity($post, $me);
+        })->value;
 
 
         return $posts;
