@@ -10,14 +10,16 @@ use Poirot\Events\EventHeap;
 class EventsHeapOfContent
     extends EventHeap
 {
-    const RETRIEVE_CONTENT        = 'retrieve.content';
-    const RETRIEVE_CONTENT_RESULT = 'retrieve.content.result';
-    const AFTER_CREATE_CONTENT    = 'post.create.content';
-    const BEFORE_CREATE_CONTENT   = 'pre.create.content';
-    const LIST_POSTS_RESULT       = 'list.posts.result';
+    const RETRIEVE_POST          = 'retrieve.content';
+    const RETRIEVE_POST_RESULT   = 'retrieve.content.result';
 
-    const BEFORE_ADD_COMMENT      = 'before.comment.add';
-    const AFTER_ADD_COMMENT       = 'after.comment.add';
+    const LIST_POSTS_RESULTSET   = 'list.posts.result';
+
+    const AFTER_CREATE_CONTENT   = 'post.create.content';
+    const BEFORE_CREATE_CONTENT  = 'pre.create.content';
+
+    const BEFORE_ADD_COMMENT     = 'before.comment.add';
+    const AFTER_ADD_COMMENT      = 'after.comment.add';
 
 
     /**
@@ -29,11 +31,11 @@ class EventsHeapOfContent
         $this->collector = new DataCollector;
 
         // attach default event names:
-        $this->bind( new Event(self::RETRIEVE_CONTENT) );
-        $this->bind( new Event(self::RETRIEVE_CONTENT_RESULT) );
+        $this->bind( new Event(self::RETRIEVE_POST) );
+        $this->bind( new Event(self::RETRIEVE_POST_RESULT) );
         $this->bind( new Event(self::BEFORE_CREATE_CONTENT) );
         $this->bind( new Event(self::AFTER_CREATE_CONTENT) );
-        $this->bind( new Event(self::LIST_POSTS_RESULT) );
+        $this->bind( new Event(self::LIST_POSTS_RESULTSET) );
 
         // Comments:
         $this->bind( new Event(self::BEFORE_ADD_COMMENT, new Event\BuildEvent([

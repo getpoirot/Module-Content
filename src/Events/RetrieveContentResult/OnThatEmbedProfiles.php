@@ -1,7 +1,6 @@
 <?php
-namespace Module\Content\Events;
+namespace Module\Content\Events\RetrieveContentResult;
 
-use Module\Content\Model\Entity\EntityPost;
 use Module\Profile\Actions\Helpers\RetrieveProfiles;
 
 
@@ -15,17 +14,23 @@ class OnThatEmbedProfiles
      *
      * @return array
      */
-    function __invoke($posts, $me)
+    function __invoke($posts = null, $me = null, $result = null)
     {
-        $postsArray = [];
+        if ($result !== null)
+            // Attached To retrieve_post event
+            /** @see EventsHeapOfContent */
+            $posts = [$result];
+
+
+        if ( empty($posts) )
+            return;
+
 
         ## Retrieve Profiles For Posts Owner
         #
         $postOwners = [];
-        /** @var EntityPost $p */
-        foreach ($posts as $p) {
-            \array_push($postsArray, $p);
-            $ownerId = (string) $p->getOwnerIdentifier();
+        foreach ($posts as &$p) {
+            $ownerId = (string) $p['user']['uid'];
             $postOwners[$ownerId] = true;
         }
 
@@ -35,17 +40,26 @@ class OnThatEmbedProfiles
         $profiles = \Module\Profile\Actions::RetrieveProfiles($postOwners);
 
 
-        foreach ($postsArray as $p) {
-            $uid  = (string) $p->getOwnerIdentifier();
+        foreach ($posts as &$p) {
+            $uid  = (string) $p['user']['uid'];
 
+            /** @see \Module\Content\toArrayResponseFromPostEntity() */
             if ( isset($profiles[$uid]) )
-                // set with open options
-                $p->setOwnerProfile($profiles[$uid]);
+                $p['user'] = $profiles[$uid];
+            else
+                $p['user']['uid'] = (string) $p['user']['uid'];
         }
 
 
+        if ($result !== null)
+            // Attached To retrieve_post event
+            /** @see EventsHeapOfContent */
+            return [
+                'result' => current($posts),
+            ];
+
         return [
-            'posts' => $postsArray,
+            'posts' => $posts,
         ];
     }
 }

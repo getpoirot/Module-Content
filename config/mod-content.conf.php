@@ -1,6 +1,10 @@
 <?php
 use Module\Content\Events\EventsHeapOfContent;
-use Module\Content\Events\RetrieveContent\OnRetrieveContentEmbedProfile;
+use Module\Content\Events\RetrieveContent\OnRetrieveContentToDataResponse;
+use Module\Content\Events\RetrieveContentResult\OnThatConvertToDataResponse;
+use Module\Content\Events\RetrieveContentResult\OnThatEmbedMediaLinks;
+use Module\Content\Events\RetrieveContentResult\OnThatEmbedProfiles;
+use Module\Content\Events\RetrieveContentResult\OnThatPersistFromCursor;
 
 return [
 
@@ -12,24 +16,22 @@ return [
             // Events Section Of Events Builder
             /** @see \Poirot\Events\Event\BuildEvent */
 
-            EventsHeapOfContent::RETRIEVE_CONTENT => [
+            EventsHeapOfContent::RETRIEVE_POST_RESULT => [
                 'listeners' => [
-                    ['priority' => 1000,  'listener' => OnRetrieveContentEmbedProfile::class ],
+                    ['priority' => 1500,  'listener' => OnThatEmbedMediaLinks::class ],
+                    ['priority' => 1100,  'listener' => OnRetrieveContentToDataResponse::class ],
+                    ['priority' => 1000,  'listener' => OnThatEmbedProfiles::class ],
                 ],
             ],
 
-            EventsHeapOfContent::RETRIEVE_CONTENT_RESULT => [
+            EventsHeapOfContent::LIST_POSTS_RESULTSET => [
                 'listeners' => [
-                    ['priority' => 1000,  'listener' => function($result, $me) {
-                        // Implement this
-                        /** @var \Module\Content\Model\Entity\EntityPost $entityPost */
-                    }],
-                    ['priority' => 10000, 'listener' => \Module\Content\Events\OnThatConvertToArray::class ],
-                    ['priority' => 1000,  'listener' => \Module\Content\Events\OnThatEmbedProfiles::class ],
-                    ['priority' => 1000,  'listener' => \Module\Content\Events\OnThatEmbedMediaLinks::class ],
+                    ['priority' => 10000, 'listener' => OnThatPersistFromCursor::class ],
+                    ['priority' => 1500,  'listener' => OnThatEmbedMediaLinks::class ],
+                    ['priority' => 1100,  'listener' => OnThatConvertToDataResponse::class ],
+                    ['priority' => 1000,  'listener' => OnThatEmbedProfiles::class ],
                 ],
             ],
-            
         ],
     ],
 

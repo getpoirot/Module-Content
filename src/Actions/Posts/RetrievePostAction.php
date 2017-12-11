@@ -77,7 +77,7 @@ class RetrievePostAction
         #
         /** @var Content\Model\Entity\EntityPost $post */
         $post = $this->event()
-            ->trigger(EventsHeapOfContent::RETRIEVE_CONTENT, [
+            ->trigger(EventsHeapOfContent::RETRIEVE_POST, [
                 /** @see Content\Events\DataCollector */
                 'me' => $me, 'entity_post' => $post,
             ])
@@ -87,23 +87,13 @@ class RetrievePostAction
             });
 
 
-
-        # Build Response
-        #
-        $r        = Content\toArrayResponseFromPostEntity($post, $me) + [
-                '_self' => [
-                    'content_id' => $content_id,
-                ],
-            ];
-
-
         ## Event
         #
         /** @var Content\Model\Entity\EntityPost $post */
         $r = $this->event()
-            ->trigger(EventsHeapOfContent::RETRIEVE_CONTENT_RESULT, [
+            ->trigger(EventsHeapOfContent::RETRIEVE_POST_RESULT, [
                 /** @see Content\Events\DataCollector */
-                'result' => $r, 'entity_post' => $post, 'me' => $me,
+                'entity_post' => $post, 'me' => $me,
             ])
             ->then(function ($collector) {
                 /** @var Content\Events\DataCollector $collector */

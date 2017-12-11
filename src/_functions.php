@@ -1,6 +1,7 @@
 <?php
 namespace Module\Content
 {
+
     use Poirot\TenderBinClient;
     use Module\Content\Model\Entity\EntityPost;
 
@@ -34,9 +35,6 @@ namespace Module\Content
 
         $user = [
             'uid' => $post->getOwnerIdentifier(), ];
-
-        if ( $profile = $post->getOwnerProfile() )
-            $user = $profile;
 
 
         return [

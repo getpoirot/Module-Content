@@ -2,10 +2,8 @@
 namespace Module\Content\Actions\Posts;
 
 use Module\Content;
-use Poirot\Std\Type\StdArray;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
-use Module\Content\Model\Entity\EntityPost;
 use Module\Content\Events\EventsHeapOfContent;
 
 
@@ -57,7 +55,7 @@ class FindLatestPosts
         #
         /** @var array $posts */
         $posts = $this->event()
-            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
+            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULTSET, [
                 /** @see Content\Events\DataCollector */
                 'me' => $me, 'posts' => $crsr
             ])
@@ -65,12 +63,6 @@ class FindLatestPosts
                 /** @var Content\Events\DataCollector $collector */
                 return $collector->getPosts();
             });
-
-
-        /** @var EntityPost $post */
-        $posts = StdArray::of($posts)->each(function ($post) use ($me) {
-            return \Module\Content\toArrayResponseFromPostEntity($post, $me);
-        })->value;
 
 
         return $posts;

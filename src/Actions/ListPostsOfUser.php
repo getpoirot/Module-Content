@@ -50,7 +50,7 @@ class ListPostsOfUser
         ## Event
         #
         $posts = $this->event()
-            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
+            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULTSET, [
                 /** @see Content\Events\DataCollector */
                 'me' => $me, 'posts' => $persistPosts
             ])
@@ -59,11 +59,6 @@ class ListPostsOfUser
                 return $collector->getPosts();
             });
 
-
-        /** @var EntityPost $post */
-        $posts = \Poirot\Std\cast($posts)->toArray(function (&$post) use ($me) {
-            $post = \Module\Content\toArrayResponseFromPostEntity($post, $me);
-        });
 
         return $posts;
     }

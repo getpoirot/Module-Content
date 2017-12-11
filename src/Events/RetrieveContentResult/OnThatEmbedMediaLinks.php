@@ -1,11 +1,12 @@
 <?php
-namespace Module\Content\Events;
+namespace Module\Content\Events\RetrieveContentResult;
 
 use Module\Content\Actions\UploadMediaAction;
+use Module\Content\Events\EventsHeapOfContent;
 use Module\Content\Model\Entity\EntityPost;
-use Module\TenderBinClient\Model\MediaObjectTenderBinVersions;
 use Poirot\TenderBinClient\Model\aMediaObject;
 use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
+use Poirot\TenderBinClient\Model\MediaObjectTenderBinVersions;
 
 
 class OnThatEmbedMediaLinks
@@ -18,29 +19,21 @@ class OnThatEmbedMediaLinks
      *
      * @return array
      */
-    function __invoke($posts, $me)
+    function __invoke($posts = null, $me = null, $entity_post = null)
     {
+        if ($entity_post !== null)
+            // Attached To retrieve_post event
+            /** @see EventsHeapOfContent */
+            return [
+                'entity_post' => $this->_embedMediaLinks($entity_post),
+            ];
+
+
+        // retrieve_post_resultset
+
         /** @var EntityPost $post */
         foreach ($posts as $post)
-        {
-            $content = $post->getContent();
-
-            if ($content instanceof EntityPost\ContentObjectGeneral) {
-                $postMedias = $content->getMedias();
-
-                /** @var aMediaObject $media */
-                $medias = [];
-                foreach ($postMedias as $media) {
-                    if ( \Poirot\Std\isMimeMatchInList(['image/*'], $media->getContentType()) )
-                        $media = $this->_mediaVersion($media);
-
-                    $medias[] = $media;
-                }
-
-
-                $content->setMedias($medias);
-            }
-        }
+            $this->_embedMediaLinks($post);
 
         return [
             'posts' => $posts,
@@ -49,6 +42,34 @@ class OnThatEmbedMediaLinks
 
 
     // ..
+
+    /**
+     * @param EntityPost $post
+     *
+     * @return EntityPost
+     */
+    private function _embedMediaLinks($post)
+    {
+        $content = $post->getContent();
+
+        if ($content instanceof EntityPost\ContentObjectGeneral) {
+            $postMedias = $content->getMedias();
+
+            /** @var aMediaObject $media */
+            $medias = [];
+            foreach ($postMedias as $media) {
+                if ( \Poirot\Std\isMimeMatchInList(['image/*'], $media->getContentType()) )
+                    $media = $this->_mediaVersion($media);
+
+                $medias[] = $media;
+            }
+
+
+            $content->setMedias($medias);
+        }
+
+        return $post;
+    }
 
     /** @see UploadMediaAction */
     private function _mediaVersion(aMediaObject $media)

@@ -89,7 +89,7 @@ class ListPostsWhichUserLikedAction
         #
         $me = ($token) ? $token->getOwnerIdentifier() : null;
         $posts = $this->event()
-            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULT, [
+            ->trigger(EventsHeapOfContent::LIST_POSTS_RESULTSET, [
                 /** @see Content\Events\DataCollector */
                 'me' => $me, 'posts' => $posts
             ])
@@ -97,13 +97,6 @@ class ListPostsWhichUserLikedAction
                 /** @var Content\Events\DataCollector $collector */
                 return $collector->getPosts();
             });
-
-
-        /** @var EntityPost $post */
-        $posts = StdArray::of($posts)->each(function ($post) use ($token) {
-            return \Module\Content\toArrayResponseFromPostEntity($post, $token->getOwnerIdentifier());
-        })->value;
-
 
 
         // Check whether to display fetch more link in response?
