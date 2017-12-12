@@ -18,10 +18,9 @@ class OnRetrieveContentToDataResponse
     {
         $r = \Module\Content\toArrayResponseFromPostEntity($entity_post, $me) + [
             '_self' => [
-                'content_id' => $entity_post->getUid(),
+                'content_id' => (string) $entity_post->getUid(),
             ],
         ];
-
 
         return [
             'result' => $r,

@@ -15,10 +15,6 @@ use Poirot\TenderBinClient\FactoryMediaObject;
 class UploadMediaAction
     extends aAction
 {
-//    const STORAGE_TYPE = HandleIrTenderBin::STORAGE_TYPE;
-    const STORAGE_TYPE = 'tenderbin';
-
-
     /**
      * Upload Temporary Media Into Storage
      *
@@ -57,7 +53,8 @@ class UploadMediaAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
-                'storage_type' => self::STORAGE_TYPE,
+                // TODO
+                'storage_type' => FactoryMediaObject::STORAGE_TYPE,
                 'hash'         => $binArr['hash'],
                 'content_type' => $binArr['content_type'],
             ],
@@ -77,8 +74,7 @@ class UploadMediaAction
      */
     private function _storeMedia($media, $token)
     {
-        $storageType = self::STORAGE_TYPE;
-        $handler     = FactoryMediaObject::hasHandlerOfStorage($storageType);
+        $handler     = FactoryMediaObject::hasHandlerOfStorage(FactoryMediaObject::STORAGE_TYPE);
 
 
         $c = $handler->client();

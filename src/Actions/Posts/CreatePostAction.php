@@ -4,6 +4,7 @@ namespace Module\Content\Actions\Posts;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
+use Module\HttpFoundation\Actions\Url;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Content\Events\EventsHeapOfContent;
 use Poirot\Http\Interfaces\iHttpRequest;
@@ -105,11 +106,24 @@ class CreatePostAction
         $post = $this->repoPosts->insert($entityPost);
 
 
-        # Build Response:
+
+        $me = $token->getOwnerIdentifier();
+
+        ## Event
         #
-        # TODO: move RetrieveProfiles outside
-        $profiles = \Module\Profile\Actions::RetrieveProfiles([ $token->getOwnerIdentifier() ]);
-        $r = Content\toArrayResponseFromPostEntity($post, null, $profiles);
+
+
+        /** @var Content\Model\Entity\EntityPost $post */
+        $r = $this->event()
+            ->trigger(EventsHeapOfContent::RETRIEVE_POST_RESULT, [
+                /** @see Content\Events\DataCollector */
+                'entity_post' => $post, 'me' => $me,
+            ])
+            ->then(function ($collector) {
+                /** @var Content\Events\DataCollector $collector */
+                return $collector->getResult();
+            });
+
 
 
         ## Event
@@ -118,12 +132,13 @@ class CreatePostAction
         $r = $this->event()
             ->trigger(EventsHeapOfContent::AFTER_CREATE_CONTENT, [
                 /** @see Content\Events\DataCollector */
-                'result' => $r, 'entity_post' => $post, 'me' => $token->getOwnerIdentifier()
+                'result' => $r, 'entity_post' => $post, 'me' => $me,
             ])
             ->then(function ($collector) {
                 /** @var Content\Events\DataCollector $collector */
                 return $collector->getResult();
             });
+
 
         return [
             ListenerDispatch::RESULT_DISPATCH => $r

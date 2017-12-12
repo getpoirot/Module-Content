@@ -74,12 +74,15 @@ class OnThatEmbedMediaLinks
     /** @see UploadMediaAction */
     private function _mediaVersion(aMediaObject $media)
     {
-        $storageType = $media->getStorageType();
-        if ( $storageType !== MediaObjectTenderBin::TYPE )
+        if ( ! $media instanceof MediaObjectTenderBin )
             throw new \RuntimeException(sprintf(
                 'Media Object (%s) is unknown for versioned links.'
-                , $storageType
+                , get_class($media)
             ));
+
+
+        if ($media instanceof MediaObjectTenderBinVersions)
+            return $media;
 
 
         ## Embed Versions Into Response
