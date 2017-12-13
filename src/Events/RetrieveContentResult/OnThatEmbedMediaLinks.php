@@ -11,6 +11,9 @@ use Poirot\TenderBinClient\Model\MediaObjectTenderBinVersions;
 
 class OnThatEmbedMediaLinks
 {
+    const EVENT_PRIORITY = 1500;
+
+
     /**
      * Embed Media Links To Content
      *

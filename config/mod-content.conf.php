@@ -18,7 +18,7 @@ return [
 
             EventsHeapOfContent::RETRIEVE_POST_RESULT => [
                 'listeners' => [
-                    ['priority' => 1500,  'listener' => OnThatEmbedMediaLinks::class ],
+                    ['priority' => OnThatEmbedMediaLinks::EVENT_PRIORITY,  'listener' => OnThatEmbedMediaLinks::class ],
                     ['priority' => 1100,  'listener' => OnRetrieveContentToDataResponse::class ],
                     ['priority' => 1000,  'listener' => OnThatEmbedProfiles::class ],
                 ],
@@ -27,7 +27,7 @@ return [
             EventsHeapOfContent::LIST_POSTS_RESULTSET => [
                 'listeners' => [
                     ['priority' => 10000, 'listener' => OnThatPersistFromCursor::class ],
-                    ['priority' => 1500,  'listener' => OnThatEmbedMediaLinks::class ],
+                    ['priority' => OnThatEmbedMediaLinks::EVENT_PRIORITY,  'listener' => OnThatEmbedMediaLinks::class ],
                     ['priority' => 1100,  'listener' => OnThatConvertToDataResponse::class ],
                     ['priority' => 1000,  'listener' => OnThatEmbedProfiles::class ],
                 ],
