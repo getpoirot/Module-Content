@@ -85,7 +85,7 @@ class UploadMediaAction
         ));
 
         $r = $c->store(
-            fopen($media->getTmpName(), 'rb')
+            $media
             , null
             , $media->getClientFilename()
             , [
