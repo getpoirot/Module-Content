@@ -71,6 +71,7 @@ class UploadMediaAction
      * @param iAccessToken $token
      *
      * @return array
+     * @throws \Exception
      */
     private function _storeMedia($media, $token)
     {
@@ -84,8 +85,14 @@ class UploadMediaAction
             new AccessTokenObject(['access_token' => $token->getIdentifier()])
         ));
 
+        $filePath = $media->getTmpName();
+        $newFile  = sys_get_temp_dir().'/'.basename($filePath).'_'.$media->getClientFilename();
+        if (! copy($filePath, $newFile) )
+            throw new \Exception('Error Copying File...');
+
+
         $r = $c->store(
-            fopen($media->getTmpName(), 'rb')
+            fopen($newFile, 'rb')
             , null
             , $media->getClientFilename()
             , [
@@ -110,6 +117,8 @@ class UploadMediaAction
             , 360 // expiration time
             , false );
 
+
+        unlink($newFile);
 
         return $r;
     }
