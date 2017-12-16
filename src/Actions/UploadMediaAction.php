@@ -76,8 +76,6 @@ class UploadMediaAction
     private function _storeMedia($media, $token)
     {
         $handler     = FactoryMediaObject::hasHandlerOfStorage(FactoryMediaObject::STORAGE_TYPE);
-
-
         $c = $handler->client();
 
         // Request Behalf of User as Owner With Token
@@ -85,14 +83,15 @@ class UploadMediaAction
             new AccessTokenObject(['access_token' => $token->getIdentifier()])
         ));
 
+        /*
         $filePath = $media->getTmpName();
         $newFile  = sys_get_temp_dir().'/'.basename($filePath).'_'.$media->getClientFilename();
         if (! copy($filePath, $newFile) )
             throw new \Exception('Error Copying File...');
-
+        */
 
         $r = $c->store(
-            fopen($newFile, 'rb')
+            $media
             , null
             , $media->getClientFilename()
             , [
@@ -118,7 +117,7 @@ class UploadMediaAction
             , false );
 
 
-        unlink($newFile);
+//        unlink($newFile);
 
         return $r;
     }
