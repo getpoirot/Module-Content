@@ -122,8 +122,7 @@ class AddCommentOnPostAction
                     'نظر روی پست شما'
                     , sprintf('%s روی پست %s نظر داده است.', $userName, $titlePost)
                     , [ $ownerId ]
-                    , 'user'
-                    , $visitorId
+                    , ['entityName' => 'user', 'entityId' =>  $visitorId ]
                 );
 
         }
