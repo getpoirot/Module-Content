@@ -25,6 +25,8 @@ class UploadMediaAction
      */
     function __invoke($token = null)
     {
+        set_time_limit(0);
+
         # Assert Token
         #
         $this->assertTokenByOwnerAndScope($token);
