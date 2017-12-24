@@ -420,4 +420,25 @@ class PostsRepo
 
         return ($r) ? $r->getLikes() : null;
     }
+
+    /**
+     * @inheritdoc
+     */
+    function findUserLatestPost($uid)
+    {
+        $expression = \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public');
+        $condition  = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+        $condition += [ 'owner_identifier' => $this->attainNextIdentifier($uid) ];
+
+        $r = $this->_query()->findOne(
+            $condition,
+            [
+                'sort' => [
+                    '_id'   => -1,
+                    'limit' => 1
+                ]
+            ]
+        );
+        return ($r) ? $r : null;
+    }
 }
