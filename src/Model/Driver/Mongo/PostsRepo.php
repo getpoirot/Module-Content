@@ -441,4 +441,34 @@ class PostsRepo
         );
         return ($r) ? $r : null;
     }
+
+    /**
+     * @param array|object $filter  Query by which to filter documents
+     * @param array        $options Command options
+     *
+     * @return int
+     */
+    protected function count($filter, array $options)
+    {
+        return $this
+            ->gateway
+            ->selectCollection($this->collection_name)
+            ->count($filter, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    function countNewPosts($ownerIdentifier, $offset)
+    {
+        return $this->count(
+            [
+                'owner_identifier' => $this->attainNextIdentifier($ownerIdentifier),
+                '_id' => [ '$lt' => $this->attainNextIdentifier($offset), ]
+            ],
+            [
+                'sort'  => [ '_id' => -1, ],
+            ]
+        );
+    }
 }

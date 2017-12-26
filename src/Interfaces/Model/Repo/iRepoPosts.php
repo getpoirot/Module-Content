@@ -147,4 +147,11 @@ interface iRepoPosts
      * @return EntityPost|null
      */
     function findUserLatestPost($uid);
+
+    /**
+     * @param \MongoId|string $ownerIdentifier
+     * @param \MongoId|string $offset
+     * @return int
+     */
+    function countNewPosts($ownerIdentifier, $offset);
 }
