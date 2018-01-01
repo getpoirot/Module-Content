@@ -41,12 +41,18 @@ class FindLatestPosts
      *
      * @return array
      */
-    function __invoke($me = null, $limit = null, $offset = null)
+    function __invoke($me = null, $limit = null, $offset = null, array $expression = [])
     {
+        $expression = array_merge(
+            $expression
+            , \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public')
+        );
+
+
         ## Retrieve All Latest Posts
         #
         $crsr = $this->repoPosts->findAll(
-            \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public')
+            $expression
             , $offset
             , $limit
         );

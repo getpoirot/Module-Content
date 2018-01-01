@@ -40,10 +40,15 @@ class BrowsePostsAction
         $limit  = (isset($q['limit']))  ? (int) $q['limit']  : 30;
 
 
+        ## Filter Expression
+        #
+        $expr   = \Module\MongoDriver\parseExpressionFromArray($q, ['offset', 'limit', 'stat', 'stat_share', 'debug']);
+
+
         ## Retrieve Posts
         #
         $me    = ($token) ? $token->getOwnerIdentifier() : null;
-        $posts = \Module\Content\Actions::FindLatestPosts($me, $limit+1, $offset);
+        $posts = \Module\Content\Actions::FindLatestPosts($me, $limit+1, $offset, $expr);
 
 
         ## Build Response

@@ -185,7 +185,7 @@ namespace Module\Content
      * @method static bool ListPostsOfUser($me = null, $owner_identifier = null, $expression = null, $offset = null, $limit = 30)
      * ...............................................................
      * @see FindLatestPosts
-     * @method static array FindLatestPosts($me = null, $limit = null, $offset = null)
+     * @method static array FindLatestPosts($me = null, $limit = null, $offset = null, $expression = null)
      */
     class Actions extends \IOC
     { }
