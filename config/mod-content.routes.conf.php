@@ -368,6 +368,21 @@ return
                             ],
                         ],
                     ],
+                    ## /browse
+                    #- Count new Posts
+                    'count' => [
+                        'route'   => 'RouteMethodSegment',
+                        'options' => [
+                            'criteria' => '/',
+                            'method'   => 'HEAD',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                \Module\Content\Actions\Posts\NewPostsCountAction::class,
+                            ],
+                        ],
+                    ],
                     ## /browse/discover
                     #- Suggest Authorized? user posts stream to explore.
                     'discover' => [

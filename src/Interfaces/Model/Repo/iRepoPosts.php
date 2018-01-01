@@ -139,4 +139,19 @@ interface iRepoPosts
      * @return EntityPost\LikesObject
      */
     function removeLikeEntry($content_id, MemberObject $member);
+
+    /**
+     * Find specified user's latest post
+     *
+     * @param string $uid
+     * @return EntityPost|null
+     */
+    function findUserLatestPost($uid);
+
+    /**
+     * @param \MongoId|string $ownerIdentifier
+     * @param \MongoId|string $offset
+     * @return int
+     */
+    function countNewPosts($ownerIdentifier, $offset);
 }

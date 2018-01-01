@@ -420,4 +420,55 @@ class PostsRepo
 
         return ($r) ? $r->getLikes() : null;
     }
+
+    /**
+     * @inheritdoc
+     */
+    function findUserLatestPost($uid)
+    {
+        $expression = \Module\MongoDriver\parseExpressionFromString('stat=publish&stat_share=public');
+        $condition  = \Module\MongoDriver\buildMongoConditionFromExpression($expression);
+        $condition += [ 'owner_identifier' => $this->attainNextIdentifier($uid) ];
+
+        $r = $this->_query()->findOne(
+            $condition,
+            [
+                'sort' => [
+                    '_id'   => -1,
+                    'limit' => 1
+                ]
+            ]
+        );
+        return ($r) ? $r : null;
+    }
+
+    /**
+     * @param array|object $filter  Query by which to filter documents
+     * @param array        $options Command options
+     *
+     * @return int
+     */
+    protected function count($filter, array $options)
+    {
+        return $this
+            ->gateway
+            ->selectCollection($this->collection_name)
+            ->count($filter, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    function countNewPosts($ownerIdentifier, $offset)
+    {
+        return $this->count(
+            [
+                'owner_identifier' => $this->attainNextIdentifier($ownerIdentifier),
+                '_id' => [ '$lt' => $this->attainNextIdentifier($offset), ]
+            ],
+            [
+                'sort'  => [ '_id' => -1, ],
+            ]
+        );
+    }
 }
