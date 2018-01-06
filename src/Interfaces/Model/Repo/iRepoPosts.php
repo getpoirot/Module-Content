@@ -154,4 +154,11 @@ interface iRepoPosts
      * @return int
      */
     function countNewPosts($ownerIdentifier, $offset);
+
+    /**
+     * @param \MongoId|string $ownerIdentifier
+     * @param \DateTime $dateTime
+     * @return int
+     */
+    function countUserRepostsNewerThan($ownerIdentifier, \DateTime $dateTime);
 }
