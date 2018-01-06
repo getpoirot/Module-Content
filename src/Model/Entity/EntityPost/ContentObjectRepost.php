@@ -58,6 +58,14 @@ class ContentObjectRepost
         if ( ! ($this->entityPost instanceof EntityPost))
             throw new \RuntimeException(sprintf("Invalid Original Content Id = %s", (string)$originalContentId));
 
+        ## Re-Posting a Re-Post?
+        #
+        if ($this->entityPost->getContent() instanceof ContentObjectRepost)
+        {
+            $originalContentId = $this->entityPost->getContent()->getUid();
+            return $this->setOriginalContentId($originalContentId);
+        }
+
         return $this;
     }
 
