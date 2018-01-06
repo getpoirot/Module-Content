@@ -103,7 +103,7 @@ class EntityPostBase
 
     /**
      * Get Post Stat
-     * values: publish|draft|locked
+     * values: publish|draft|locked|wip
      *
      * @return string
      */

@@ -4,6 +4,7 @@ namespace Module\Content\Services;
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
 use Module\Content\Model\Entity\EntityPost\ContentObjectPlain;
 use Module\Content\Model\Entity\EntityPost\ContentObjectGeneral;
+use Module\Content\Model\Entity\EntityPost\ContentObjectRepost;
 use Poirot\Ioc\Container\aContainerCapped;
 use Poirot\Ioc\Container\BuildContainer;
 use Poirot\Ioc\Container\Exception\exContainerInvalidServiceType;
@@ -17,6 +18,7 @@ class ContentPlugins
     protected $_map_resolver_options = [
         'plain'   => ContentObjectPlain::class,
         'general' => ContentObjectGeneral::class,
+        'repost'  => ContentObjectRepost::class,
     ];
 
 
