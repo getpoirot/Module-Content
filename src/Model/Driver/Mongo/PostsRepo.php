@@ -471,4 +471,21 @@ class PostsRepo
             ]
         );
     }
+
+    /**
+     * @inheritdoc
+     */
+    function countUserRepostsNewerThan($ownerIdentifier, \DateTime $dateTime)
+    {
+        return $this->count(
+            [
+                'owner_identifier'          => $this->attainNextIdentifier($ownerIdentifier),
+                'content.content_type'      => 'repost',
+                'date_time_created_mongo'   => [
+                    '$gte' => New \MongoDB\BSON\UTCDateTime($dateTime->getTimestamp() * 1000)
+                ],
+            ],
+            []
+        );
+    }
 }
