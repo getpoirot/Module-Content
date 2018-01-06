@@ -4,7 +4,6 @@ namespace Module\Content\Actions\Posts;
 use Module\Content;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
-use Module\HttpFoundation\Actions\Url;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Content\Events\EventsHeapOfContent;
 use Poirot\Http\Interfaces\iHttpRequest;
@@ -111,8 +110,6 @@ class CreatePostAction
 
         ## Event
         #
-
-
         /** @var Content\Model\Entity\EntityPost $post */
         $r = $this->event()
             ->trigger(EventsHeapOfContent::RETRIEVE_POST_RESULT, [

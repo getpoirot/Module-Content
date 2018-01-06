@@ -113,7 +113,7 @@ namespace Module\Content\Lib
          * @param mixed $contentName
          * @param null  $contentData
          *
-         * @return mixed
+         * @return iEntityPostContentObject
          * @throws \Exception
          */
         static function of($contentName, $contentData = null)
