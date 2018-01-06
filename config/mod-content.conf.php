@@ -1,4 +1,5 @@
 <?php
+use Module\Content\Events\CreateContent\OnBeforeCreateContentValidateRepost;
 use Module\Content\Events\EventsHeapOfContent;
 use Module\Content\Events\RetrieveContent\OnRetrieveContentToDataResponse;
 use Module\Content\Events\RetrieveContentResult\OnThatConvertToDataResponse;
@@ -30,6 +31,12 @@ return [
                     ['priority' => OnThatEmbedMediaLinks::EVENT_PRIORITY,  'listener' => OnThatEmbedMediaLinks::class ],
                     ['priority' => 1100,  'listener' => OnThatConvertToDataResponse::class ],
                     ['priority' => 1000,  'listener' => OnThatEmbedProfiles::class ],
+                ],
+            ],
+
+            EventsHeapOfContent::BEFORE_CREATE_CONTENT => [
+                'listeners' => [
+                    OnBeforeCreateContentValidateRepost::class,
                 ],
             ],
         ],

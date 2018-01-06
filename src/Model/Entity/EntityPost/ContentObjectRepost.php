@@ -1,12 +1,12 @@
 <?php
 namespace Module\Content\Model\Entity\EntityPost;
 
-
 use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
 use Module\Content\Lib\FactoryContentObject;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\Content\Model\Entity\EntityPost;
 use Module\Content\Model\Entity\EntityPostBase;
+
 
 class ContentObjectRepost
     extends ContentObjectPlain
@@ -31,6 +31,7 @@ class ContentObjectRepost
     /** @var \DateTime */
     protected $datetimeCreated;
 
+
     /**
      * ContentObjectRepost constructor.
      *
@@ -42,6 +43,7 @@ class ContentObjectRepost
         $this->repoPosts = $repoPosts;
         parent::__construct($options);
     }
+
 
     /**
      * Usage before creating the repost. Not while retrieving from data source,
@@ -279,5 +281,4 @@ class ContentObjectRepost
 
         return $this->datetimeCreated;
     }
-
 }

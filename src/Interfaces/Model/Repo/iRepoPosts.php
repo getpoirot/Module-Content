@@ -156,8 +156,13 @@ interface iRepoPosts
     function countNewPosts($ownerIdentifier, $offset);
 
     /**
+     * Count Users Total Reposts
+     *
+     * - to limit users repost per day
+     *
      * @param \MongoId|string $ownerIdentifier
      * @param \DateTime $dateTime
+     *
      * @return int
      */
     function countUserRepostsNewerThan($ownerIdentifier, \DateTime $dateTime);
