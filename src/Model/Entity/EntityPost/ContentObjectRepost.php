@@ -24,10 +24,6 @@ class ContentObjectRepost
     protected $uid;
     /** @var iEntityPostContentObject */
     protected $content;
-    /** @var string */
-    protected $stat;
-    /** @var string */
-    protected $statShare;
     /** @var \DateTime */
     protected $datetimeCreated;
 
@@ -194,64 +190,6 @@ class ContentObjectRepost
             $this->content = $this->entityPost->getContent();
 
         return $this->content;
-    }
-
-    /**
-     * Set Publish Stat
-     * @see EntityPostBase
-     *
-     * @param string $stat
-     *
-     * @return $this
-     */
-    function setStat($stat)
-    {
-        $this->stat = $stat;
-        return $this;
-    }
-
-    /**
-     * Get Post Stat
-     * values: publish|draft|locked
-     * @see EntityPostBase
-     *
-     * @return string
-     */
-    function getStat()
-    {
-        if ($this->entityPost instanceof EntityPost)
-            $this->stat = $this->entityPost->getStat();
-
-        return $this->stat;
-    }
-
-    /**
-     * Set Stat Share
-     * @see EntityPostBase
-     *
-     * @param string $stat
-     *
-     * @return $this
-     */
-    function setStatShare($stat)
-    {
-        $this->statShare = $stat;
-        return $this;
-    }
-
-    /**
-     * Get Share Stat
-     * values: public|private
-     * @see EntityPostBase
-     *
-     * @return string
-     */
-    function getStatShare()
-    {
-        if ($this->entityPost instanceof EntityPost)
-            $this->statShare = $this->entityPost->getStatShare();
-
-        return $this->statShare;
     }
 
     /**
