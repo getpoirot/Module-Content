@@ -1,7 +1,6 @@
 <?php
 namespace Module\Content\Actions;
 
-use Module\Apanaj\Storage\HandleIrTenderBin;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Poirot\ApiClient\AccessTokenObject;
 use Poirot\ApiClient\TokenProviderSolid;
@@ -55,7 +54,7 @@ class UploadMediaAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
-                // TODO
+                // TODO using generalized storage
                 'storage_type' => FactoryMediaObject::STORAGE_TYPE,
                 'hash'         => $binArr['hash'],
                 'content_type' => $binArr['content_type'],
@@ -79,6 +78,7 @@ class UploadMediaAction
     {
         $handler     = FactoryMediaObject::hasHandlerOfStorage(FactoryMediaObject::STORAGE_TYPE);
         $c = $handler->client();
+
 
         // Request Behalf of User as Owner With Token
         $c->setTokenProvider(new TokenProviderSolid(
