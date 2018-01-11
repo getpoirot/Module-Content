@@ -58,6 +58,7 @@ class UploadMediaAction
                 'storage_type' => FactoryMediaObject::STORAGE_TYPE,
                 'hash'         => $binArr['hash'],
                 'content_type' => $binArr['content_type'],
+                'meta'         => $binArr['meta'],
             ],
         ];
     }

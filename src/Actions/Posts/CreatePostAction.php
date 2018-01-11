@@ -8,8 +8,10 @@ use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Content\Events\EventsHeapOfContent;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\Psr7\UploadedFile;
 use Poirot\Std\Exceptions\exUnexpectedValue;
 use Module\Content\Model\PostValidate;
+use Poirot\TenderBinClient\FactoryMediaObject;
 
 
 class CreatePostAction
@@ -58,7 +60,6 @@ class CreatePostAction
             Content\Model\HydrateEntityPost::parseWith($this->request) );
 
 
-
         # Assert Validate Entity
         #
         try
@@ -82,7 +83,7 @@ class CreatePostAction
         # Content May Include TenderBin Media
         # so touch-media file for infinite expiration
         #
-        $content  = $hydratePost->getContent();
+        $content  = $entityPost->getContent();
         Content\assertMediaContents($content);
 
 
@@ -108,6 +109,7 @@ class CreatePostAction
 
         $me = $token->getOwnerIdentifier();
 
+
         ## Event
         #
         /** @var Content\Model\Entity\EntityPost $post */
@@ -120,7 +122,6 @@ class CreatePostAction
                 /** @var Content\Events\DataCollector $collector */
                 return $collector->getResult();
             });
-
 
 
         ## Event

@@ -2,6 +2,7 @@
 namespace Module\Content
 {
 
+    use Poirot\Std\Struct\DataEntity;
     use Poirot\TenderBinClient;
     use Module\Content\Model\Entity\EntityPost;
 
@@ -81,10 +82,54 @@ namespace Module\Content
 
                 try {
                     if ($handler)
-                        $handler->client()->touch( $c->getHash() );
+                    {
+                        // Touch Media Bin And Assert Content/Meta
+                        //
+                        /** @var DataEntity $r */
+                        $r = $handler->client()->touch( $c->getHash() );
+                        $r = $r->get('result');
+
+                        $meta        = $r['bindata']['meta'];
+                        $contentType = $r['bindata']['content_type'];
+
+                        $c->setMeta($meta);
+                        $c->setContentType($contentType);
+
+
+                        // Set Versions Available For This Media
+                        //
+                        $r = $handler->client()->getBinMeta($c->getHash());
+
+                        if (isset($r['versions']) && !empty($r['versions'])) {
+                            $versions = [];
+                            foreach ($r['versions'] as $vname => $values) {
+                                $uid = $values['bindata']['uid'];
+                                $versions[$vname] = $uid;
+                            }
+
+                            $r = $handler->client()->listBinMeta( array_values($versions) );
+
+                            // append to media object as version
+                            $storageType = $c->getStorageType();
+                            foreach ($versions as $vname => $hash)
+                            {
+                                $subVer = TenderBinClient\FactoryMediaObject::of(null, $storageType);
+                                $subVer->setHash($hash);
+                                $subVer->setMeta( $r[$hash] );
+
+                                $c->addVersion(
+                                    $vname
+                                    , $subVer
+                                );
+
+                            }
+                        }
+                    }
 
                 } catch (TenderBinClient\Exceptions\exResourceNotFound $e) {
                     // Specific Content Client Exception
+                    throw $e;
+
                 } catch (\Exception $e) {
                     // Other Errors Throw To Next Layer!
                     throw $e;

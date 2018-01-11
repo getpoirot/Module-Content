@@ -88,11 +88,15 @@ class OnThatEmbedMediaLinks
             return $media;
 
 
-        ## Embed Versions Into Response
-        #
-        /** @var MediaObjectTenderBin $media */
-        return new MediaObjectTenderBinVersions($media, [
-            'thumb', 'low_thumb', 'small', 'low_small', 'large', 'low_large', 'origin'
-        ]);
+        $availableVersions = $media->getVersions();
+        if ( empty($availableVersions) )
+            ## Embed Default Versions Into Response
+            #
+            /** @var MediaObjectTenderBin $media */
+            return new MediaObjectTenderBinVersions($media, [
+                'thumb', 'low_thumb', 'small', 'low_small', 'large', 'low_large', 'origin'
+            ]);
+
+        return $media;
     }
 }
