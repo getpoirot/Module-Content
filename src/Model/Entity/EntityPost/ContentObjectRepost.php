@@ -52,18 +52,23 @@ class ContentObjectRepost
      */
     function setOriginalContentId($originalContentId)
     {
-        $this->entityPost = $this->repoPosts->findOneMatchUid($originalContentId);
-        if ( ! ($this->entityPost instanceof EntityPost))
-            throw new \RuntimeException(sprintf("Invalid Original Content Id = %s", (string)$originalContentId));
+        $entity = $this->repoPosts->findOneMatchUid($originalContentId);
+        if (! $entity instanceof EntityPost )
+            throw new \RuntimeException(sprintf(
+                'Invalid Original Content Id = %s'
+                , (string)$originalContentId
+            ));
+
 
         ## Re-Posting a Re-Post?
         #
-        if ($this->entityPost->getContent() instanceof ContentObjectRepost)
-        {
-            $originalContentId = $this->entityPost->getContent()->getUid();
-            return $this->setOriginalContentId($originalContentId);
-        }
+        if ($entity->getContent() instanceof ContentObjectRepost)
+            return $this->setOriginalContentId(
+                $entity->getContent()->getUid()
+            );
 
+
+        $this->entityPost = $entity;
         return $this;
     }
 

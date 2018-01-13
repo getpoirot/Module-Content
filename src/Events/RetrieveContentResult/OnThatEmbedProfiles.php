@@ -32,23 +32,18 @@ class OnThatEmbedProfiles
 
         ## Retrieve profiles for original post owners in case of Re-Posts (if any)
         #
-        $originalPostOwners = [];
-
-        foreach ($posts as &$p) {
+        foreach ($posts as $p) {
             $ownerId = (string) $p['user']['uid'];
             $postOwners[$ownerId] = true;
 
             if ('repost' == $p['content']['content_type']) {
                 $ownerId = (string) $p['content']['owner_identifier'];
-                $originalPostOwners[$ownerId] = true;
+                $postOwners[$ownerId] = true;
             }
         }
 
-        $postOwners = \array_keys($postOwners);
-        $originalPostOwners = \array_keys($originalPostOwners);
-
         /** @var RetrieveProfiles $funListUsers */
-        $profiles = \Module\Profile\Actions::RetrieveProfiles(\array_unique($postOwners+$originalPostOwners));
+        $profiles = \Module\Profile\Actions::RetrieveProfiles(array_keys($postOwners));
 
 
         foreach ($posts as &$p) {
