@@ -459,11 +459,10 @@ class PostsRepo
     /**
      * @inheritdoc
      */
-    function countNewPosts($ownerIdentifier, $offset)
+    function countNewPostsAfter($offset)
     {
         return $this->count(
             [
-                'owner_identifier' => $this->attainNextIdentifier($ownerIdentifier),
                 '_id' => [ '$lt' => $this->attainNextIdentifier($offset), ]
             ],
             [

@@ -149,11 +149,12 @@ interface iRepoPosts
     function findUserLatestPost($uid);
 
     /**
-     * @param \MongoId|string $ownerIdentifier
+     * Count New Posts After(since) Given Post ID
+     *
      * @param \MongoId|string $offset
      * @return int
      */
-    function countNewPosts($ownerIdentifier, $offset);
+    function countNewPostsAfter($offset);
 
     /**
      * Count Users Total Reposts

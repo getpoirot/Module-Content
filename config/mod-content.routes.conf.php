@@ -370,7 +370,7 @@ return
                     ],
                     ## /browse
                     #- Count new Posts
-                    'count' => [
+                    'explore-count' => [
                         'route'   => 'RouteMethodSegment',
                         'options' => [
                             'criteria' => '/',

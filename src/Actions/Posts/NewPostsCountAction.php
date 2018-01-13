@@ -4,7 +4,7 @@ namespace Module\Content\Actions\Posts;
 use Module\Content\Actions\aAction;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
-use Poirot\Http\Interfaces\iHeader;
+use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\Std\Exceptions\exUnexpectedValue;
@@ -13,17 +13,15 @@ use Poirot\Http\Header\FactoryHttpHeader;
 
 
 /**
- * @route /browse/feeds
+ * Respond With Count Of New Post(s) after specified post by id
+ *
  */
 class NewPostsCountAction
     extends aAction
 {
-    const X_HEADER = 'X-PostId';
-
     /** @var iRepoPosts */
     protected $repoPosts;
 
-    protected $tokenMustHaveOwner  = true;
 
     /**
      * Construct
@@ -49,22 +47,18 @@ class NewPostsCountAction
      */
     function __invoke($token = null)
     {
-        ## Assert Token
-        #
-        $this->assertTokenByOwnerAndScope($token);
+        $pReq = ParseRequestData::_($this->request)->parseQueryParams();
+        if ( ! isset($pReq['since']) )
+            throw exUnexpectedValue::paramIsRequired('since');
 
-        if ( ! $this->request->headers()->has(self::X_HEADER))
-            throw exUnexpectedValue::paramIsRequired('post_id');
-
-        /** @var iHeader $postIdHeader */
-        $postIdHeader = $this->request->headers()->get(self::X_HEADER)->current();
-        $postId       = $postIdHeader->renderValueLine();
-
-        $me     = $token->getOwnerIdentifier();
-        $count  = $this->repoPosts->countNewPosts($me, $postId);
+        $postId = trim($pReq['since']);
+        $count  = $this->repoPosts->countNewPostsAfter($postId);
 
         return $this->_respond($count);
     }
+
+
+    // ..
 
     private function _respond($count)
     {
@@ -75,7 +69,7 @@ class NewPostsCountAction
             ->insert(FactoryHttpHeader::of(['Cache-Control' => 'no-cache, no-store, must-revalidate',]))
             ->insert(FactoryHttpHeader::of(['Pragma'        => 'no-cache',]))
             ->insert(FactoryHttpHeader::of(['Expires'       => '0',]))
-            ->insert(FactoryHttpHeader::of(['X-Count'    => $count]))
+            ->insert(FactoryHttpHeader::of(['X-Count'       => $count]))
         ;
 
         return [
