@@ -8,15 +8,16 @@ use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Content\Events\EventsHeapOfContent;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
-use Poirot\Psr7\UploadedFile;
 use Poirot\Std\Exceptions\exUnexpectedValue;
 use Module\Content\Model\PostValidate;
-use Poirot\TenderBinClient\FactoryMediaObject;
 
 
 class CreatePostAction
     extends aAction
 {
+    /** Add File Meta Embed */
+    const VER_MEDIA_META = '2.3.0';
+
     /** @var iRepoPosts */
     protected $repoPosts;
 
@@ -84,7 +85,12 @@ class CreatePostAction
         # so touch-media file for infinite expiration
         #
         $content  = $entityPost->getContent();
-        Content\assertMediaContents($content);
+        if ( $this->_isSupportedForMediaMeta() )
+            // Meta Version Support
+            \Poirot\TenderBinClient\assertMediaContents($content);
+        else
+            // Backward Compatibility
+            Content\assertMediaContents($content);
 
 
         ## Event
@@ -141,5 +147,22 @@ class CreatePostAction
         return [
             ListenerDispatch::RESULT_DISPATCH => $r
         ];
+    }
+
+
+    // ..
+
+    /**
+     * Check whether request has contains supported header contracted version
+     *
+     * - Version Support Is Implementation Of Backward Compatibility for API Clients!
+     *
+     */
+    private function _isSupportedForMediaMeta()
+    {
+        ## Check Request With Specified Header; Considering Client Version
+        #
+        $v = \Poirot\Http\Header\renderHeaderValue($this->request, 'X-Apanaj-Ver');
+        return version_compare($v, static::VER_MEDIA_META, '>=');
     }
 }

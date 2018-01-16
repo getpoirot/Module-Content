@@ -60,87 +60,42 @@ namespace Module\Content
         ];
     }
 
-
     /**
      * Magic Touch Media Contents To Infinite Expiration
      *
-     * @param \Traversable $content
+     * @param \Traversable|array $content
      *
      * @throws \Exception
      */
     function assertMediaContents($content)
     {
-        if (!($content instanceof \Traversable || is_array($content)))
+        if (! $content instanceof \Traversable )
             // Do Nothing!!
             return;
 
 
-        foreach ($content as $c) {
+        /** @var $cTender */
+        $cTender = \Module\TenderBinClient\Services::ClientTender();
+
+        foreach ($content as $c)
+        {
             if ($c instanceof TenderBinClient\Model\aMediaObject) {
-
-                $handler = TenderBinClient\FactoryMediaObject::hasHandlerOfStorage($c->getStorageType());
-
                 try {
-                    if ($handler)
-                    {
-                        // Touch Media Bin And Assert Content/Meta
-                        //
-                        /** @var DataEntity $r */
-                        $r = $handler->client()->touch( $c->getHash() );
-                        $r = $r->get('result');
-
-                        $meta        = $r['bindata']['meta'];
-                        $contentType = $r['bindata']['content_type'];
-
-                        $c->setMeta($meta);
-                        $c->setContentType($contentType);
-
-
-                        // Set Versions Available For This Media
-                        //
-                        $r = $handler->client()->getBinMeta($c->getHash());
-
-                        if (isset($r['versions']) && !empty($r['versions'])) {
-                            $versions = [];
-                            foreach ($r['versions'] as $vname => $values) {
-                                $uid = $values['bindata']['uid'];
-                                $versions[$vname] = $uid;
-                            }
-
-                            $r = $handler->client()->listBinMeta( array_values($versions) );
-
-                            // append to media object as version
-                            $storageType = $c->getStorageType();
-                            foreach ($versions as $vname => $hash)
-                            {
-                                $subVer = TenderBinClient\FactoryMediaObject::of(null, $storageType);
-                                $subVer->setHash($hash);
-                                $subVer->setMeta( $r[$hash] );
-
-                                $c->addVersion(
-                                    $vname
-                                    , $subVer
-                                );
-
-                            }
-                        }
-                    }
-
+                    $cTender->touch( $c->getHash() );
                 } catch (TenderBinClient\Exceptions\exResourceNotFound $e) {
                     // Specific Content Client Exception
-                    throw $e;
-
                 } catch (\Exception $e) {
                     // Other Errors Throw To Next Layer!
                     throw $e;
                 }
-
-            } elseif (is_array($c) || $c instanceof \Traversable) {
-                assertMediaContents($c);
             }
+
+            elseif (is_array($c) || $c instanceof \Traversable)
+                assertMediaContents($c);
         }
     }
 }
+
 
 namespace Module\Content\Lib
 {
