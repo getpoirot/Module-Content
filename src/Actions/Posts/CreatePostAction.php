@@ -15,9 +15,6 @@ use Module\Content\Model\PostValidate;
 class CreatePostAction
     extends aAction
 {
-    /** Add File Meta Embed */
-    const VER_MEDIA_META = '2.3.0';
-
     /** @var iRepoPosts */
     protected $repoPosts;
 
@@ -85,12 +82,7 @@ class CreatePostAction
         # so touch-media file for infinite expiration
         #
         $content  = $entityPost->getContent();
-        if ( $this->_isSupportedForMediaMeta() )
-            // Meta Version Support
-            \Poirot\TenderBinClient\assertMediaContents($content);
-        else
-            // Backward Compatibility
-            Content\assertMediaContents($content);
+        \Poirot\TenderBinClient\assertMediaContents($content);
 
 
         ## Event
@@ -147,22 +139,5 @@ class CreatePostAction
         return [
             ListenerDispatch::RESULT_DISPATCH => $r
         ];
-    }
-
-
-    // ..
-
-    /**
-     * Check whether request has contains supported header contracted version
-     *
-     * - Version Support Is Implementation Of Backward Compatibility for API Clients!
-     *
-     */
-    private function _isSupportedForMediaMeta()
-    {
-        ## Check Request With Specified Header; Considering Client Version
-        #
-        $v = \Poirot\Http\Header\renderHeaderValue($this->request, 'X-Apanaj-Ver');
-        return version_compare($v, static::VER_MEDIA_META, '>=');
     }
 }

@@ -463,10 +463,10 @@ class PostsRepo
     {
         return $this->count(
             [
-                '_id' => [ '$lt' => $this->attainNextIdentifier($offset), ]
+                '_id' => [ '$gt' => $this->attainNextIdentifier($offset), ]
             ],
             [
-                'sort'  => [ '_id' => -1, ],
+                'sort'  => [ '_id' => 1, ],
             ]
         );
     }
