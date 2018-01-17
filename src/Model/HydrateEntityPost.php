@@ -28,6 +28,7 @@ class HydrateEntityPost
     protected $stat  = EntityPostBase::STAT_PUBLISH;
     protected $share = EntityPostBase::STAT_SHARE_PUBLIC;
     protected $isCommentEnabled = true;
+    protected $category = null;
 
     /**
      * Construct
@@ -158,5 +159,21 @@ class HydrateEntityPost
     function getDateTimeCreated()
     {
         // TODO: Implement getDateTimeCreated() method.
+    }
+
+    /**
+     * @param string $category
+     */
+    function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return string|null
+     */
+    function getCategory()
+    {
+        return $this->category;
     }
 }

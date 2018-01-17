@@ -68,7 +68,7 @@ class PostsRepo
 
 
         # Convert given entity to Persistence Entity Object To Insert
-        $entityMongo = new Mongo\EntityPost(new HydrateGetters($entity));
+        $entityMongo = new Mongo\EntityPost($entity);
         $entityMongo->setUid($givenIdentifier);
         $entityMongo->setOwnerIdentifier( $this->attainNextIdentifier($entity->getOwnerIdentifier()) );
         $entityMongo->setDateTimeCreated($dateCreated);
