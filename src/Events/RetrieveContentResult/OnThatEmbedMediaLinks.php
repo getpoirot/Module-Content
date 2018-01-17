@@ -89,7 +89,7 @@ class OnThatEmbedMediaLinks
 
 
         $availableVersions = $media->getVersions();
-        if ( empty($availableVersions) )
+        if ( empty($availableVersions) || !$this->_isSupportedForMediaMeta() )
             ## Embed Default Versions Into Response
             #
             /** @var MediaObjectTenderBin $media */
@@ -98,5 +98,24 @@ class OnThatEmbedMediaLinks
             ]);
 
         return $media;
+    }
+
+
+    // ..
+
+    /**
+     * Check whether request has contains supported header contracted version
+     *
+     * - Version Support Is Implementation Of Backward Compatibility for API Clients!
+     *
+     */
+    function _isSupportedForMediaMeta()
+    {
+        ## Check Request With Specified Header; Considering Client Version
+        #
+        $request = \IOC::GetIoC()->get('/HttpRequest');
+
+        $v = \Poirot\Http\Header\renderHeaderValue($request, 'X-Apanaj-Ver');
+        return version_compare($v, '2.3.0', '>=');
     }
 }
