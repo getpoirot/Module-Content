@@ -125,7 +125,7 @@ namespace Module\Content\Lib
 
 
             /** @var iEntityPostContentObject $contentObject */
-            $contentObject = \Module\Content\Services::ContentPlugins()->fresh($contentName);
+            $contentObject = \Module\Content\Services::ContentPlugins()->fresh($contentName/*, [$contentData]*/);
             $contentObject->with($contentObject::parseWith($contentData));
             return $contentObject;
         }
