@@ -17,6 +17,9 @@ namespace Module\Content
      */
     function toArrayResponseFromPostEntity(EntityPost $post, $me = null)
     {
+        /** @var \MongoDB\Model\BSONDocument $category */
+        $category = isset($post->category) ? \iterator_to_array($post->category) : null;
+
         # Build Likes Response:
         $likes = ($post->getLikes()) ? [
             'count'   => $post->getLikes()->getCount(),
@@ -57,6 +60,7 @@ namespace Module\Content
                 'datetime'  => $post->getDateTimeCreated(),
                 'timestamp' => $post->getDateTimeCreated()->getTimestamp(),
             ],
+            'category'  => $category,
         ];
     }
 
