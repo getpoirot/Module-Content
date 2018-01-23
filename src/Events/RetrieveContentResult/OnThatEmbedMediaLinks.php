@@ -4,6 +4,7 @@ namespace Module\Content\Events\RetrieveContentResult;
 use Module\Content\Actions\UploadMediaAction;
 use Module\Content\Events\EventsHeapOfContent;
 use Module\Content\Model\Entity\EntityPost;
+use Poirot\Http\HttpRequest;
 use Poirot\TenderBinClient\Model\aMediaObject;
 use Poirot\TenderBinClient\Model\MediaObjectTenderBin;
 use Poirot\TenderBinClient\Model\MediaObjectTenderBinVersions;
@@ -89,6 +90,7 @@ class OnThatEmbedMediaLinks
 
 
         $availableVersions = $media->getVersions();
+
         if ( empty($availableVersions) || !$this->_isSupportedForMediaMeta() )
             ## Embed Default Versions Into Response
             #
@@ -113,6 +115,7 @@ class OnThatEmbedMediaLinks
     {
         ## Check Request With Specified Header; Considering Client Version
         #
+        /** @var HttpRequest $request */
         $request = \IOC::GetIoC()->get('/HttpRequest');
 
         $v = \Poirot\Http\Header\renderHeaderValue($request, 'X-Apanaj-Ver');
