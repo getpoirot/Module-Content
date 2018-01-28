@@ -1,9 +1,11 @@
 <?php
 namespace Module\Content\Exception;
 
+use Poirot\Application\Exception\exRouteNotMatch;
 
-class exPostLocked
-    extends exPostUnavailable
+
+class exPostUnavailable
+    extends exRouteNotMatch
 {
-    protected $code = 423;
+    protected $code = 410;
 }
