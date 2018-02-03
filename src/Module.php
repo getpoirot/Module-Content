@@ -1,6 +1,7 @@
 <?php
 namespace Module\Content
 {
+    use Module\Content\Services\ContentPlugins;
     use Poirot\Ioc\Container;
     use Poirot\Application\aSapi;
     use Poirot\Application\Interfaces\iApplication;
@@ -22,6 +23,8 @@ namespace Module\Content
      *
      *   Contents Can Be Created With Factory:
      *   FactoryContentObject::of($type, $options)
+     *
+     *   @see ContentPlugins
      *
      *
      * - Using Mongo Db To Store Content.
@@ -193,8 +196,6 @@ namespace Module\Content
 
 namespace Module\Content
 {
-    use Module\Content\Services\ContentPlugins;
-
     /**
      * @method static ContentPlugins ContentPlugins()
      */
