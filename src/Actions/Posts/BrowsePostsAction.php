@@ -42,7 +42,8 @@ class BrowsePostsAction
 
         ## Filter Expression
         #
-        $expr   = \Module\MongoDriver\parseExpressionFromArray($q, ['offset', 'limit', 'stat', 'stat_share', 'debug']);
+        // TODO add allowed query field
+        $expr   = \Module\MongoDriver\parseExpressionFromArray($q, ['offset', 'limit', 'stat', 'stat_share', 'debug', 'XDEBUG_SESSION_START']);
 
 
         ## Retrieve Posts

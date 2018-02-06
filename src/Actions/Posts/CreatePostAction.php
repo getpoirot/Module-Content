@@ -32,6 +32,7 @@ class CreatePostAction
         $this->repoPosts = $repoPosts;
     }
 
+
     /**
      * Create Post By Http Request
      *

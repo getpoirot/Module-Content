@@ -1,6 +1,7 @@
 <?php
 namespace Module\Content\Events\RetrieveContentResult;
 
+use Module\Content\Interfaces\Model\Entity\iEntityPostContentObject;
 use Module\Profile\Actions\Helpers\RetrieveProfiles;
 
 
@@ -36,9 +37,18 @@ class OnThatEmbedProfiles
             $ownerId = (string) $p['user']['uid'];
             $postOwners[$ownerId] = true;
 
-            if ('repost' == $p['content']['content_type']) {
-                $ownerId = (string) $p['content']['owner_identifier'];
-                $postOwners[$ownerId] = true;
+            $content = $p['content'];
+            if (is_array($content)) {
+                // TODO Deprecated
+                if ('repost' == $content['content_type']) {
+                    $ownerId = (string) $p['content']['owner_identifier'];
+                    $postOwners[$ownerId] = true;
+                }
+            } elseif ($content instanceof iEntityPostContentObject) {
+                if ('repost' == $content->getContentType()) {
+                    $ownerId = (string) $content->getOWnerIdentifier();
+                    $postOwners[$ownerId] = true;
+                }
             }
         }
 
@@ -57,17 +67,33 @@ class OnThatEmbedProfiles
 
             ## Re-Posts
             #
-            if ('repost' == $p['content']['content_type']) {
-                $originalOwnerIdentifier = (string) $p['content']['owner_identifier'];
+            $content = $p['content'];
+            if (is_array($content)) {
+                if ('repost' == $p['content']['content_type']) {
+                    $originalOwnerIdentifier = (string) $p['content']['owner_identifier'];
 
-                if ( isset($profiles[$originalOwnerIdentifier]) )
-                    $p['content']['user'] = $profiles[$originalOwnerIdentifier];
-                else
-                    $p['content']['user']['uid'] = $originalOwnerIdentifier;
+                    if ( isset($profiles[$originalOwnerIdentifier]) )
+                        $p['content']['user'] = $profiles[$originalOwnerIdentifier];
+                    else
+                        $p['content']['user']['uid'] = $originalOwnerIdentifier;
 
-                unset($p['content']['owner_identifier']);
-                $p['content']['original_post_id'] = (string)$p['content']['uid'];
-                unset($p['content']['uid']);
+                    unset($p['content']['owner_identifier']);
+                    $p['content']['original_post_id'] = (string)$p['content']['uid'];
+                    unset($p['content']['uid']);
+                }
+            } elseif ($content instanceof iEntityPostContentObject) {
+                if ('repost' == $content->getContentType()) {
+                    $originalOwnerIdentifier = (string) $content->getOwnerIdentifier();
+
+                    if ( isset($profiles[$originalOwnerIdentifier]) )
+                        $content['user'] = $profiles[$originalOwnerIdentifier];
+                    else
+                        $p['content']['user']['uid'] = $originalOwnerIdentifier;
+
+                    unset($p['content']['owner_identifier']);
+                    $p['content']['original_post_id'] = (string)$p['content']['uid'];
+                    unset($p['content']['uid']);
+                }
             }
         }
 

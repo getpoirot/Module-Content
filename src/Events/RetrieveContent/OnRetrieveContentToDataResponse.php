@@ -7,7 +7,7 @@ use Module\Content\Model\Entity\EntityPost;
 class OnRetrieveContentToDataResponse
 {
     /**
-     * Embed Profiles Data Into Posts Result
+     * Build Result Data Response From Content Entity
      *
      * @param EntityPost $entity_post
      * @param mixed      $me

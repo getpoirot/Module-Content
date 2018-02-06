@@ -116,6 +116,10 @@ class PostsRepo
     }
 
     /**
+     * // TODO post entity mongo can't directly send to response because getUid() is ignored
+     * //      it must converted to entity original by setters without unwanted property like mongo_date, ..
+     * //      maybe the hydration match can help to only transport similar data
+     *
      * Find Match By Given UID
      *
      * @param string|mixed $uid
@@ -129,7 +133,11 @@ class PostsRepo
             '_id' => $this->attainNextIdentifier($uid),
         ]);
 
-        return ($r) ? $r : false;
+        if (! $r )
+            return false;
+
+
+        return $r;
     }
 
     /**

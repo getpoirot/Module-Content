@@ -1,8 +1,6 @@
 <?php
 namespace Module\Content
 {
-
-    use Poirot\Std\Struct\DataEntity;
     use Poirot\TenderBinClient;
     use Module\Content\Model\Entity\EntityPost;
 
@@ -17,8 +15,10 @@ namespace Module\Content
      */
     function toArrayResponseFromPostEntity(EntityPost $post, $me = null)
     {
+        // TODO bson implementation most not goes farther to here
         /** @var \MongoDB\Model\BSONDocument $category */
         $category = isset($post->category) ? \iterator_to_array($post->category) : null;
+
 
         # Build Likes Response:
         $likes = ($post->getLikes()) ? [
@@ -43,17 +43,12 @@ namespace Module\Content
 
         return [
             'uid'        => (string) $post->getUid(),
-            'content'    => TenderBinClient\embedLinkToMediaData($post->getContent()),
+            // Todo embed media link will break content object itself into array that is not sufficient
+            'content'    => $post->getContent(),
             'stat'       => $post->getStat(),
             'stat_share' => $post->getStatShare(),
             'user'       => $user,
-            'location'   => ($post->getLocation()) ? [
-                'caption' => $post->getLocation()->getCaption(),
-                'geo'     => [
-                    'lon' => $post->getLocation()->getGeo('lon'),
-                    'lat' => $post->getLocation()->getGeo('lat'),
-                ],
-            ] : null,
+            'location'   => ($post->getLocation()) ? $post->getLocation() : null,
             'likes'       => $likes,
             'is_comment_enabled' => $post->getIsCommentEnabled(),
             'datetime_created' => [
