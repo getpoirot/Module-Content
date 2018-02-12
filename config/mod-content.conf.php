@@ -6,13 +6,13 @@ use Module\Content\Events\RetrieveContentResult\OnThatConvertToDataResponse;
 use Module\Content\Events\RetrieveContentResult\OnThatEmbedMediaLinks;
 use Module\Content\Events\RetrieveContentResult\OnThatEmbedProfiles;
 use Module\Content\Events\RetrieveContentResult\OnThatPersistFromCursor;
+use Module\HttpRenderer\RenderStrategy\RenderJsonStrategy;
 
 return [
 
     \Module\Content\Module::CONF => [
 
-        ## Events
-        #
+        // Events
         \Module\Content\Actions\aAction::CONF => [
             // Events Section Of Events Builder
             /** @see \Poirot\Events\Event\BuildEvent */
@@ -42,8 +42,29 @@ return [
         ],
     ],
 
-    # Mongo Driver:
+    ## Renderer Hydration
+    #
+    RenderJsonStrategy::CONF_KEY => [
+        'routes' => [
 
+        ],
+        'aliases' => [
+            '@content' => [
+                'main/content/get_post',
+                'main/content/posts/create',
+                'main/content/users/posts/retrieve',
+            ],
+            '@content-result' => [
+                'main/content/browse/explore',
+                'main/content/posts/liked',
+                'main/content/users/posts/list',
+            ],
+        ],
+    ],
+
+
+    ## Mongo Driver:
+    #
     Module\MongoDriver\Module::CONF_KEY =>
     [
         \Module\MongoDriver\Services\aServiceRepository::CONF_REPOSITORIES =>

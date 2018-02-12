@@ -1,6 +1,8 @@
 <?php
 namespace Module\Content
 {
+
+    use Poirot\Std\Type\StdTravers;
     use Poirot\TenderBinClient;
     use Module\Content\Model\Entity\EntityPost;
 
@@ -15,11 +17,6 @@ namespace Module\Content
      */
     function toArrayResponseFromPostEntity(EntityPost $post, $me = null)
     {
-        // TODO bson implementation most not goes farther to here
-        /** @var \MongoDB\Model\BSONDocument $category */
-        $category = isset($post->category) ? \iterator_to_array($post->category) : null;
-
-
         # Build Likes Response:
         $likes = ($post->getLikes()) ? [
             'count'   => $post->getLikes()->getCount(),
@@ -37,26 +34,40 @@ namespace Module\Content
         }
 
 
-        $user = [
-            'uid' => $post->getOwnerIdentifier(), ];
+
+        $post = StdTravers::of($post)->each(function ($val, &$key) use ($post, $likes) {
+            switch ($key) {
+                case '_id':
+                case 'uid': $val = (string) $post->getUid();
+                            $key = 'uid';
+                    break;
+                case 'owner_identifier': $val = [
+                        'uid' => $post->getOwnerIdentifier(), ];
+                     $key = 'user';
+                    break;
+                case 'likes': $val = $likes;
+                    break;
+                case 'location': $val = ($post->getLocation()) ? $post->getLocation() : null;
+                    break;
+                case 'date_time_created_mongo':
+                case 'datetime_created': $val = [
+                        'datetime'  => $post->getDateTimeCreated(),
+                        'timestamp' => $post->getDateTimeCreated()->getTimestamp(),
+                    ];
+                    $key = 'datetime_created';
+                    break;
+                case '__pclass':
+                    $val = null;
+                    $key = null;
+
+            }
+
+            return $val;
+        });
 
 
-        return [
-            'uid'        => (string) $post->getUid(),
-            // Todo embed media link will break content object itself into array that is not sufficient
-            'content'    => $post->getContent(),
-            'stat'       => $post->getStat(),
-            'stat_share' => $post->getStatShare(),
-            'user'       => $user,
-            'location'   => ($post->getLocation()) ? $post->getLocation() : null,
-            'likes'       => $likes,
-            'is_comment_enabled' => $post->getIsCommentEnabled(),
-            'datetime_created' => [
-                'datetime'  => $post->getDateTimeCreated(),
-                'timestamp' => $post->getDateTimeCreated()->getTimestamp(),
-            ],
-            'category'  => $category,
-        ];
+        $post = StdTravers::of($post)->toArray();
+        return $post;
     }
 
     /**

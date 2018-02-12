@@ -158,22 +158,6 @@ class HydrateEntityPost
      */
     function getDateTimeCreated()
     {
-        // TODO: Implement getDateTimeCreated() method.
-    }
-
-    /**
-     * @param string $category
-     */
-    function setCategory($category)
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * @return string|null
-     */
-    function getCategory()
-    {
-        return $this->category;
+        // Ignored
     }
 }
