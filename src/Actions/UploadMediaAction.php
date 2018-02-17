@@ -54,8 +54,7 @@ class UploadMediaAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
-                // TODO using generalized storage
-                'storage_type' => FactoryMediaObject::STORAGE_TYPE,
+                'storage_type' => FactoryMediaObject::getDefaultHandler()->getType(),
                 'hash'         => $binArr['hash'],
                 'content_type' => $binArr['content_type'],
                 'meta'         => $binArr['meta'],
@@ -77,7 +76,7 @@ class UploadMediaAction
      */
     private function _storeMedia($media, $token)
     {
-        $handler     = FactoryMediaObject::hasHandlerOfStorage(FactoryMediaObject::STORAGE_TYPE);
+        $handler     = FactoryMediaObject::getDefaultHandler();
         $c = $handler->client();
 
 
