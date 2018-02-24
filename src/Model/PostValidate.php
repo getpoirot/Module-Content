@@ -5,7 +5,6 @@ use Module\Content\Model\Entity\EntityPost\ContentObjectGeneral;
 use Poirot\Std\aValidator;
 use Module\Content\Interfaces\Model\Entity\iEntityPost;
 use Poirot\Std\Exceptions\exUnexpectedValue;
-use Poirot\Std\Hydrator\HydrateGetters;
 
 
 class PostValidate
