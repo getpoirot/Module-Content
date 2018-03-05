@@ -70,12 +70,15 @@ class PostsRepo
         # Convert given entity to Persistence Entity Object To Insert
         $entityMongo = new Mongo\EntityPost($entity);
         $entityMongo->setUid($givenIdentifier);
-        $entityMongo->setOwnerIdentifier( $this->attainNextIdentifier($entity->getOwnerIdentifier()) );
         $entityMongo->setDateTimeCreated($dateCreated);
+        if ( $entity->getOwnerIdentifier() )
+            $entityMongo->setOwnerIdentifier(
+                $this->attainNextIdentifier($entity->getOwnerIdentifier())
+            );
+
 
         # Persist BinData Record
         $r = $this->_query()->insertOne($entityMongo);
-
 
         # Give back entity with given id and meta record info
         $entity = clone $entity;
