@@ -56,7 +56,7 @@ class OnThatEmbedMediaLinks
     {
         $content = $post->getContent();
 
-        if ($content instanceof EntityPost\ContentObjectGeneral) {
+        if ( method_exists($content, 'getMedias') ) {
             $postMedias = $content->getMedias();
 
             /** @var aMediaObject $media */

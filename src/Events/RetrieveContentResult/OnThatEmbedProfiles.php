@@ -35,6 +35,10 @@ class OnThatEmbedProfiles
         #
         foreach ($posts as $p) {
             $ownerId = (string) $p['user']['uid'];
+            if ( empty($ownerId) )
+                continue;
+
+
             $postOwners[$ownerId] = true;
 
             $content = $p['content'];
@@ -58,6 +62,9 @@ class OnThatEmbedProfiles
 
         foreach ($posts as &$p) {
             $uid  = (string) $p['user']['uid'];
+            if ( empty($uid) )
+                continue;
+
 
             /** @see \Module\Content\toArrayResponseFromPostEntity() */
             if ( isset($profiles[$uid]) )
