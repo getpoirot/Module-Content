@@ -313,8 +313,12 @@ class PostsRepo
     function findAllMatchUidWithin($uids, $expression = null)
     {
         $objIds = [];
-        foreach ($uids as $id)
+        foreach ($uids as $id) {
+            if ( empty($id) )
+                continue;
+
             $objIds[] = $this->attainNextIdentifier($id);
+        }
 
 
         // Query Condition By Expression
