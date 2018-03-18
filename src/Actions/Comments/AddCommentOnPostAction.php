@@ -101,7 +101,7 @@ class AddCommentOnPostAction
         $profiles  = \Module\Profile\Actions::RetrieveProfiles([$visitorId]);
         $profiles  = $profiles[$visitorId];
 
-        $userName  = (isset($profiles['fullname']))
+        $userName  = ( isset($profiles['fullname']) && !empty($profiles['fullname']) )
             ? $profiles['fullname']
             : '@'.$profiles['username'];
 
@@ -118,11 +118,15 @@ class AddCommentOnPostAction
 
         if ($visitorId !== $ownerId) {
             \Module\Fcm\Actions::SendNotification()
-                ->sendSimple(
+                ->sendRouteIncluded(
                     'نظر روی پست شما'
                     , sprintf('%s روی پست %s نظر داده است.', $userName, $titlePost)
                     , [ $ownerId ]
-                    , ['entityName' => 'user', 'entityId' =>  $visitorId ]
+                    , 'main/content/users/posts/retrieve'
+                    , [
+                        'post'     => $post,
+                        'username' => $profiles['username'],
+                    ]
                 );
 
         }
