@@ -63,6 +63,7 @@ class BrowsePostsAction
             $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset['uid']).'&limit='.$limit);
         }
 
+
         return [
             ListenerDispatch::RESULT_DISPATCH => [
                 'count' => count($posts),
