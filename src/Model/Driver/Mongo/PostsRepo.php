@@ -210,6 +210,31 @@ class PostsRepo
     }
 
     /**
+     * @deprecated 
+     * Change Post Status By UID
+     *
+     * @param mixed $uid
+     * @param string $status
+     *
+     * @return bool|\MongoDB\UpdateResult
+     */
+    function changeStatWithUpstreamId($uid, $status)
+    {
+        $r = $this->_query()->updateOne(
+            [
+                'content.campaign_id' => (int) $uid,
+            ]
+            , [
+                '$set' => [
+                    'stat' => $status,
+                ]
+            ]
+        );
+
+        return ($r) ? $r : false;
+    }
+
+    /**
      * Find Entities Match With Given Expression
      *
      * !! Consider Mongo Indexes When Using Custom Conditions !!
