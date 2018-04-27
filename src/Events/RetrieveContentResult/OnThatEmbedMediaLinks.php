@@ -79,10 +79,8 @@ class OnThatEmbedMediaLinks
     private function _mediaVersion(aMediaObject $media)
     {
         if ( ! $media instanceof MediaObjectTenderBin )
-            throw new \RuntimeException(sprintf(
-                'Media Object (%s) is unknown for versioned links.'
-                , get_class($media)
-            ));
+            // We Not Embed Versions To Unknown Media Type!
+            return $media;
 
 
         if ($media instanceof MediaObjectTenderBinVersions)
